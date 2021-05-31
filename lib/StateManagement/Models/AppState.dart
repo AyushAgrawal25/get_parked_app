@@ -45,6 +45,12 @@ class AppState extends ChangeNotifier {
   //   currentCameraPosition = gpCamPos;
   // }
 
+  String authToken;
+  void setAuthToken(String token) {
+    authToken = token;
+    notifyListeners();
+  }
+
   //Map Suggestions Data
   List<GooglePlaceData> googlePlaces;
   void setGooglePlacesData(List<GooglePlaceData> gpGooglePlaces) {

@@ -1,4 +1,4 @@
-import 'package:getparked/BussinessLogic/domainDetails.dart';
+import 'package:getparked/Utils/DomainUtils.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketUtils {

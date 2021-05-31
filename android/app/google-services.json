@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "437958723797",
+    "project_id": "get-parked-5dda9",
+    "storage_bucket": "get-parked-5dda9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:437958723797:android:e91b7cb0c3a63f6a4c7a5c",
+        "android_client_info": {
+          "package_name": "com.example.getparked"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "437958723797-t2ufifl6l6vfo0nr6ojcloio70nhi0vo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAq7BFcE790YZg8-6i1IJs6aVGyRyy617I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "437958723797-t2ufifl6l6vfo0nr6ojcloio70nhi0vo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

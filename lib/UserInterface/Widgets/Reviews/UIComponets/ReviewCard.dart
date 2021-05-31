@@ -1,5 +1,5 @@
 import 'package:getparked/Utils/DateTimeUtils.dart';
-import 'package:getparked/BussinessLogic/domainDetails.dart';
+import 'package:getparked/Utils/DomainUtils.dart';
 import 'package:getparked/StateManagement/Models/ReviewData.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';
 import 'package:getparked/UserInterface/Widgets/DisplayPicture.dart';

@@ -42,22 +42,31 @@ dependencies:
 # File And Encryption
   encrypt: ^5.0.0
   path_provider: ^2.0.2
+  flutter_secure_storage: ^4.2.0
 
 # Image
   flutter_svg: ^0.22.0
   cached_network_image: ^3.0.0
 
 # UPI
-  upi_pay: ^0.2.4
+  # upi_pay: ^0.2.4
 
 # State Management
   provider: ^5.0.0
+
+# Sailor
+  sailor: ^0.7.1
 
 # Toast
   fluttertoast: ^8.0.7
 
 # Socket
   socket_io_client: ^1.0.1
+
+# Firebase
+  firebase_auth: ^1.2.0
+  firebase_core: ^1.2.0
+  google_sign_in: ^5.0.4
 
 
   # The following adds the Cupertino Icons font to your application.

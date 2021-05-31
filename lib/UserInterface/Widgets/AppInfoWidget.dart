@@ -1,4 +1,4 @@
-import 'package:getparked/BussinessLogic/domainDetails.dart';
+import 'package:getparked/Utils/DomainUtils.dart';
 import 'package:getparked/UserInterface/Icons/g_p_icons_icons.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';
 import 'package:getparked/UserInterface/Widgets/CustomIcon.dart';

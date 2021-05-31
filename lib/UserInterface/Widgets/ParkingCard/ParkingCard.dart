@@ -1,4 +1,4 @@
-import 'package:getparked/BussinessLogic/domainDetails.dart';
+import 'package:getparked/Utils/DomainUtils.dart';
 import 'package:getparked/StateManagement/Models/ParkingRequestData.dart';
 import 'package:getparked/StateManagement/Models/UserDetails.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';

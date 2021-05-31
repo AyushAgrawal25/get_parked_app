@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:getparked/BussinessLogic/domainDetails.dart';
+import 'package:getparked/Utils/DomainUtils.dart';
 import 'package:getparked/StateManagement/Models/SlotData.dart';
 import 'package:getparked/StateManagement/Models/TransactionData.dart';
 import 'package:getparked/StateManagement/Models/UserDetails.dart';

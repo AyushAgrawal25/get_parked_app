@@ -1,5 +1,5 @@
 import 'package:getparked/Utils/ContactUtils.dart';
-import 'package:getparked/BussinessLogic/domainDetails.dart';
+import 'package:getparked/Utils/DomainUtils.dart';
 import 'package:getparked/StateManagement/Models/SlotData.dart';
 import 'package:getparked/StateManagement/Models/UserDetails.dart';
 import 'package:getparked/UserInterface/Widgets/Reviews/ReviewButton.dart';
