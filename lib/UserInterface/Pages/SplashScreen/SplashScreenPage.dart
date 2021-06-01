@@ -22,6 +22,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
   initApp() async {
     InitAppStatus initAppStatus =
         await AuthProvider().initApp(context: context);
+    print(initAppStatus);
     switch (initAppStatus) {
       case InitAppStatus.loggedIn:
         // TODO: send to home page.

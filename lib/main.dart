@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:getparked/BussinessLogic/AuthProvider.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/UserInterface/Pages/Login/LoginPage.dart';
-import 'package:getparked/UserInterface/Pages/SplashScreen/SplashScreePage.dart';
+import 'package:getparked/UserInterface/Pages/SplashScreen/SplashScreenPage.dart';
 import 'package:getparked/UserInterface/Widgets/SideNav/SideNavRoutes.dart';
 import 'package:getparked/Utils/DomainUtils.dart';
 import 'package:google_sign_in/google_sign_in.dart';

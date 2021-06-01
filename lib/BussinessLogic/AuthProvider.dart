@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:getparked/BussinessLogic/UserServices.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/Utils/SecureStorageUtils.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -26,8 +27,13 @@ class AuthProvider {
 
     // Get User
     // Call Get User function
+    // TODO: complete this function.
+    await UserServices().getUser(authToken: authToken);
+
     // Set the user data and details together.
     // Refresh the token also.
+
+    return InitAppStatus.loggedIn;
   }
 
   fbAuth.User getFirebaseUser() {

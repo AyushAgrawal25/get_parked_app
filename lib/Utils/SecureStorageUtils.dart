@@ -30,4 +30,4 @@ class SecureStorageUtils {
   }
 }
 
-String AUTH_TOKEN = "authToken";
+const String AUTH_TOKEN = "authorization";
