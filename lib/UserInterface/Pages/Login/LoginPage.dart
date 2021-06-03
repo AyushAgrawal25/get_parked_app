@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:getparked/BussinessLogic/AuthProvider.dart';
 import 'package:getparked/BussinessLogic/UserServices.dart';
 import 'package:getparked/UserInterface/Icons/g_p_icons_icons.dart';
+import 'package:getparked/UserInterface/Pages/SplashScreen/SplashScreenPage.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';
 import 'package:getparked/UserInterface/Widgets/CustomIcon.dart';
 import 'package:getparked/UserInterface/Widgets/Loaders/LoaderPage.dart';
@@ -143,9 +144,11 @@ class _LoginPageState extends State<LoginPage> {
         // Call Login function.
         String authToken =
             await UserServices().login(email: user.email, userToken: user.uid);
+
+        print(authToken);
         if (authToken != null) {
           await SecureStorageUtils().setAuthToken(authToken);
-          //TODO: Call Init App Function to initialize App State.
+          navigateToSpashScreen();
         } else {
           // TODO: Add a toast.
         }
@@ -158,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
               .login(email: user.email, userToken: user.uid);
           if (authToken != null) {
             await SecureStorageUtils().setAuthToken(authToken);
-            //TODO: Call Init App Function to initialize App State.
+            navigateToSpashScreen();
           }
         } else {
           // TODO: Add a toast
@@ -168,5 +171,13 @@ class _LoginPageState extends State<LoginPage> {
         isLoading = false;
       });
     }
+  }
+
+  navigateToSpashScreen() {
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) {
+        return SplashScreenPage();
+      },
+    ));
   }
 }

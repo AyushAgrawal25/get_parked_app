@@ -31,3 +31,4 @@ class SecureStorageUtils {
 }
 
 const String AUTH_TOKEN = "authorization";
+const String REFRESH_TOKEN = "refreshToken";

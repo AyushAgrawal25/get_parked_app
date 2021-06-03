@@ -17,6 +17,7 @@ class AuthProvider {
 
     // Check the token.
     String authToken = await SecureStorageUtils().getAuthToken();
+
     if (authToken == null) {
       return InitAppStatus.notLoggedIn;
     }
@@ -26,12 +27,20 @@ class AuthProvider {
     appState.setAuthToken(authToken);
 
     // Get User
-    // Call Get User function
-    // TODO: complete this function.
-    await UserServices().getUser(authToken: authToken);
-
     // Set the user data and details together.
-    // Refresh the token also.
+    UserGetStatus userGetStatus =
+        await UserServices().getUser(authToken: authToken, context: context);
+    if (userGetStatus != UserGetStatus.successful) {
+      await firebaseLogout();
+      return InitAppStatus.notLoggedIn;
+    }
+
+    // User Details
+    if (appState.userData.signUpStatus == 0) {
+      return InitAppStatus.notSignedUp;
+    }
+
+    // TODO: Add a function for parking lord too.
 
     return InitAppStatus.loggedIn;
   }
@@ -121,4 +130,4 @@ class AuthProvider {
   }
 }
 
-enum InitAppStatus { loggedIn, notLoggedIn }
+enum InitAppStatus { loggedIn, notSignedUp, notLoggedIn }

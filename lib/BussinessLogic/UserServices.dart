@@ -1,24 +1,53 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart' as dio;
+import 'package:getparked/StateManagement/Models/AppState.dart';
+import 'package:getparked/StateManagement/Models/UserData.dart';
 import 'package:getparked/Utils/JSONUtils.dart';
 import 'package:getparked/Utils/SecureStorageUtils.dart';
 import 'package:http/http.dart' as http;
 import 'package:getparked/Utils/DomainUtils.dart';
+import 'package:provider/provider.dart';
 
 String USER_ROUTE = "/app/users";
 
 class UserServices {
   // TODO: get user data from it.
-  Future getUser({@required String authToken}) async {
+  Future getUser(
+      {@required String authToken, @required BuildContext context}) async {
     try {
+      AppState appState = Provider.of<AppState>(context, listen: false);
       http.Response resp = await http.get(
           Uri.parse(domainName + USER_ROUTE + "/getUser"),
           headers: {AUTH_TOKEN: authToken});
 
-      print(resp);
-    } catch (e) {}
+      // print(resp.body);
+      if (resp.statusCode == 200) {
+        Map<String, dynamic> respMap = json.decode(resp.body);
+        String refreshToken = respMap[REFRESH_TOKEN];
+        appState.setAuthToken(refreshToken);
+        UserData userData = UserData.fromMap(respMap["user"]);
+        if (userData != null) {
+          SecureStorageUtils().setAuthToken(authToken);
+          appState.setUserData(userData);
+          return UserGetStatus.successful;
+        }
+        return UserGetStatus.failed;
+      } else if (resp.statusCode == 404) {
+        return UserGetStatus.notFound;
+      } else if (resp.statusCode == 500) {
+        return UserGetStatus.internalServerError;
+      }
+
+      return UserGetStatus.failed;
+    } catch (e) {
+      print(e);
+
+      return UserGetStatus.failed;
+    }
   }
 
   Future<bool> isEmailRegistered({@required String email}) async {
@@ -85,6 +114,17 @@ class UserServices {
       return UserCreateStatus.failed;
     }
   }
+
+  uploadUserDetails(
+      {@required String authToken,
+      @required String firstName,
+      @required String lastName,
+      @required String notificationToken,
+      @required String dialCode,
+      @required String gender,
+      @required String phoneNumber}) {}
+
+  uploadProfilePic({@required File profilePic, @required String authToken}) {}
 }
 
 enum UserCreateStatus {
@@ -94,6 +134,8 @@ enum UserCreateStatus {
   serverError,
   failed
 }
+
+enum UserGetStatus { successful, notFound, internalServerError, failed }
 
 const String API_TOKEN_HEADER = "apitoken";
 const String CONTENT_TYPE_KEY = 'Content-Type';

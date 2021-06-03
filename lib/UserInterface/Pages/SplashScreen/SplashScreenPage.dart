@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:getparked/BussinessLogic/AuthProvider.dart';
+import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/UserInterface/Icons/g_p_icons_icons.dart';
+import 'package:getparked/UserInterface/Pages/Login/LoginDetailsForm.dart';
 import 'package:getparked/UserInterface/Pages/Login/LoginPage.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';
 import 'package:getparked/UserInterface/Widgets/CustomIcon.dart';
 import 'package:getparked/Utils/DomainUtils.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreenPage extends StatefulWidget {
   @override
@@ -23,13 +26,25 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
     InitAppStatus initAppStatus =
         await AuthProvider().initApp(context: context);
     print(initAppStatus);
+
+    AppState appState = Provider.of<AppState>(context, listen: false);
     switch (initAppStatus) {
       case InitAppStatus.loggedIn:
         // TODO: send to home page.
         print("Sending to Home Page...");
         break;
+      case InitAppStatus.notSignedUp:
+        // Sending to login details form.
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) {
+            return LoginDetailsForm(
+                userData: appState.userData, authToken: appState.authToken);
+          },
+        ));
+        break;
       case InitAppStatus.notLoggedIn:
-        Navigator.of(context).push(MaterialPageRoute(
+        // Sending to login page.
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) {
             return LoginPage();
           },
