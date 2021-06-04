@@ -50,5 +50,11 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+
+        
+        <!--Google Maps Api Key-->
+        <meta-data
+          android:name="com.google.android.geo.API_KEY"
+          android:value="AIzaSyCdfNk4HGuDa0XdG2cTnSuuJR8NGD3mPBM"/>
     </application>
 </manifest>

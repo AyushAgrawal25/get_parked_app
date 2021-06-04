@@ -4,7 +4,6 @@ import 'package:getparked/Utils/ContactUtils.dart';
 import 'package:getparked/Utils/InternetConnection.dart';
 // TODO: create map places utils
 // import 'package:getparked/BussinessLogic/MapPlacesUtils.dart';
-// import 'package:getparked/BussinessLogic/VehiclesUtils.dart';
 import 'package:getparked/StateManagement/Models/AppOverlayStyleData.dart';
 import 'package:getparked/StateManagement/Models/ContactData.dart';
 import 'package:getparked/StateManagement/Models/GooglePlaceData.dart';
@@ -17,6 +16,8 @@ import 'package:getparked/StateManagement/Models/UserData.dart';
 import 'package:getparked/StateManagement/Models/UserDetails.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:getparked/Utils/MapPlacesUtils.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -40,10 +41,10 @@ class AppState extends ChangeNotifier {
 
   // TODO: create this.
   // // Camera Position
-  // CameraPosition currentCameraPosition;
-  // void setCurrentCameraPosition(CameraPosition gpCamPos) {
-  //   currentCameraPosition = gpCamPos;
-  // }
+  CameraPosition currentCameraPosition;
+  void setCurrentCameraPosition(CameraPosition gpCamPos) {
+    currentCameraPosition = gpCamPos;
+  }
 
   String authToken;
   void setAuthToken(String token) {
@@ -222,13 +223,12 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  // TODO: create this.
-  // // Map Places
-  // MapPlacesSearchResult mapPlacesForSearch;
-  // void setMapPlacesForSearch(MapPlacesSearchResult gpMapPlacesSearchResult) {
-  //   this.mapPlacesForSearch = gpMapPlacesSearchResult;
-  //   notifyListeners();
-  // }
+  // Map Places
+  MapPlacesSearchResult mapPlacesForSearch;
+  void setMapPlacesForSearch(MapPlacesSearchResult gpMapPlacesSearchResult) {
+    this.mapPlacesForSearch = gpMapPlacesSearchResult;
+    notifyListeners();
+  }
 
   // App Overlay Style
   List<AppOverlayStyleData> overlayStyles = [];

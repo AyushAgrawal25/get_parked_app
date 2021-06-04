@@ -36,6 +36,7 @@ dependencies:
   url_launcher: ^6.0.4
   dio: ^4.0.0
   http: ^0.13.3
+  connectivity: ^3.0.6
   
 # Fonts
   google_fonts: ^2.1.0
@@ -54,9 +55,16 @@ dependencies:
   cached_network_image: ^3.0.0
   image_picker: ^0.8.0
   image_cropper: ^1.4.0
+  flutter_barcode_scanner: ^2.0.0
+  carousel_pro: ^1.0.0
 
 # UPI
   # upi_pay: ^0.2.4
+
+# Maps
+  google_maps_flutter: ^2.0.6
+  location: ^4.1.1
+  geolocator: ^5.3.1
 
 # State Management
   provider: ^5.0.0
@@ -69,6 +77,7 @@ dependencies:
 
 # Toast
   fluttertoast: ^8.0.7
+  flushbar: ^1.10.4
 
 # Socket
   socket_io_client: ^1.0.1

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:getparked/BussinessLogic/AuthProvider.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/UserInterface/Icons/g_p_icons_icons.dart';
+import 'package:getparked/UserInterface/Pages/Home/HomePage.dart';
 import 'package:getparked/UserInterface/Pages/Login/LoginDetailsForm.dart';
 import 'package:getparked/UserInterface/Pages/Login/LoginPage.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';
@@ -32,6 +33,11 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
       case InitAppStatus.loggedIn:
         // TODO: send to home page.
         print("Sending to Home Page...");
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) {
+            return HomePage();
+          },
+        ));
         break;
       case InitAppStatus.notSignedUp:
         // Sending to login details form.
