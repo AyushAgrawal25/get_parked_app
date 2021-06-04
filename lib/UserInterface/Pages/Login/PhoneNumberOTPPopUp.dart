@@ -7,6 +7,7 @@ import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:getparked/UserInterface/Widgets/qbFAB.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
+import 'package:pinput/pin_put/pin_put.dart';
 
 class PhoneNumberOTPPopUp {
   show(BuildContext context,
@@ -196,10 +197,45 @@ class _PhoneNumberOTPPopUpContentState
 
             // SizedBox(height: 12.5),
             // OTP Field
+            // Container(
+            //   padding: EdgeInsets.only(top: 13.5, left: 20, right: 20),
+            //   child: PinCodeTextField(
+            //     onTextChanged: (String otp) {
+            //       print(otp + " Entered Value...");
+            //       setState(() {
+            //         gpUserEnteredOTP = otp;
+            //         if ((showError) &&
+            //             (!toShowOTPIncorrectError(
+            //                 gpUserEnteredOTP, widget.correctOTP))) {
+            //           showError = false;
+            //         }
+            //       });
+            //     },
+            //     autofocus: true,
+            //     highlight: true,
+            //     keyboardType: TextInputType.phone,
+            //     highlightColor: qbAppSecondaryBlueColor,
+            //     pinBoxColor: qbAppTextColor,
+            //     pinBoxHeight: 20,
+            //     pinBoxWidth: 20,
+            //     pinBoxDecoration:
+            //         ProvidedPinBoxDecoration.underlinedPinBoxDecoration,
+            //     wrapAlignment: WrapAlignment.spaceAround,
+            //     pinTextStyle: GoogleFonts.roboto(
+            //         fontSize: 15 / MediaQuery.of(context).textScaleFactor,
+            //         fontWeight: FontWeight.w500,
+            //         color: Colors.black),
+            //   ),
+            // ),
+
             Container(
+              alignment: Alignment.center,
               padding: EdgeInsets.only(top: 13.5, left: 20, right: 20),
-              child: PinCodeTextField(
-                onTextChanged: (String otp) {
+              child: PinPut(
+                withCursor: true,
+                fieldsCount: 4,
+                onChanged: (String otp) {
+                  // print(otp + " Entered Value...");
                   setState(() {
                     gpUserEnteredOTP = otp;
                     if ((showError) &&
@@ -209,20 +245,23 @@ class _PhoneNumberOTPPopUpContentState
                     }
                   });
                 },
-                autofocus: true,
-                highlight: true,
+                fieldsAlignment: MainAxisAlignment.spaceEvenly,
+                eachFieldHeight: 40,
+                eachFieldWidth: 40,
+                eachFieldMargin: EdgeInsets.symmetric(horizontal: 2.5),
                 keyboardType: TextInputType.phone,
-                highlightColor: qbAppSecondaryBlueColor,
-                pinBoxColor: qbAppTextColor,
-                pinBoxHeight: 20,
-                pinBoxWidth: 20,
-                pinBoxDecoration:
-                    ProvidedPinBoxDecoration.underlinedPinBoxDecoration,
-                wrapAlignment: WrapAlignment.spaceAround,
-                pinTextStyle: GoogleFonts.roboto(
-                    fontSize: 15 / MediaQuery.of(context).textScaleFactor,
-                    fontWeight: FontWeight.w500,
-                    color: qbAppTextColor),
+                selectedFieldDecoration: BoxDecoration(
+                  border:
+                      Border.all(color: Colors.deepPurpleAccent, width: 1.5),
+                  borderRadius: BorderRadius.circular(360),
+                ),
+                followingFieldDecoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.0),
+                  border: Border.all(
+                    width: 1.5,
+                    color: Colors.deepPurpleAccent.withOpacity(.5),
+                  ),
+                ),
               ),
             ),
 

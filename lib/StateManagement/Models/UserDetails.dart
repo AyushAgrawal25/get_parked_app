@@ -48,13 +48,13 @@ class UserDetailsUtils {
   static UserGender setGenderTypeFromString(String gender) {
     UserGender userGender;
     switch (gender) {
-      case "m":
+      case "Male":
         userGender = UserGender.male;
         break;
-      case "f":
+      case "Female":
         userGender = UserGender.female;
         break;
-      case "o":
+      case "Others":
         userGender = UserGender.others;
         break;
     }
@@ -66,13 +66,13 @@ class UserDetailsUtils {
     String gender;
     switch (userGender) {
       case UserGender.male:
-        gender = "m";
+        gender = "Male";
         break;
       case UserGender.female:
-        gender = "f";
+        gender = "Female";
         break;
       case UserGender.others:
-        gender = "o";
+        gender = "Others";
         break;
     }
 

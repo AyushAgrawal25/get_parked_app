@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -36,6 +37,8 @@ class UserServices {
           return UserGetStatus.successful;
         }
         return UserGetStatus.failed;
+      } else if (resp.statusCode == 403) {
+        return UserGetStatus.invalidToken;
       } else if (resp.statusCode == 404) {
         return UserGetStatus.notFound;
       } else if (resp.statusCode == 500) {
@@ -115,14 +118,77 @@ class UserServices {
     }
   }
 
-  uploadUserDetails(
+  Future<String> verifyPhoneNumber(
+      {@required String phNum, @required String authToken}) async {
+    try {
+      var rng = Random();
+      String otp = "";
+
+      for (int i = 0; i < 4; i++) {
+        int num = rng.nextInt(8);
+        num++;
+        otp = otp + num.toString();
+      }
+      Map<String, dynamic> reqBody = {"otp": otp, "phoneNumber": phNum};
+      Uri url = Uri.parse(domainName + USER_ROUTE + "/phoneNumberVerification");
+
+      http.Response resp = await http.post(url,
+          body: JSONUtils().postBody(reqBody),
+          headers: <String, String>{
+            AUTH_TOKEN: authToken,
+            CONTENT_TYPE_KEY: JSON_CONTENT_VALUE,
+          });
+
+      print(resp.body);
+      if (resp.statusCode == 200) {
+        return otp;
+      }
+      return null;
+    } catch (error) {
+      print(error);
+      return null;
+    }
+  }
+
+  Future<UserDetailsUploadStatus> uploadUserDetails(
       {@required String authToken,
       @required String firstName,
       @required String lastName,
       @required String notificationToken,
       @required String dialCode,
       @required String gender,
-      @required String phoneNumber}) {}
+      @required String phoneNumber}) async {
+    try {
+      Map<String, dynamic> reqBody = {
+        "firstName": firstName,
+        "lastName": lastName,
+        "dialCode": dialCode,
+        "phoneNumber": phoneNumber,
+        "gender": gender,
+        "fcmToken": notificationToken
+      };
+      Uri url = Uri.parse(domainName + USER_ROUTE + "/addUserDetails");
+      http.Response resp = await http.post(url,
+          body: JSONUtils().postBody(reqBody),
+          headers: <String, String>{
+            AUTH_TOKEN: authToken,
+            CONTENT_TYPE_KEY: JSON_CONTENT_VALUE,
+          });
+      print(resp.body);
+      if (resp.statusCode == 200) {
+        return UserDetailsUploadStatus.successful;
+      } else if (resp.statusCode == 403) {
+        return UserDetailsUploadStatus.invalidToken;
+      } else if (resp.statusCode == 500) {
+        return UserDetailsUploadStatus.serverError;
+      }
+
+      return UserDetailsUploadStatus.failed;
+    } catch (e) {
+      print(e);
+      return UserDetailsUploadStatus.failed;
+    }
+  }
 
   uploadProfilePic({@required File profilePic, @required String authToken}) {}
 }
@@ -134,8 +200,15 @@ enum UserCreateStatus {
   serverError,
   failed
 }
+enum UserDetailsUploadStatus { successful, invalidToken, serverError, failed }
 
-enum UserGetStatus { successful, notFound, internalServerError, failed }
+enum UserGetStatus {
+  successful,
+  notFound,
+  invalidToken,
+  internalServerError,
+  failed
+}
 
 const String API_TOKEN_HEADER = "apitoken";
 const String CONTENT_TYPE_KEY = 'Content-Type';

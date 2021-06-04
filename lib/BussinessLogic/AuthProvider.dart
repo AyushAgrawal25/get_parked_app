@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getparked/BussinessLogic/UserServices.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
@@ -127,6 +128,34 @@ class AuthProvider {
     } catch (e) {
       return false;
     }
+  }
+
+  Future firebasePhoneVerification({@required String phoneNumber}) async {
+    print(phoneNumber + " this is phone number....");
+    fbAuth.FirebaseAuth firebaseAuth = fbAuth.FirebaseAuth.instance;
+    firebaseAuth.verifyPhoneNumber(
+        // phoneNumber: phoneNumber,
+        phoneNumber: "+91 8085 873 059",
+        verificationCompleted: (phoneAuthCredential) {
+          print("Verification Complete !");
+          print(phoneAuthCredential.smsCode);
+        },
+        verificationFailed: (error) {
+          print("Error !");
+          print(error.phoneNumber);
+          print(error.tenantId);
+          print(error.code);
+          print(error.message);
+        },
+        codeSent: (verificationId, forceResendingToken) {
+          print("Code Sent !");
+          print(verificationId);
+          print(forceResendingToken);
+        },
+        codeAutoRetrievalTimeout: (verificationId) {
+          print(verificationId);
+        },
+        autoRetrievedSmsCodeForTesting: "4565");
   }
 }
 

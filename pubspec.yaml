@@ -42,6 +42,7 @@ dependencies:
 
 # PinCodeInput
   pin_code_text_field: ^1.8.0
+  pinput: ^1.2.0
 
 # File And Encryption
   encrypt: ^5.0.0

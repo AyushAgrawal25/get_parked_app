@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:getparked/BussinessLogic/AuthProvider.dart';
 import 'package:getparked/Utils/FCMUtils.dart';
 import 'package:getparked/Utils/NotificationUtils.dart';
 import 'package:getparked/BussinessLogic/UserServices.dart';
@@ -74,8 +75,8 @@ class _LoginDetailsFormState extends State<LoginDetailsForm> {
     String placeHolderPic = "";
     if (gpProfilePicFile == null) {
       if ((gpUserGenderValue == "") ||
-          (gpUserGenderValue == "o") ||
-          (gpUserGenderValue == "m") ||
+          (gpUserGenderValue == "Others") ||
+          (gpUserGenderValue == "Male") ||
           (gpUserGenderValue == null)) {
         placeHolderPic = "assets/images/male.png";
       } else {
@@ -436,17 +437,18 @@ class _LoginDetailsFormState extends State<LoginDetailsForm> {
         });
 
         //TODO: Add Firebase verification.
-        // String otpData = await UserAuth().verifyPhoneNumber(
-        //     gpDialCode + gpPhNum,
-        //     widget.userData.id,
-        //     widget.userData.accessToken);
-        // setState(() {
-        //   gpCorrectOTP = otpData;
-        //   isLoadinForPhNumVerification = false;
-        //   if (gpCorrectOTP != null) {
-        //     isOTPSentCurPhNum = true;
-        //   }
-        // });
+        String otpData = await UserServices().verifyPhoneNumber(
+            phNum: gpDialCode + gpPhNum, authToken: widget.authToken);
+        setState(() {
+          gpCorrectOTP = otpData;
+          isLoadinForPhNumVerification = false;
+          if (gpCorrectOTP != null) {
+            isOTPSentCurPhNum = true;
+          }
+        });
+
+        // AuthProvider()
+        //     .firebasePhoneVerification(phoneNumber: gpDialCode + gpPhNum);
 
         if (gpCorrectOTP != null) {
           PhoneNumberOTPPopUp().show(context,
@@ -505,14 +507,15 @@ class _LoginDetailsFormState extends State<LoginDetailsForm> {
         });
 
         //TODO: Add Firebase verification.
-        // String otpData = await UserAuth().verifyPhoneNumber(
-        //     gpDialCode + gpPhNum,
-        //     widget.userData.id,
-        //     widget.userData.accessToken);
-        // setState(() {
-        //   gpCorrectOTP = otpData;
-        //   isLoadinForOTPResend = false;
-        // });
+        String otpData = await UserServices().verifyPhoneNumber(
+            phNum: gpDialCode + gpPhNum, authToken: widget.authToken);
+        setState(() {
+          gpCorrectOTP = otpData;
+          isLoadinForOTPResend = false;
+        });
+
+        // AuthProvider()
+        //     .firebasePhoneVerification(phoneNumber: gpDialCode + gpPhNum);
 
         if (gpCorrectOTP != null) {
           PhoneNumberOTPPopUp().show(context,
@@ -596,7 +599,7 @@ class _LoginDetailsFormState extends State<LoginDetailsForm> {
                       textScaleFactor: 1.0,
                     ),
                   ),
-                  value: "m",
+                  value: "Male",
                 ),
               ),
               SizedBox(
@@ -621,7 +624,7 @@ class _LoginDetailsFormState extends State<LoginDetailsForm> {
                       textScaleFactor: 1.0,
                     ),
                   ),
-                  value: "f",
+                  value: "Female",
                 ),
               ),
               SizedBox(
@@ -646,7 +649,7 @@ class _LoginDetailsFormState extends State<LoginDetailsForm> {
                       textScaleFactor: 1.0,
                     ),
                   ),
-                  value: "o",
+                  value: "Others",
                 ),
               ),
             ],
@@ -906,21 +909,26 @@ class _LoginDetailsFormState extends State<LoginDetailsForm> {
         isLoading = true;
       });
       String gpNotificationToken = await FCMUtils().getToken();
-      bool userDetailsResp = await UserServices().uploadUserDetails(
-          authToken: widget.authToken,
-          firstName: gpFirstName,
-          lastName: gpLastName,
-          notificationToken: gpNotificationToken,
-          dialCode: gpDialCode,
-          gender: gpUserGenderValue,
-          phoneNumber: gpPhNum);
+      UserDetailsUploadStatus uploadStatus = await UserServices()
+          .uploadUserDetails(
+              authToken: widget.authToken,
+              firstName: gpFirstName,
+              lastName: gpLastName,
+              notificationToken: gpNotificationToken,
+              dialCode: gpDialCode,
+              gender: gpUserGenderValue,
+              phoneNumber: gpPhNum);
 
-      if (userDetailsResp) {
+      if (uploadStatus == UserDetailsUploadStatus.successful) {
         if (gpProfilePicFile != null) {
           await UserServices().uploadProfilePic(
               authToken: widget.authToken, profilePic: gpProfilePicFile);
         }
         navigateToHome();
+      } else if (uploadStatus == UserDetailsUploadStatus.invalidToken) {
+        await AuthProvider().firebaseLogout();
+      } else {
+        // TODO: toast try again.
       }
       setState(() {
         isLoading = false;
@@ -931,6 +939,8 @@ class _LoginDetailsFormState extends State<LoginDetailsForm> {
   }
 
   navigateToHome() async {
+    // TODO: navigate to Home Page.
+    print("Sending you to HomePage...");
     // await NotificationUtils().init();
 
     // UserDetails gpUserDetails = await UserAuth().getUserDetailsFromUserId(
