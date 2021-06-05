@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/UserData.dart';
+import 'package:getparked/StateManagement/Models/UserDetails.dart';
 import 'package:getparked/Utils/JSONUtils.dart';
 import 'package:getparked/Utils/SecureStorageUtils.dart';
 import 'package:http/http.dart' as http;
@@ -30,9 +31,18 @@ class UserServices {
         Map<String, dynamic> respMap = json.decode(resp.body);
         String refreshToken = respMap[REFRESH_TOKEN];
         appState.setAuthToken(refreshToken);
+        print(respMap);
+
         UserData userData = UserData.fromMap(respMap["user"]);
+        if (userData.signUpStatus == 0) {
+          return UserGetStatus.notSignedUp;
+        }
+        UserDetails userDetails =
+            UserDetails.fromMap(respMap["user"]["userDetails"]);
+
         if (userData != null) {
           SecureStorageUtils().setAuthToken(authToken);
+          appState.setUserDetails(userDetails);
           appState.setUserData(userData);
           return UserGetStatus.successful;
         }
@@ -204,6 +214,7 @@ enum UserDetailsUploadStatus { successful, invalidToken, serverError, failed }
 
 enum UserGetStatus {
   successful,
+  notSignedUp,
   notFound,
   invalidToken,
   internalServerError,

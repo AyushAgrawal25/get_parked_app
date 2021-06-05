@@ -48,4 +48,17 @@ class ContactUtils {
     gpContacts.sort((a, b) => a.displayName.compareTo(b.displayName));
     return gpContacts;
   }
+
+  static String encodePhNum(String phNum) {
+    String enPhNum = "";
+    for (int i = 0; i < phNum.length; i++) {
+      if (i < phNum.length - 3) {
+        enPhNum += "x";
+      } else {
+        enPhNum += phNum[i];
+      }
+    }
+
+    return enPhNum;
+  }
 }

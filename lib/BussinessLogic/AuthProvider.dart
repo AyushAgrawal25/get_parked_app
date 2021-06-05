@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:getparked/BussinessLogic/NotificationServices.dart';
 import 'package:getparked/BussinessLogic/UserServices.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/Utils/SecureStorageUtils.dart';
@@ -31,7 +32,9 @@ class AuthProvider {
     // Set the user data and details together.
     UserGetStatus userGetStatus =
         await UserServices().getUser(authToken: authToken, context: context);
-    if (userGetStatus != UserGetStatus.successful) {
+    if (userGetStatus == UserGetStatus.notSignedUp) {
+      return InitAppStatus.notSignedUp;
+    } else if (userGetStatus != UserGetStatus.successful) {
       await firebaseLogout();
       return InitAppStatus.notLoggedIn;
     }
@@ -40,6 +43,9 @@ class AuthProvider {
     if (appState.userData.signUpStatus == 0) {
       return InitAppStatus.notSignedUp;
     }
+
+    // FCM Token Update
+    NotificationServices().updateFCMToken(authToken: authToken);
 
     // TODO: Add a function for parking lord too.
 

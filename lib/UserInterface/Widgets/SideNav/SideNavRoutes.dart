@@ -9,6 +9,8 @@
 // import 'package:getparked/UserInterface/Pages/About/AboutPage.dart';
 // import 'package:getparked/UserInterface/Pages/Settings/SettingsPage.dart';
 // import 'package:getparked/UserInterface/Pages/HelpAndFeedback/HelpAndFeedbackPage.dart';
+import 'package:getparked/UserInterface/Pages/Profile/ProfilePage.dart';
+import 'package:getparked/UserInterface/Pages/RentOutSpace/RentOutSpaceFormsPage.dart';
 import 'package:sailor/sailor.dart';
 
 class SideNavRoutes {
@@ -26,16 +28,16 @@ class SideNavRoutes {
       //       SailorTransition.fade_in
       //     ],
       //     defaultTransitionDuration: Duration(milliseconds: 250)),
-      // SailorRoute(
-      //     name: '/Profile',
-      //     builder: (context, args, paramMap) {
-      //       return ProfilePage();
-      //     },
-      //     defaultTransitions: [
-      //       SailorTransition.slide_from_left,
-      //       SailorTransition.fade_in
-      //     ],
-      //     defaultTransitionDuration: Duration(milliseconds: 250)),
+      SailorRoute(
+          name: '/Profile',
+          builder: (context, args, paramMap) {
+            return ProfilePage();
+          },
+          defaultTransitions: [
+            SailorTransition.slide_from_left,
+            SailorTransition.fade_in
+          ],
+          defaultTransitionDuration: Duration(milliseconds: 250)),
       // SailorRoute(
       //     name: '/Wallet',
       //     builder: (context, args, paramMap) {
@@ -56,16 +58,16 @@ class SideNavRoutes {
       //       SailorTransition.fade_in
       //     ],
       //     defaultTransitionDuration: Duration(milliseconds: 250)),
-      // SailorRoute(
-      //     name: '/RentOutSpace',
-      //     builder: (context, args, paramMap) {
-      //       return RentOutSpaceForms();
-      //     },
-      //     defaultTransitions: [
-      //       SailorTransition.slide_from_left,
-      //       SailorTransition.fade_in
-      //     ],
-      //     defaultTransitionDuration: Duration(milliseconds: 250)),
+      SailorRoute(
+          name: '/RentOutSpace',
+          builder: (context, args, paramMap) {
+            return RentOutSpaceForms();
+          },
+          defaultTransitions: [
+            SailorTransition.slide_from_left,
+            SailorTransition.fade_in
+          ],
+          defaultTransitionDuration: Duration(milliseconds: 250)),
       // SailorRoute(
       //     name: '/ParkingLord',
       //     builder: (context, args, paramMap) {

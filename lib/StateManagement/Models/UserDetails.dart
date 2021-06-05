@@ -8,25 +8,25 @@ class UserDetails {
   String gender;
   String profilePicUrl;
   String profilePicThumbnailUrl;
-  int loginStatus;
   int status;
 
   UserGender getGenderType() {
     return UserDetailsUtils.setGenderTypeFromString(gender);
   }
 
+  // TODO: whenever use this function add email to it.
   UserDetails.fromMap(Map userDetailsMap) {
-    id = userDetailsMap["userId"];
-    email = userDetailsMap["userEmail"];
-    firstName = userDetailsMap["userDetailFirstName"];
-    lastName = userDetailsMap["userDetailLastName"];
-    gender = userDetailsMap["userDetailGender"];
-    loginStatus = userDetailsMap["userLogInStatus"];
-    dialCode = userDetailsMap["userDetailDialCode"];
-    phoneNumber = userDetailsMap["userDetailPhoneNumber"];
-    profilePicUrl = userDetailsMap["userProfilePicUrl"];
-    profilePicThumbnailUrl = userDetailsMap["userProfilePicThumbnailUrl"];
-    status = userDetailsMap["userStatus"];
+    id = userDetailsMap["id"];
+    email = userDetailsMap["email"];
+    firstName = userDetailsMap["firstName"];
+    lastName = userDetailsMap["lastName"];
+    gender = userDetailsMap["gender"];
+    dialCode = userDetailsMap["dialCode"];
+    phoneNumber = userDetailsMap["phoneNumber"];
+    profilePicUrl = userDetailsMap["picUrl"];
+    profilePicThumbnailUrl = userDetailsMap["picThumbnailUrl"];
+
+    status = userDetailsMap["status"];
   }
 
   UserDetails({
@@ -39,7 +39,6 @@ class UserDetails {
     this.gender,
     this.profilePicUrl,
     this.profilePicThumbnailUrl,
-    this.loginStatus,
     this.status,
   });
 }
@@ -90,7 +89,6 @@ class UserDetailsUtils {
       "userDetailGender": userDetails.gender,
       "userProfilePicUrl": userDetails.profilePicUrl,
       "userProfilePicThumbnailUrl": userDetails.profilePicThumbnailUrl,
-      "userLogInStatus": userDetails.loginStatus,
       "userStatus": userDetails.status
     };
   }
@@ -102,7 +100,6 @@ class UserDetailsUtils {
       firstName: userDetailsMap["userDetailFirstName"],
       lastName: userDetailsMap["userDetailLastName"],
       gender: userDetailsMap["userDetailGender"],
-      loginStatus: userDetailsMap["userLogInStatus"],
       dialCode: userDetailsMap["userDetailDialCode"],
       phoneNumber: userDetailsMap["userDetailPhoneNumber"],
       profilePicUrl: userDetailsMap["userProfilePicUrl"],

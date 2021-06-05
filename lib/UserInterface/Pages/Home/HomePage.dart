@@ -328,6 +328,7 @@ class _HomePageState extends State<HomePage> {
       settingUpMarkersAndBookings(gpAppStateListen);
     }
 
+    print(gpAppStateListen.userData);
     return WillPopScope(
         child: Scaffold(
             backgroundColor: qbWhiteBGColor,

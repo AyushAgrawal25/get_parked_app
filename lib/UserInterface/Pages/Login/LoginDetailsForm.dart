@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:getparked/BussinessLogic/AuthProvider.dart';
+import 'package:getparked/UserInterface/Pages/SplashScreen/SplashScreenPage.dart';
 import 'package:getparked/Utils/FCMUtils.dart';
 import 'package:getparked/Utils/NotificationUtils.dart';
 import 'package:getparked/BussinessLogic/UserServices.dart';
@@ -941,6 +942,12 @@ class _LoginDetailsFormState extends State<LoginDetailsForm> {
   navigateToHome() async {
     // TODO: navigate to Home Page.
     print("Sending you to HomePage...");
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) {
+        return SplashScreenPage();
+      }),
+    );
+
     // await NotificationUtils().init();
 
     // UserDetails gpUserDetails = await UserAuth().getUserDetailsFromUserId(
