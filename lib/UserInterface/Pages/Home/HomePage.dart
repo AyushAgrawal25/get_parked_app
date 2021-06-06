@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:getparked/BussinessLogic/VehiclesServices.dart';
 import 'package:getparked/StateManagement/Models/VehicleTypeData.dart';
 import 'package:getparked/Utils/ContactUtils.dart';
 import 'package:getparked/Utils/FlushBarUtils.dart';
@@ -71,9 +72,10 @@ class _HomePageState extends State<HomePage> {
 
   initializeVehiclesTypeData() async {
     // TODO: create this function
-    // vehiclesTypeData = await VehiclesUtils()
-    //     .initVehicleTypeData(gpAppState.userData.accessToken);
-    // gpAppState.setVehiclesTypeData(vehiclesTypeData);
+    vehiclesTypeData =
+        await VehiclesServices().getTypes(authToken: gpAppState.authToken);
+    gpAppState.setVehiclesTypeData(vehiclesTypeData);
+    print(vehiclesTypeData.length);
   }
 
   initializeContacts() async {

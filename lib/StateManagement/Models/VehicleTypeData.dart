@@ -8,6 +8,41 @@ class VehicleTypeData {
   double breadth;
   double height;
 
+  setType(String typeValue) {
+    switch (typeValue) {
+      case "BIKE":
+        type = VehicleType.bike;
+        break;
+      case "MINI":
+        type = VehicleType.mini;
+        break;
+      case "SEDAN":
+        type = VehicleType.sedan;
+        break;
+      case "VAN":
+        type = VehicleType.van;
+        break;
+      case "SUV":
+        type = VehicleType.suv;
+        break;
+    }
+  }
+
   VehicleTypeData(
       {this.type, this.id, this.name, this.length, this.breadth, this.height});
+
+  VehicleTypeData.fromMap(Map vehicleTypeData) {
+    id = vehicleTypeData["vehicleMasterId"];
+    name = vehicleTypeData["name"];
+    setType(vehicleTypeData["type"]);
+    length = (vehicleTypeData["length"] != null)
+        ? (vehicleTypeData["length"]).toDouble()
+        : 0.0;
+    breadth = (vehicleTypeData["breadth"] != null)
+        ? (vehicleTypeData["breadth"]).toDouble()
+        : 0.0;
+    height = (vehicleTypeData["height"] != null)
+        ? (vehicleTypeData["height"]).toDouble()
+        : 0.0;
+  }
 }

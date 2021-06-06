@@ -75,15 +75,19 @@ class _ParkingAreaDetailsState extends State<ParkingAreaDetails> {
       print(err);
     });
     if (markerLocationData != null) {
-      setState(() {
-        gpLocationISOCode = markerLocationData[0].isoCountryCode;
-        gpLocationName = markerLocationData[0].name;
-        gpParkingSlotCity = markerLocationData[0].subAdministrativeArea;
-        gpParkingSlotState = markerLocationData[0].administrativeArea;
-        gpParkingSlotCountry = markerLocationData[0].country;
-        gpParkingSlotPincode = markerLocationData[0].postalCode;
+      markerLocationData.forEach((element) {
+        if (element != null) {
+          gpLocationISOCode = element.isoCountryCode;
+          gpLocationName = element.name;
+          gpParkingSlotCity = element.subAdministrativeArea;
+          gpParkingSlotState = element.administrativeArea;
+          gpParkingSlotCountry = element.country;
+          gpParkingSlotPincode = element.postalCode;
+        }
       });
+      setState(() {});
     } else {
+      print("Getting null man");
       setState(() {
         gpLocationISOCode = "";
         gpLocationName = "";
@@ -220,14 +224,11 @@ class _ParkingAreaDetailsState extends State<ParkingAreaDetails> {
           // City
           Expanded(
             child: Container(
-              child: UnderLineTextFormField(
-                  labelText: "City",
-                  value: gpParkingSlotCity,
-                  isReadOnly:
-                      ((gpParkingSlotCity != null) && (gpParkingSlotCity != ""))
-                          ? true
-                          : false),
-            ),
+                child: UnderLineTextFormField(
+              labelText: "City",
+              value: gpParkingSlotCity,
+              isReadOnly: true,
+            )),
           ),
 
           // PinCode
@@ -347,6 +348,12 @@ class _ParkingAreaDetailsState extends State<ParkingAreaDetails> {
     setSlotDetailsHeading();
     setCityAndPincodeWidget();
     setContinueBtn();
+    // print(gpLocationISOCode);
+    // print(gpLocationName);
+    // print(gpParkingSlotCity);
+    // print(gpParkingSlotState);
+    // print(gpParkingSlotCountry);
+    // print(gpParkingSlotPincode);
     return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
@@ -418,14 +425,18 @@ class _ParkingAreaDetailsState extends State<ParkingAreaDetails> {
                               },
                             )),
                             // Address
-                            Container(
-                                child: UnderLineTextFormField(
-                              labelText: "State",
-                              value: gpParkingSlotState,
-                              isReadOnly: true,
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 7.5, horizontal: 12.5),
-                            )),
+                            ((gpParkingSlotState != null) &&
+                                    (gpParkingSlotState.length > 0))
+                                ? Container(
+                                    child: UnderLineTextFormField(
+                                    labelText: "State",
+                                    value: gpParkingSlotState,
+                                    isReadOnly: true,
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 7.5, horizontal: 12.5),
+                                  ))
+                                : Container(),
+
                             // City And Pincode
                             cityAndPincodeWidget,
 

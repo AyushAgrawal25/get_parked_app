@@ -49,7 +49,6 @@ class _UnderLineTextFormFieldState extends State<UnderLineTextFormField> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _textEditingController = TextEditingController();
     if (widget.value != null) {
@@ -59,9 +58,9 @@ class _UnderLineTextFormFieldState extends State<UnderLineTextFormField> {
 
   @override
   Widget build(BuildContext context) {
-    // if (widget.value != null) {
-    //   _textEditingController.text = widget.value;
-    // }
+    if (widget.value != null) {
+      _textEditingController.text = widget.value;
+    }
     return Container(
       width: widget.width,
       padding: widget.padding,
