@@ -83,7 +83,7 @@ class SlotsServices {
       // print(resp.body);
       if (resp.statusCode == 200) {
         // Parking lord found.
-        Map parkingLordMap = json.decode(resp.body);
+        Map parkingLordMap = json.decode(resp.body)["data"];
         ParkingLordData parkingLordData =
             ParkingLordData.fromMap(parkingLordMap);
         appState.setParkingLordData(parkingLordData);

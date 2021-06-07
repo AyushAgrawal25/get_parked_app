@@ -28,7 +28,7 @@ class NotificationServices {
             AUTH_TOKEN: authToken
           });
 
-      print(resp.body);
+      // print(resp.body);
       if (resp.statusCode == 200) {
         return FCMTokenUpdateStatus.successful;
       } else if (resp.statusCode == 403) {

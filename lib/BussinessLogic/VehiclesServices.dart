@@ -14,7 +14,7 @@ class VehiclesServices {
       Uri url = Uri.parse(domainName + VEHICLES_ROUTE + "/types");
       http.Response resp =
           await http.get(url, headers: {AUTH_TOKEN: authToken});
-      print(resp.body);
+      // print(resp.body);
       if (resp.statusCode == 200) {
         Map respData = json.decode(resp.body);
         List<VehicleTypeData> typesData = [];

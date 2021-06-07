@@ -31,7 +31,7 @@ class UserServices {
         Map<String, dynamic> respMap = json.decode(resp.body);
         String refreshToken = respMap[REFRESH_TOKEN];
         appState.setAuthToken(refreshToken);
-        print(respMap);
+        // print(respMap);
 
         UserData userData = UserData.fromMap(respMap["user"]);
         if (userData.signUpStatus == 0) {
@@ -149,7 +149,7 @@ class UserServices {
             CONTENT_TYPE_KEY: JSON_CONTENT_VALUE,
           });
 
-      print(resp.body);
+      // print(resp.body);
       if (resp.statusCode == 200) {
         return otp;
       }
@@ -184,7 +184,7 @@ class UserServices {
             AUTH_TOKEN: authToken,
             CONTENT_TYPE_KEY: JSON_CONTENT_VALUE,
           });
-      print(resp.body);
+      // print(resp.body);
       if (resp.statusCode == 200) {
         return UserDetailsUploadStatus.successful;
       } else if (resp.statusCode == 403) {
