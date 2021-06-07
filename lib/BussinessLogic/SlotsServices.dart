@@ -1,10 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:getparked/BussinessLogic/UserServices.dart';
+import 'package:getparked/StateManagement/Models/AppState.dart';
+import 'package:getparked/StateManagement/Models/ParkingLordData.dart';
 import 'package:getparked/StateManagement/Models/SlotData.dart';
 import 'package:getparked/Utils/DomainUtils.dart';
 import 'package:getparked/Utils/JSONUtils.dart';
 import 'package:getparked/Utils/SecureStorageUtils.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 const String SLOTS_ROUTE = "/app/slots";
 
@@ -66,6 +71,44 @@ class SlotsServices {
       return SlotCreateStatus.failed;
     }
   }
+
+  Future<ParkingLordGetStatus> getParkingLord(
+      {@required BuildContext context}) async {
+    AppState appState = Provider.of<AppState>(context, listen: false);
+    try {
+      String authToken = appState.authToken;
+      Uri url = Uri.parse(domainName + SLOTS_ROUTE + "/parkingLord");
+      http.Response resp =
+          await http.get(url, headers: {AUTH_TOKEN: authToken});
+      // print(resp.body);
+      if (resp.statusCode == 200) {
+        // Parking lord found.
+        Map parkingLordMap = json.decode(resp.body);
+        ParkingLordData parkingLordData =
+            ParkingLordData.fromMap(parkingLordMap);
+        appState.setParkingLordData(parkingLordData);
+        return ParkingLordGetStatus.successful;
+      } else if (resp.statusCode == 400) {
+        // User not registered.
+        return ParkingLordGetStatus.successful;
+      } else if (resp.statusCode == 403) {
+        return ParkingLordGetStatus.invlidToken;
+      } else if (resp.statusCode == 500) {
+        return ParkingLordGetStatus.internalServerError;
+      }
+      return ParkingLordGetStatus.failed;
+    } catch (excp) {
+      print(excp);
+      return ParkingLordGetStatus.failed;
+    }
+  }
+}
+
+enum ParkingLordGetStatus {
+  successful,
+  invlidToken,
+  internalServerError,
+  failed
 }
 
 enum SlotCreateStatus { successful, invalidToken, internalServerError, failed }

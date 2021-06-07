@@ -49,14 +49,20 @@ dependencies:
   encrypt: ^5.0.0
   path_provider: ^2.0.2
   flutter_secure_storage: ^4.2.0
+  folder_file_saver: ^1.0.0+2
+
 
 # Image
   flutter_svg: ^0.22.0
   cached_network_image: ^3.0.0
   image_picker: ^0.8.0
   image_cropper: ^1.4.0
-  flutter_barcode_scanner: ^2.0.0
   carousel_pro: ^1.0.0
+  photo_view: ^0.11.1
+
+# QR Scanner
+  flutter_barcode_scanner: ^2.0.0
+  qr_flutter: ^4.0.0
 
 # UPI
   # upi_pay: ^0.2.4

@@ -43,91 +43,91 @@ class ParkingLordData {
       data = parkingLordMap;
 
       // Slot Id;
-      if (parkingLordMap["slotId"] != null) {
-        id = parkingLordMap["slotId"];
+      if (parkingLordMap["id"] != null) {
+        id = parkingLordMap["id"];
       }
 
       // User Id
-      if (parkingLordMap["slotUserId"] != null) {
-        userId = parkingLordMap["slotUserId"];
+      if (parkingLordMap["userId"] != null) {
+        userId = parkingLordMap["userId"];
       }
 
       // Token
-      if (parkingLordMap["slotToken"] != null) {
-        token = parkingLordMap["slotToken"];
+      if (parkingLordMap["token"] != null) {
+        token = parkingLordMap["token"];
       }
 
       // Name
-      if (parkingLordMap["slotName"] != null) {
-        name = parkingLordMap["slotName"];
+      if (parkingLordMap["name"] != null) {
+        name = parkingLordMap["name"];
       }
 
       // Address
-      if (parkingLordMap["slotAddress"] != null) {
-        address = parkingLordMap["slotAddress"];
+      if (parkingLordMap["address"] != null) {
+        address = parkingLordMap["address"];
       }
 
       // State
-      if (parkingLordMap["slotState"] != null) {
-        state = parkingLordMap["slotState"];
+      if (parkingLordMap["state"] != null) {
+        state = parkingLordMap["state"];
       }
 
       // City
-      if (parkingLordMap["slotCity"] != null) {
-        city = parkingLordMap["slotCity"];
+      if (parkingLordMap["city"] != null) {
+        city = parkingLordMap["city"];
       }
 
       // Pincode
-      if (parkingLordMap["slotPincode"] != null) {
-        pincode = parkingLordMap["slotPincode"];
+      if (parkingLordMap["pincode"] != null) {
+        pincode = parkingLordMap["pincode"];
       }
 
       // Landmark
-      if (parkingLordMap["slotLandmark"] != null) {
-        landmark = parkingLordMap["slotLandmark"];
+      if (parkingLordMap["landmark"] != null) {
+        landmark = parkingLordMap["landmark"];
       }
 
       // Location Name
-      if (parkingLordMap["slotLocationName"] != null) {
-        locationName = parkingLordMap["slotLocationName"];
+      if (parkingLordMap["locationName"] != null) {
+        locationName = parkingLordMap["locationName"];
       }
 
       // Location Country
-      if (parkingLordMap["slotLocationCountry"] != null) {
-        locationCountry = parkingLordMap["slotLocationCountry"];
+      if (parkingLordMap["locationCountry"] != null) {
+        locationCountry = parkingLordMap["locationCountry"];
       }
 
       // Location ISO Country Code
-      if (parkingLordMap["slotLocationISOCountryCode"] != null) {
-        locationISOCountryCode = parkingLordMap["slotLocationISOCountryCode"];
+      if (parkingLordMap["isoCountryCode"] != null) {
+        locationISOCountryCode = parkingLordMap["isoCountryCode"];
       }
 
       //Location Latitude
-      if (parkingLordMap["slotLocationLatitude"] != null) {
-        locationLatitude = (parkingLordMap["slotLocationLatitude"]).toDouble();
+      if (parkingLordMap["latitude"] != null) {
+        locationLatitude = (parkingLordMap["latitude"]).toDouble();
       }
 
       //Location Longitude
-      if (parkingLordMap["slotLocationLongitude"] != null) {
-        locationLongitude =
-            (parkingLordMap["slotLocationLongitude"]).toDouble();
+      if (parkingLordMap["longitude"] != null) {
+        locationLongitude = (parkingLordMap["longitude"]).toDouble();
       }
 
       // Length
-      if (parkingLordMap["slotSpecLength"] != null) {
-        specLength = (parkingLordMap["slotSpecLength"]).toDouble();
+      if (parkingLordMap["length"] != null) {
+        specLength = (parkingLordMap["length"]).toDouble();
       }
 
       // Breadth
-      if (parkingLordMap["slotSpecBreadth"] != null) {
-        specBreadth = (parkingLordMap["slotSpecBreadth"]).toDouble();
+      if (parkingLordMap["breadth"] != null) {
+        specBreadth = (parkingLordMap["breadth"]).toDouble();
       }
 
       // Height
-      if (parkingLordMap["slotSpecHeight"] != null) {
-        specHeight = (parkingLordMap["slotSpecHeight"]).toDouble();
+      if (parkingLordMap["height"] != null) {
+        specHeight = (parkingLordMap["height"]).toDouble();
       }
 
+      // TODO: complete this.
       // Rating
       if (parkingLordMap["rating"] != null) {
         rating = (parkingLordMap["rating"]).toDouble();
@@ -174,28 +174,28 @@ class ParkingLordData {
       }
 
       // Start Time
-      if (parkingLordMap["slotSpecParkingStartTime"] != null) {
-        specParkingStartTime = parkingLordMap["slotSpecParkingStartTime"];
+      if (parkingLordMap["startTime"] != null) {
+        specParkingStartTime = parkingLordMap["startTime"];
       }
 
       // End Time
-      if (parkingLordMap["slotSpecParkingEndTime"] != null) {
-        specParkingEndTime = parkingLordMap["slotSpecParkingEndTime"];
+      if (parkingLordMap["endTime"] != null) {
+        specParkingEndTime = parkingLordMap["endTime"];
       }
 
       // Parking Type
-      if (parkingLordMap["slotSpecSpaceParkingType"] != null) {
-        specSpaceParkingType = parkingLordMap["slotSpecSpaceParkingType"];
+      if (parkingLordMap["spaceType"] != null) {
+        specSpaceParkingType = parkingLordMap["spaceType"];
       }
 
       // Deposit Time
-      if (parkingLordMap["slotSpecSecurityDepositTime"] != null) {
-        specSecurityDepositTime = parkingLordMap["slotSpecSecurityDepositTime"];
+      if (parkingLordMap["securityDepositTime"] != null) {
+        specSecurityDepositTime = parkingLordMap["securityDepositTime"];
       }
 
       // Status
-      if (parkingLordMap["slotStatus"] != null) {
-        status = parkingLordMap["slotStatus"];
+      if (parkingLordMap["status"] != null) {
+        status = parkingLordMap["status"];
       }
     }
   }

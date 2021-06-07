@@ -19,6 +19,7 @@ class UnderLineTextFormField extends StatefulWidget {
   List<TextInputFormatter> inputFormatters;
   bool showClearButton;
   Widget prefixIcon;
+  bool toChangeTextValueOnUpdate;
 
   UnderLineTextFormField(
       {@required this.labelText,
@@ -31,6 +32,7 @@ class UnderLineTextFormField extends StatefulWidget {
       this.keyboardType: TextInputType.text,
       this.contentPadding: defContentPadding,
       this.value,
+      this.toChangeTextValueOnUpdate: false,
       this.prefixIcon,
       this.inputFormatters,
       this.showClearButton: false,
@@ -58,7 +60,7 @@ class _UnderLineTextFormFieldState extends State<UnderLineTextFormField> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.value != null) {
+    if ((widget.value != null) && (widget.toChangeTextValueOnUpdate)) {
       _textEditingController.text = widget.value;
     }
     return Container(

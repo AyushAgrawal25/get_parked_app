@@ -227,6 +227,7 @@ class _ParkingAreaDetailsState extends State<ParkingAreaDetails> {
                 child: UnderLineTextFormField(
               labelText: "City",
               value: gpParkingSlotCity,
+              toChangeTextValueOnUpdate: true,
               isReadOnly: true,
             )),
           ),
@@ -237,6 +238,7 @@ class _ParkingAreaDetailsState extends State<ParkingAreaDetails> {
               labelText: "Pincode",
               isReadOnly: true,
               value: gpParkingSlotPincode,
+              toChangeTextValueOnUpdate: true,
             ),
           ),
         ],
@@ -432,6 +434,7 @@ class _ParkingAreaDetailsState extends State<ParkingAreaDetails> {
                                     labelText: "State",
                                     value: gpParkingSlotState,
                                     isReadOnly: true,
+                                    toChangeTextValueOnUpdate: true,
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: 7.5, horizontal: 12.5),
                                   ))

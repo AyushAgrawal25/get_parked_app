@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getparked/BussinessLogic/NotificationServices.dart';
+import 'package:getparked/BussinessLogic/SlotsServices.dart';
 import 'package:getparked/BussinessLogic/UserServices.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/Utils/SecureStorageUtils.dart';
@@ -38,6 +39,9 @@ class AuthProvider {
       await firebaseLogout();
       return InitAppStatus.notLoggedIn;
     }
+
+    // For Parking Lord
+    await SlotsServices().getParkingLord(context: context);
 
     // User Details
     if (appState.userData.signUpStatus == 0) {

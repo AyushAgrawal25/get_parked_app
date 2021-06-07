@@ -2,6 +2,7 @@ import 'dart:io';
 
 // import 'package:getparked/BussinessLogic/ParkingLordUtils.dart';
 import 'package:getparked/BussinessLogic/SlotsServices.dart';
+import 'package:getparked/BussinessLogic/UserServices.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/ParkingLordData.dart';
 import 'package:getparked/StateManagement/Models/SlotData.dart';
@@ -123,9 +124,11 @@ class _RentOutSpaceFormsState extends State<RentOutSpaceForms> {
 
     // return postStatus;
 
+    AppState appState = Provider.of<AppState>(context, listen: false);
     SlotCreateStatus slotCreateStatus = await SlotsServices()
         .createSlot(authToken: gpAppState.authToken, slotData: gpSlotData);
     if (slotCreateStatus == SlotCreateStatus.successful) {
+      UserServices().getUser(authToken: appState.authToken, context: context);
       return true;
     }
     return false;
