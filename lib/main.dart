@@ -12,6 +12,8 @@ import 'package:getparked/Utils/DomainUtils.dart';
 import 'package:getparked/Utils/NotificationUtils.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
+import 'package:getparked/UserInterface/Theme/AppTheme.dart';
 
 // Firebase BG Services
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -51,6 +53,13 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: qbWhiteBGColor));
     return MaterialApp(
       title: appName,
       theme: ThemeData(

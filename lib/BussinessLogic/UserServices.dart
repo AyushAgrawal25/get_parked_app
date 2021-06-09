@@ -14,7 +14,8 @@ import 'package:http/http.dart' as http;
 import 'package:getparked/Utils/DomainUtils.dart';
 import 'package:provider/provider.dart';
 
-String USER_ROUTE = "/app/users";
+const String USER_ROUTE = "/app/users";
+const String PROFILE_PICS_ROUTE = "/images/profilePics";
 
 class UserServices {
   // TODO: get user data from it.
@@ -200,7 +201,32 @@ class UserServices {
     }
   }
 
-  uploadProfilePic({@required File profilePic, @required String authToken}) {}
+  Future<UploadProfilePicStatus> uploadProfilePic(
+      {@required File profilePic, @required String authToken}) async {
+    try {
+      Uri url = Uri.parse(domainName + PROFILE_PICS_ROUTE + "/upload");
+      http.MultipartRequest postReq = http.MultipartRequest('POST', url);
+      postReq.headers[AUTH_TOKEN] = authToken;
+      postReq.files.add(http.MultipartFile(
+          'image', profilePic.readAsBytes().asStream(), profilePic.lengthSync(),
+          filename: profilePic.path.split("/").last));
+      http.StreamedResponse resp = await postReq.send();
+      if (resp.statusCode == 200) {
+        return UploadProfilePicStatus.successful;
+      } else if (resp.statusCode == 400) {
+        return UploadProfilePicStatus.userDetailsNotFound;
+      } else if (resp.statusCode == 403) {
+        return UploadProfilePicStatus.invalidToken;
+      }
+      if (resp.statusCode == 500) {
+        return UploadProfilePicStatus.internalServerError;
+      }
+      return UploadProfilePicStatus.failed;
+    } catch (excp) {
+      print(excp);
+      return UploadProfilePicStatus.failed;
+    }
+  }
 }
 
 enum UserCreateStatus {
@@ -216,6 +242,14 @@ enum UserGetStatus {
   successful,
   notSignedUp,
   notFound,
+  invalidToken,
+  internalServerError,
+  failed
+}
+
+enum UploadProfilePicStatus {
+  successful,
+  userDetailsNotFound,
   invalidToken,
   internalServerError,
   failed

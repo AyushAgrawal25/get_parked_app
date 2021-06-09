@@ -249,6 +249,7 @@ class _ParkingLordState extends State<ParkingLord> {
     // setParkingCards();
     essentialWidgetsBuilder();
 
+    // print(formatImgUrl(gpAppStateListen.parkingLordData.mainImage.imageUrl));
     return Container(
       child: Stack(
         children: [

@@ -127,7 +127,6 @@ class ParkingLordData {
         specHeight = (parkingLordMap["height"]).toDouble();
       }
 
-      // TODO: complete this.
       // Rating
       if (parkingLordMap["rating"] != null) {
         rating = (parkingLordMap["rating"]).toDouble();
@@ -138,7 +137,7 @@ class ParkingLordData {
       if (parkingLordMap["images"] != null) {
         // Image Urls
         parkingLordMap["images"].forEach((slotImage) {
-          if (slotImage["slotImageType"] == 1) {
+          if (slotImage["type"] == "Others") {
             images.add(SlotImageData.fromMap(slotImage));
           } else {
             mainImage = SlotImageData.fromMap(slotImage);
@@ -147,7 +146,7 @@ class ParkingLordData {
       } else if (parkingLordMap["slotImages"] != null) {
         // Image Urls
         parkingLordMap["slotImages"].forEach((slotImage) {
-          if (slotImage["slotImageType"] == 1) {
+          if (slotImage["type"] == "Others") {
             images.add(SlotImageData.fromMap(slotImage));
           } else {
             mainImage = SlotImageData.fromMap(slotImage);

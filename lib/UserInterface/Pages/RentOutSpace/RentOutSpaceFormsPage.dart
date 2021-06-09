@@ -1,6 +1,7 @@
 import 'dart:io';
 
 // import 'package:getparked/BussinessLogic/ParkingLordUtils.dart';
+import 'package:getparked/BussinessLogic/ParkingLordServices.dart';
 import 'package:getparked/BussinessLogic/SlotsServices.dart';
 import 'package:getparked/BussinessLogic/UserServices.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
@@ -11,9 +12,7 @@ import 'package:getparked/UserInterface/Pages/RentOutSpace/RentOutSpaceForms/Par
 import 'package:getparked/UserInterface/Pages/RentOutSpace/RentOutSpaceForms/TermsAndConditions.dart';
 import 'package:getparked/UserInterface/Pages/RentOutSpace/RentOutSpaceForms/VehiclesSelect.dart';
 import 'package:provider/provider.dart';
-import '../../Theme/AppOverlayStyle.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class RentOutSpaceForms extends StatefulWidget {
   @override
@@ -125,9 +124,10 @@ class _RentOutSpaceFormsState extends State<RentOutSpaceForms> {
     // return postStatus;
 
     AppState appState = Provider.of<AppState>(context, listen: false);
-    SlotCreateStatus slotCreateStatus = await SlotsServices()
-        .createSlot(authToken: gpAppState.authToken, slotData: gpSlotData);
-    if (slotCreateStatus == SlotCreateStatus.successful) {
+    ParkingLordCreateStatus parkingLordCreateStatus =
+        await ParkingLordServices()
+            .createSlot(authToken: gpAppState.authToken, slotData: gpSlotData);
+    if (parkingLordCreateStatus == ParkingLordCreateStatus.successful) {
       UserServices().getUser(authToken: appState.authToken, context: context);
       return true;
     }

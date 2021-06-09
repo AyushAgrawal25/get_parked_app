@@ -12,13 +12,13 @@ class SlotImageData {
       data = slotImageMap;
 
       // Slot Image Id
-      if (slotImageMap["slotImageId"] != null) {
-        id = slotImageMap["slotImageId"];
+      if (slotImageMap["id"] != null) {
+        id = slotImageMap["id"];
       }
 
       // Image Type
-      if (slotImageMap["slotImageType"] != null) {
-        if (slotImageMap["slotImageType"] == 0) {
+      if (slotImageMap["type"] != null) {
+        if (slotImageMap["type"] == "Main") {
           type = SlotImageType.main;
         } else {
           type = SlotImageType.other;
@@ -26,18 +26,18 @@ class SlotImageData {
       }
 
       // Image Url
-      if (slotImageMap["slotImageUrl"] != null) {
-        imageUrl = slotImageMap["slotImageUrl"];
+      if (slotImageMap["url"] != null) {
+        imageUrl = slotImageMap["url"];
       }
 
       // Thumbnail Image Url
-      if (slotImageMap["slotImageThumbnailUrl"] != null) {
-        thumbnailUrl = slotImageMap["slotImageThumbnailUrl"];
+      if (slotImageMap["thumbnailUrl"] != null) {
+        thumbnailUrl = slotImageMap["thumbnailUrl"];
       }
 
       // Status
-      if (slotImageMap["slotImageStatus"] != null) {
-        status = slotImageMap["slotImageStatus"];
+      if (slotImageMap["status"] != null) {
+        status = slotImageMap["status"];
       }
     }
   }

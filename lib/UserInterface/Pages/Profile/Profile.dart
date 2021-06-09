@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:getparked/BussinessLogic/UserServices.dart';
 import 'package:getparked/Utils/FileUtils.dart';
 // import 'package:getparked/BussinessLogic/UserAuth.dart';
 import 'package:getparked/Utils/DomainUtils.dart';
@@ -319,27 +320,36 @@ class _ProfileState extends State<Profile> {
   onImageInsert(imgFile) async {
     if (imgFile != null) {
       // TODO: Add function for profile pic upload.
-      // bool updateStatus = await UserAuth().uploadProfilePic(
-      //     imgFile, gpAppState.userData.id, gpAppState.userData.accessToken);
+      UploadProfilePicStatus uploadStatus = await UserServices()
+          .uploadProfilePic(
+              profilePic: imgFile, authToken: gpAppState.authToken);
 
-      // // Changing Profile Pic
+      if (uploadStatus == UploadProfilePicStatus.successful) {
+        if (gpAppState.userDetails.profilePicUrl != null) {
+          await FileUtils.updateCacheImage(
+              formatImgUrl(gpAppState.userDetails.profilePicUrl));
+        }
+        UserServices()
+            .getUser(authToken: gpAppState.authToken, context: context);
+      }
+      // Changing Profile Pic
       // if (updateStatus) {
-      //   if (gpAppState.userDetails.profilePicUrl != null) {
-      //     // Updating ProfilePic
-      //     await FileUtils.updateCacheImage(
-      //         formatImgUrl(gpAppState.userDetails.profilePicUrl));
+      // if (gpAppState.userDetails.profilePicUrl != null) {
+      //   // Updating ProfilePic
+      //   await FileUtils.updateCacheImage(
+      //       formatImgUrl(gpAppState.userDetails.profilePicUrl));
 
-      //     // Updating ProfilePic
-      //     await FileUtils.updateCacheImage(
-      //         formatImgUrl(gpAppState.userDetails.profilePicThumbnailUrl));
+      //   // Updating ProfilePic
+      //   await FileUtils.updateCacheImage(
+      //       formatImgUrl(gpAppState.userDetails.profilePicThumbnailUrl));
 
-      //     // gpAppState.setUserDetails(gpAppState.userDetails);
-      //   } else {
-      //     UserDetails gpNewUserDetails = await UserAuth()
-      //         .getUserDetailsFromUserId(
-      //             gpAppState.userData.id, gpAppState.userData.accessToken);
-      //     gpAppState.setUserDetails(gpNewUserDetails);
-      //   }
+      //   // gpAppState.setUserDetails(gpAppState.userDetails);
+      // } else {
+      //   UserDetails gpNewUserDetails = await UserAuth()
+      //       .getUserDetailsFromUserId(
+      //           gpAppState.userData.id, gpAppState.userData.accessToken);
+      //   gpAppState.setUserDetails(gpNewUserDetails);
+      // }
       // }
     }
   }

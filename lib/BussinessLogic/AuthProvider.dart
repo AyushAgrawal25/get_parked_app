@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getparked/BussinessLogic/NotificationServices.dart';
+import 'package:getparked/BussinessLogic/ParkingLordServices.dart';
 import 'package:getparked/BussinessLogic/SlotsServices.dart';
 import 'package:getparked/BussinessLogic/UserServices.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
@@ -41,7 +42,7 @@ class AuthProvider {
     }
 
     // For Parking Lord
-    await SlotsServices().getParkingLord(context: context);
+    await ParkingLordServices().getParkingLord(context: context);
 
     // User Details
     if (appState.userData.signUpStatus == 0) {
