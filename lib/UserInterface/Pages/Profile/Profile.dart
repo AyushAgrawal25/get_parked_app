@@ -319,7 +319,6 @@ class _ProfileState extends State<Profile> {
 
   onImageInsert(imgFile) async {
     if (imgFile != null) {
-      // TODO: Add function for profile pic upload.
       UploadProfilePicStatus uploadStatus = await UserServices()
           .uploadProfilePic(
               profilePic: imgFile, authToken: gpAppState.authToken);
@@ -329,28 +328,8 @@ class _ProfileState extends State<Profile> {
           await FileUtils.updateCacheImage(
               formatImgUrl(gpAppState.userDetails.profilePicUrl));
         }
-        UserServices()
-            .getUser(authToken: gpAppState.authToken, context: context);
+        gpAppState.setUserDetails(gpAppState.userDetails);
       }
-      // Changing Profile Pic
-      // if (updateStatus) {
-      // if (gpAppState.userDetails.profilePicUrl != null) {
-      //   // Updating ProfilePic
-      //   await FileUtils.updateCacheImage(
-      //       formatImgUrl(gpAppState.userDetails.profilePicUrl));
-
-      //   // Updating ProfilePic
-      //   await FileUtils.updateCacheImage(
-      //       formatImgUrl(gpAppState.userDetails.profilePicThumbnailUrl));
-
-      //   // gpAppState.setUserDetails(gpAppState.userDetails);
-      // } else {
-      //   UserDetails gpNewUserDetails = await UserAuth()
-      //       .getUserDetailsFromUserId(
-      //           gpAppState.userData.id, gpAppState.userData.accessToken);
-      //   gpAppState.setUserDetails(gpNewUserDetails);
-      // }
-      // }
     }
   }
 

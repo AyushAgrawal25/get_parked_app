@@ -7,6 +7,7 @@ import 'package:getparked/BussinessLogic/UserServices.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/ParkingLordData.dart';
 import 'package:getparked/StateManagement/Models/SlotData.dart';
+import 'package:getparked/StateManagement/Models/SlotImageData.dart';
 import 'package:getparked/UserInterface/Pages/RentOutSpace/RentOutSpaceForms/ParkingAreaDetails.dart';
 import 'package:getparked/UserInterface/Pages/RentOutSpace/RentOutSpaceForms/ParkingSlotSpecs.dart';
 import 'package:getparked/UserInterface/Pages/RentOutSpace/RentOutSpaceForms/TermsAndConditions.dart';
@@ -97,38 +98,17 @@ class _RentOutSpaceFormsState extends State<RentOutSpaceForms> {
 
   // Final Posting Data using API
   postingDataFinal() async {
-    // Write The Main Code Here
-    // bool postStatus = await ParkingLordUtils().becomeParkingLord(gpSlotData,
-    //     gpAppState.userData.id, gpAppState.userData.accessToken, gpMainImgFile);
-    // if (postStatus) {
-    //   // Fetching Parking Lord Data
-    //   ParkingLordData gpParkingLordData = await ParkingLordUtils()
-    //       .init(gpAppState.userData.id, gpAppState.userData.accessToken);
-    //   if (gpParkingLordData != null) {
-    //     gpAppState.setParkingLordData(gpParkingLordData);
-
-    //     bool uploadImgStatus = await ParkingLordUtils().uploadSlotMainImg(
-    //         gpMainImgFile, gpParkingLordData.id, gpParkingLordData.token);
-    //     if (uploadImgStatus) {
-    //       gpParkingLordData = await ParkingLordUtils()
-    //           .init(gpAppState.userData.id, gpAppState.userData.accessToken);
-    //       if (gpParkingLordData != null) {
-    //         gpAppState.setParkingLordData(gpParkingLordData);
-    //       }
-    //     }
-    //   } else {
-    //     print("Data is NULL.");
-    //   }
-    // }
-
-    // return postStatus;
-
-    AppState appState = Provider.of<AppState>(context, listen: false);
     ParkingLordCreateStatus parkingLordCreateStatus =
         await ParkingLordServices()
-            .createSlot(authToken: gpAppState.authToken, slotData: gpSlotData);
+            .become(authToken: gpAppState.authToken, slotData: gpSlotData);
     if (parkingLordCreateStatus == ParkingLordCreateStatus.successful) {
-      UserServices().getUser(authToken: appState.authToken, context: context);
+      await ParkingLordServices().uploadSlotImg(
+          type: SlotImageType.main,
+          imgFile: gpMainImgFile,
+          authToken: gpAppState.authToken);
+      await ParkingLordServices().getParkingLord(context: context);
+    }
+    if (parkingLordCreateStatus == ParkingLordCreateStatus.successful) {
       return true;
     }
     return false;

@@ -12,5 +12,6 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 const String SLOTS_ROUTE = "/app/slots";
+const String SLOT_IMAGES_ROUTE = "/images/slotImages";
 
 class SlotsServices {}

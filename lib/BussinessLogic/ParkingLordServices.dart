@@ -1,10 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:getparked/BussinessLogic/SlotsServices.dart';
 import 'package:getparked/BussinessLogic/UserServices.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/ParkingLordData.dart';
 import 'package:getparked/StateManagement/Models/SlotData.dart';
+import 'package:getparked/StateManagement/Models/SlotImageData.dart';
 import 'package:getparked/Utils/DomainUtils.dart';
 import 'package:getparked/Utils/JSONUtils.dart';
 import 'package:getparked/Utils/SecureStorageUtils.dart';
@@ -14,7 +17,7 @@ import 'package:provider/provider.dart';
 const String PARKING_LORD_ROUTE = "/app/slots";
 
 class ParkingLordServices {
-  Future<ParkingLordCreateStatus> createSlot(
+  Future<ParkingLordCreateStatus> become(
       {@required String authToken, @required SlotData slotData}) async {
     try {
       List<Map> sVPostData = [];
@@ -102,6 +105,43 @@ class ParkingLordServices {
       return ParkingLordGetStatus.failed;
     }
   }
+
+  Future<SlotImageUploadStatus> uploadSlotImg(
+      {@required SlotImageType type,
+      @required File imgFile,
+      @required String authToken}) async {
+    try {
+      Uri url = Uri.parse(domainName + SLOT_IMAGES_ROUTE);
+      http.MultipartRequest uploadReq = http.MultipartRequest('POST', url);
+
+      uploadReq.headers[AUTH_TOKEN] = authToken;
+      uploadReq.files.add(http.MultipartFile(
+          'image', imgFile.readAsBytes().asStream(), imgFile.lengthSync(),
+          filename: imgFile.path.split("/").last));
+      uploadReq.fields["type"] =
+          (type == SlotImageType.main) ? "Main" : "Others";
+
+      http.StreamedResponse resp = await uploadReq.send();
+
+      print(resp.statusCode);
+      if (resp.statusCode == 200) {
+        return SlotImageUploadStatus.successful;
+      } else if (resp.statusCode == 403) {
+        return SlotImageUploadStatus.invalidToken;
+      } else if (resp.statusCode == 400) {
+        return SlotImageUploadStatus.notFound;
+      } else if (resp.statusCode == 409) {
+        return SlotImageUploadStatus.alreadyExists;
+      } else if (resp.statusCode == 500) {
+        return SlotImageUploadStatus.internalServerError;
+      }
+
+      return SlotImageUploadStatus.failed;
+    } catch (excp) {
+      print(excp);
+      return SlotImageUploadStatus.failed;
+    }
+  }
 }
 
 enum ParkingLordGetStatus {
@@ -116,4 +156,13 @@ enum ParkingLordCreateStatus {
   invalidToken,
   internalServerError,
   failed
+}
+
+enum SlotImageUploadStatus {
+  successful,
+  invalidToken,
+  internalServerError,
+  failed,
+  alreadyExists,
+  notFound
 }

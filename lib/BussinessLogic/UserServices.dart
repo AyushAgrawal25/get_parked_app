@@ -206,10 +206,12 @@ class UserServices {
     try {
       Uri url = Uri.parse(domainName + PROFILE_PICS_ROUTE + "/upload");
       http.MultipartRequest postReq = http.MultipartRequest('POST', url);
+
       postReq.headers[AUTH_TOKEN] = authToken;
       postReq.files.add(http.MultipartFile(
           'image', profilePic.readAsBytes().asStream(), profilePic.lengthSync(),
           filename: profilePic.path.split("/").last));
+
       http.StreamedResponse resp = await postReq.send();
       if (resp.statusCode == 200) {
         return UploadProfilePicStatus.successful;

@@ -173,9 +173,6 @@ class _RentOutSpaceTermsAndConditionsState
 
       loadHandler(true);
       bool postStatus = await widget.onAgree(gpSlotData);
-      if (postStatus) {
-        // Parking Lord Data And Set it to App State.
-      }
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) {
           return SuccessAndFailurePage(
@@ -184,7 +181,9 @@ class _RentOutSpaceTermsAndConditionsState
                 ? SuccessAndFailureStatus.success
                 : SuccessAndFailureStatus.failure,
             statusText: "Parking Lord Registration",
-            onButtonPressed: onContinuePressed,
+            onButtonPressed: () {
+              onContinuePressed(postStatus);
+            },
           );
         },
       ));
@@ -195,12 +194,14 @@ class _RentOutSpaceTermsAndConditionsState
     }
   }
 
-  onContinuePressed() {
+  onContinuePressed(bool postStatus) {
     Navigator.of(context).pop();
-    // Navigator.of(context).pop();
-    // Navigator.of(context).pop();
-    // Navigator.of(context).pop();
-    // Navigator.of(context).pop();
+    if (postStatus) {
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+    }
   }
 
   @override
