@@ -328,7 +328,12 @@ class _ProfileState extends State<Profile> {
           await FileUtils.updateCacheImage(
               formatImgUrl(gpAppState.userDetails.profilePicUrl));
         }
-        gpAppState.setUserDetails(gpAppState.userDetails);
+        if (gpAppState.userDetails.profilePicUrl != null) {
+          gpAppState.setUserDetails(gpAppState.userDetails);
+        } else {
+          await UserServices()
+              .getUser(authToken: gpAppState.authToken, context: context);
+        }
       }
     }
   }

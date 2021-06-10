@@ -178,7 +178,7 @@ class UserServices {
         "gender": gender,
         "fcmToken": notificationToken
       };
-      Uri url = Uri.parse(domainName + USER_ROUTE + "/addUserDetails");
+      Uri url = Uri.parse(domainName + USER_ROUTE + "/userDetails");
       http.Response resp = await http.post(url,
           body: JSONUtils().postBody(reqBody),
           headers: <String, String>{
@@ -190,6 +190,8 @@ class UserServices {
         return UserDetailsUploadStatus.successful;
       } else if (resp.statusCode == 403) {
         return UserDetailsUploadStatus.invalidToken;
+      } else if (resp.statusCode == 400) {
+        return UserDetailsUploadStatus.userDetailsNotFound;
       } else if (resp.statusCode == 500) {
         return UserDetailsUploadStatus.serverError;
       }
@@ -238,7 +240,13 @@ enum UserCreateStatus {
   serverError,
   failed
 }
-enum UserDetailsUploadStatus { successful, invalidToken, serverError, failed }
+enum UserDetailsUploadStatus {
+  successful,
+  userDetailsNotFound,
+  invalidToken,
+  serverError,
+  failed
+}
 
 enum UserGetStatus {
   successful,

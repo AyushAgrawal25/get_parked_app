@@ -75,6 +75,43 @@ class ParkingLordServices {
     }
   }
 
+  Future<ParkingLordDetailsUpdateStatus> updateDetails(
+      {@required String authToken,
+      @required String name,
+      @required AppState appState}) async {
+    try {
+      Map<String, dynamic> reqBody = {"name": name};
+      Uri url = Uri.parse(domainName + PARKING_LORD_ROUTE + "/details");
+      http.Response resp = await http.put(url,
+          body: JSONUtils().postBody(reqBody),
+          headers: {
+            CONTENT_TYPE_KEY: JSON_CONTENT_VALUE,
+            AUTH_TOKEN: authToken
+          });
+      // print(resp.body);
+
+      if (resp.statusCode == 200) {
+        // Manually Updating details for now.
+        ParkingLordData parkingLordData = appState.parkingLordData;
+        parkingLordData.name = name;
+        appState.setParkingLordData(parkingLordData);
+
+        return ParkingLordDetailsUpdateStatus.successful;
+      } else if (resp.statusCode == 403) {
+        return ParkingLordDetailsUpdateStatus.invalidToken;
+      } else if (resp.statusCode == 400) {
+        return ParkingLordDetailsUpdateStatus.notFound;
+      } else if (resp.statusCode == 500) {
+        return ParkingLordDetailsUpdateStatus.internalServerError;
+      }
+
+      return ParkingLordDetailsUpdateStatus.failed;
+    } catch (excp) {
+      print(excp);
+      return ParkingLordDetailsUpdateStatus.failed;
+    }
+  }
+
   Future<ParkingLordGetStatus> getParkingLord(
       {@required BuildContext context}) async {
     AppState appState = Provider.of<AppState>(context, listen: false);
@@ -224,6 +261,14 @@ enum ParkingLordCreateStatus {
   successful,
   invalidToken,
   internalServerError,
+  failed
+}
+
+enum ParkingLordDetailsUpdateStatus {
+  successful,
+  invalidToken,
+  internalServerError,
+  notFound,
   failed
 }
 

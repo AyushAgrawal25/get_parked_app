@@ -277,19 +277,15 @@ class _ParkingLordEditState extends State<ParkingLordEdit> {
   onSavePressed() async {
     SystemSound.play(SystemSoundType.click);
     // TODO: create this function.
-    // if (isFormValid) {
-    //   widget.changeLoadStatus(true);
-    //   bool updateStatus = await ParkingLordUtils().updateDetails(
-    //       gpAppState.parkingLordData.id, gpAppState.parkingLordData.token,
-    //       slotName: gpSlotName);
-    //   if (updateStatus) {
-    //     ParkingLordData gpParkingLordData = await ParkingLordUtils()
-    //         .init(gpAppState.userData.id, gpAppState.userData.accessToken);
-    //     gpAppState.setParkingLordData(gpParkingLordData);
-    //   }
-    //   widget.changeLoadStatus(false);
-    //   Navigator.of(context).pop();
-    // }
+    if (isFormValid) {
+      widget.changeLoadStatus(true);
+      await ParkingLordServices().updateDetails(
+          authToken: gpAppState.authToken,
+          name: gpSlotName,
+          appState: gpAppState);
+      widget.changeLoadStatus(false);
+      Navigator.of(context).pop();
+    }
   }
 
   onSlotMainImgEdit() {
