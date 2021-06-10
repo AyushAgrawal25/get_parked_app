@@ -102,7 +102,7 @@ class _RentOutSpaceFormsState extends State<RentOutSpaceForms> {
         await ParkingLordServices()
             .become(authToken: gpAppState.authToken, slotData: gpSlotData);
     if (parkingLordCreateStatus == ParkingLordCreateStatus.successful) {
-      await ParkingLordServices().uploadSlotImg(
+      await ParkingLordServices().uploadSlotImage(
           type: SlotImageType.main,
           imgFile: gpMainImgFile,
           authToken: gpAppState.authToken);

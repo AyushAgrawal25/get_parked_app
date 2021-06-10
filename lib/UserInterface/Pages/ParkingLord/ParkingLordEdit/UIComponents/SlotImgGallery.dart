@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:getparked/BussinessLogic/ParkingLordServices.dart';
 import 'package:getparked/StateManagement/Models/ParkingLordData.dart';
 import 'package:getparked/StateManagement/Models/SlotImageData.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
@@ -144,49 +145,46 @@ class _SlotImgGalleryState extends State<SlotImgGallery> {
   }
 
   onImageInsert(File newImgFile) async {
-    // TODO: create this function.
-    // if (newImgFile != null) {
-    //   setState(() {
-    //     isLoading = true;
-    //   });
-    //   bool updateStatus = await ParkingLordUtils().updateSlotImg(
-    //       gpAppState.parkingLordData.id,
-    //       gpAppState.parkingLordData.token,
-    //       slotImages[pageController.page.toInt()].id,
-    //       newImgFile);
-    //   if (updateStatus) {
-    //     ParkingLordData gpParkingLordData = await ParkingLordUtils()
-    //         .init(gpAppState.userData.id, gpAppState.userData.accessToken);
-    //     gpAppState.setParkingLordData(gpParkingLordData);
-    //   }
+    if (newImgFile != null) {
+      setState(() {
+        isLoading = true;
+      });
 
-    //   setState(() {
-    //     isLoading = false;
-    //   });
-    // }
+      SlotImageUpdateStatus imageUpdateStatus = await ParkingLordServices()
+          .updateSlotImage(
+              type: SlotImageType.other,
+              imgFile: newImgFile,
+              slotImageId: gpAppState
+                  .parkingLordData.images[pageController.page.toInt()].id,
+              authToken: gpAppState.authToken);
+      if (imageUpdateStatus == SlotImageUpdateStatus.successful) {
+        await ParkingLordServices().getParkingLord(context: context);
+      }
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   onDeleteImg() async {
     // TODO: create this function.
-    // setState(() {
-    //   isLoading = true;
-    // });
-    // bool deleteStatus = await ParkingLordUtils().deleteSlotImg(
-    //     gpAppState.parkingLordData.id,
-    //     gpAppState.parkingLordData.token,
-    //     slotImages[pageController.page.toInt()].id);
-    // if (deleteStatus) {
-    //   if (pageController.page.toInt() == 0) {
-    //     if (slotImages.length == 1) {
-    //       Navigator.of(context).pop();
-    //     }
-    //   } else {
-    //     pageController.jumpToPage(pageController.page.toInt() - 1);
-    //   }
-    //   ParkingLordData gpParkingLordData = await ParkingLordUtils()
-    //       .init(gpAppState.userData.id, gpAppState.userData.accessToken);
-    //   gpAppState.setParkingLordData(gpParkingLordData);
-    // }
+    setState(() {
+      isLoading = true;
+    });
+    SlotImageDeleteStatus imageDeleteStatus = await ParkingLordServices()
+        .deleteSlotImage(
+            authToken: gpAppState.authToken,
+            slotImageId: slotImages[pageController.page.toInt()].id);
+    if (imageDeleteStatus == SlotImageDeleteStatus.successful) {
+      if (pageController.page.toInt() == 0) {
+        if (slotImages.length == 1) {
+          Navigator.of(context).pop();
+        }
+      } else {
+        pageController.jumpToPage(pageController.page.toInt() - 1);
+      }
+      await ParkingLordServices().getParkingLord(context: context);
+    }
 
     setState(() {
       isLoading = false;

@@ -106,7 +106,7 @@ class ParkingLordServices {
     }
   }
 
-  Future<SlotImageUploadStatus> uploadSlotImg(
+  Future<SlotImageUploadStatus> uploadSlotImage(
       {@required SlotImageType type,
       @required File imgFile,
       @required String authToken}) async {
@@ -142,6 +142,75 @@ class ParkingLordServices {
       return SlotImageUploadStatus.failed;
     }
   }
+
+  Future<SlotImageUpdateStatus> updateSlotImage(
+      {@required SlotImageType type,
+      @required File imgFile,
+      @required int slotImageId,
+      @required String authToken}) async {
+    try {
+      Uri url = Uri.parse(domainName + SLOT_IMAGES_ROUTE);
+      http.MultipartRequest uploadReq = http.MultipartRequest('PUT', url);
+
+      uploadReq.headers[AUTH_TOKEN] = authToken;
+      uploadReq.files.add(http.MultipartFile(
+          'image', imgFile.readAsBytes().asStream(), imgFile.lengthSync(),
+          filename: imgFile.path.split("/").last));
+      uploadReq.fields["type"] =
+          (type == SlotImageType.main) ? "Main" : "Others";
+      uploadReq.fields["slotImageId"] = slotImageId.toString();
+
+      http.StreamedResponse resp = await uploadReq.send();
+
+      print(resp.statusCode);
+      if (resp.statusCode == 200) {
+        return SlotImageUpdateStatus.successful;
+      } else if (resp.statusCode == 403) {
+        return SlotImageUpdateStatus.invalidToken;
+      } else if (resp.statusCode == 400) {
+        return SlotImageUpdateStatus.oldImageNotFound;
+      } else if (resp.statusCode == 500) {
+        return SlotImageUpdateStatus.internalServerError;
+      }
+
+      return SlotImageUpdateStatus.failed;
+    } catch (excp) {
+      print(excp);
+      return SlotImageUpdateStatus.failed;
+    }
+  }
+
+  Future<SlotImageDeleteStatus> deleteSlotImage(
+      {@required String authToken, @required int slotImageId}) async {
+    try {
+      Map<String, dynamic> reqBody = {"slotImageId": slotImageId};
+      Uri url = Uri.parse(domainName + SLOT_IMAGES_ROUTE);
+      http.Response resp = await http.delete(url,
+          body: JSONUtils().postBody(reqBody),
+          headers: {
+            CONTENT_TYPE_KEY: JSON_CONTENT_VALUE,
+            AUTH_TOKEN: authToken
+          });
+
+      // print(resp.body);
+      if (resp.statusCode == 200) {
+        return SlotImageDeleteStatus.successful;
+      } else if (resp.statusCode == 422) {
+        return SlotImageDeleteStatus.nonDeletable;
+      } else if (resp.statusCode == 400) {
+        return SlotImageDeleteStatus.notFound;
+      } else if (resp.statusCode == 403) {
+        return SlotImageDeleteStatus.invalidToken;
+      } else if (resp.statusCode == 500) {
+        return SlotImageDeleteStatus.internalServerError;
+      }
+
+      return SlotImageDeleteStatus.failed;
+    } catch (excp) {
+      print(excp);
+      return SlotImageDeleteStatus.failed;
+    }
+  }
 }
 
 enum ParkingLordGetStatus {
@@ -165,4 +234,21 @@ enum SlotImageUploadStatus {
   failed,
   alreadyExists,
   notFound
+}
+
+enum SlotImageUpdateStatus {
+  successful,
+  invalidToken,
+  internalServerError,
+  failed,
+  oldImageNotFound
+}
+
+enum SlotImageDeleteStatus {
+  successful,
+  nonDeletable,
+  notFound,
+  invalidToken,
+  internalServerError,
+  failed
 }

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:getparked/BussinessLogic/ParkingLordServices.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/ParkingLordData.dart';
 import 'package:getparked/StateManagement/Models/SlotImageData.dart';
@@ -305,19 +306,18 @@ class _ParkingLordEditState extends State<ParkingLordEdit> {
   }
 
   onNewMainImgInsert(File newImgFile) async {
-    // TODO: create this function.
-    // if (newImgFile != null) {
-    //   bool updateStatus = await ParkingLordUtils().updateSlotImg(
-    //       gpAppState.parkingLordData.id,
-    //       gpAppState.parkingLordData.token,
-    //       gpAppState.parkingLordData.mainImage.id,
-    //       newImgFile);
-    //   if (updateStatus) {
-    //     ParkingLordData gpParkingLordData = await ParkingLordUtils()
-    //         .init(gpAppState.userData.id, gpAppState.userData.accessToken);
-    //     gpAppState.setParkingLordData(gpParkingLordData);
-    //   }
-    // }
+    if (newImgFile != null) {
+      SlotImageUpdateStatus imageUpdateStatus = await ParkingLordServices()
+          .updateSlotImage(
+              type: SlotImageType.main,
+              imgFile: newImgFile,
+              slotImageId: gpAppState.parkingLordData.mainImage.id,
+              authToken: gpAppState.authToken);
+      if (imageUpdateStatus == SlotImageUpdateStatus.successful) {
+        // TODO: solve this cache image issues.
+        ParkingLordServices().getParkingLord(context: context);
+      }
+    }
   }
 
   onSlotImgTap(SlotImageData slotImageData, int index) {
@@ -341,13 +341,13 @@ class _ParkingLordEditState extends State<ParkingLordEdit> {
   }
 
   onNewImgInsert(File imgFile) async {
-    // TODO: create this functions
-    // bool uploadStatus = await ParkingLordUtils().uploadSlotImgs([imgFile],
-    //     gpAppState.parkingLordData.id, gpAppState.parkingLordData.token);
-    // if (uploadStatus) {
-    //   ParkingLordData gpParkingLordData = await ParkingLordUtils()
-    //       .init(gpAppState.userData.id, gpAppState.userData.accessToken);
-    //   gpAppState.setParkingLordData(gpParkingLordData);
-    // }
+    SlotImageUploadStatus imageUploadStatus = await ParkingLordServices()
+        .uploadSlotImage(
+            type: SlotImageType.other,
+            imgFile: imgFile,
+            authToken: gpAppState.authToken);
+    if (imageUploadStatus == SlotImageUploadStatus.successful) {
+      ParkingLordServices().getParkingLord(context: context);
+    }
   }
 }
