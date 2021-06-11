@@ -20,7 +20,6 @@ class QRCodeScreenShotPage extends StatefulWidget {
 class _QRCodeScreenShotPageState extends State<QRCodeScreenShotPage> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     imgSize = 20;
     takeScreenshot();

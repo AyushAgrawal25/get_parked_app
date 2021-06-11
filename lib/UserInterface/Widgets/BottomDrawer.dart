@@ -30,7 +30,6 @@ class _BottomDrawerState extends State<BottomDrawer>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     qbBottomDrawerAnimController = AnimationController(

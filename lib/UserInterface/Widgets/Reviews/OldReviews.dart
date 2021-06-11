@@ -21,7 +21,6 @@ class _OldReviewsState extends State<OldReviews> {
   AppState gpAppState;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     gpAppState = Provider.of<AppState>(context, listen: false);
   }
@@ -97,7 +96,6 @@ class _OldReviewsState extends State<OldReviews> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 }

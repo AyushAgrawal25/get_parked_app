@@ -48,7 +48,6 @@ class _QRScannerPageState extends State<QRScannerPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     gpAppState = Provider.of(context, listen: false);
     initializeSlotData();
@@ -225,7 +224,6 @@ class _QRScannerPageState extends State<QRScannerPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 }

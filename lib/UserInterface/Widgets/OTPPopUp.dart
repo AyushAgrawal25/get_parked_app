@@ -60,7 +60,6 @@ class _OTPPopUpContentState extends State<OTPPopUpContent> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     enteredOTP = "";
     otpController = TextEditingController();

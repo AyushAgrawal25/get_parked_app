@@ -33,7 +33,6 @@ class _SuccessAndFailurePageState extends State<SuccessAndFailurePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     gpAppState = Provider.of(context, listen: false);
   }

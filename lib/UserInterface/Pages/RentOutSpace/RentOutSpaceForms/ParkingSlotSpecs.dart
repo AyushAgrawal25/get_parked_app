@@ -38,7 +38,6 @@ class _ParkingSlotSpecsState extends State<ParkingSlotSpecs> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     gpAppState = Provider.of(context, listen: false);
 

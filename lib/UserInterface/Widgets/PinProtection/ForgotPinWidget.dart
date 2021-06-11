@@ -21,7 +21,6 @@ class _ForgotPinWidgetState extends State<ForgotPinWidget> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     gpAppState = Provider.of<AppState>(context, listen: false);

@@ -52,8 +52,6 @@ class AuthProvider {
     // FCM Token Update
     NotificationServices().updateFCMToken(authToken: authToken);
 
-    // TODO: Add a function for parking lord too.
-
     return InitAppStatus.loggedIn;
   }
 

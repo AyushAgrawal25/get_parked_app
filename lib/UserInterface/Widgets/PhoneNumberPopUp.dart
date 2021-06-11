@@ -60,7 +60,6 @@ class _PhoneNumberPopUpContentState extends State<PhoneNumberPopUpContent> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     enteredPhNum = "";
     otpController = TextEditingController();

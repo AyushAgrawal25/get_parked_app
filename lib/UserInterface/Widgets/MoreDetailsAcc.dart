@@ -41,7 +41,6 @@ class _MoreDetailsAccState extends State<MoreDetailsAcc>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 

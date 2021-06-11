@@ -36,7 +36,6 @@ class _QRCodePageState extends State<QRCodePage> {
   AppState gpAppState;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     gpAppState = Provider.of<AppState>(context, listen: false);
   }

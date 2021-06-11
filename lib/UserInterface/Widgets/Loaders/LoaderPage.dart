@@ -21,7 +21,6 @@ class _LoaderPageState extends State<LoaderPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     gpAppState = Provider.of(context, listen: false);
     if (widget.bgColor == qbAppBGBluishGreyColor) {

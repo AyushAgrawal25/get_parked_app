@@ -23,7 +23,6 @@ class _SideNavState extends State<SideNav> {
   List<Widget> qbSideNavItemsList = [];
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 

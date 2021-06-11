@@ -26,7 +26,6 @@ class _RatingWidgetState extends State<RatingWidget> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 

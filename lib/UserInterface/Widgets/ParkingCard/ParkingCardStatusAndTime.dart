@@ -20,7 +20,6 @@ class _ParkingCardStatusAndTimeState extends State<ParkingCardStatusAndTime> {
   Timer timer;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     timer = Timer.periodic(Duration(seconds: 1), (gpTimer) {
       setState(() {});

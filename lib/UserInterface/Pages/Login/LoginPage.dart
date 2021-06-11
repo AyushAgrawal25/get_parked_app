@@ -9,6 +9,7 @@ import 'package:getparked/UserInterface/Widgets/CustomIcon.dart';
 import 'package:getparked/UserInterface/Widgets/Loaders/LoaderPage.dart';
 import 'package:getparked/Utils/DomainUtils.dart';
 import 'package:getparked/Utils/SecureStorageUtils.dart';
+import 'package:getparked/Utils/ToastUtils.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
 
@@ -150,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
           await SecureStorageUtils().setAuthToken(authToken);
           navigateToSpashScreen();
         } else {
-          // TODO: Add a toast.
+          ToastUtils.showMessage("Login Again");
         }
       } else {
         // Call SignUp function.
@@ -164,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
             navigateToSpashScreen();
           }
         } else {
-          // TODO: Add a toast
+          ToastUtils.showMessage("Login Again");
         }
       }
       setState(() {

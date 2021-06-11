@@ -30,7 +30,6 @@ class _RentOutSpaceTermsAndConditionsState
   AppState gpAppState;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     gpAppState = Provider.of(context, listen: false);
 

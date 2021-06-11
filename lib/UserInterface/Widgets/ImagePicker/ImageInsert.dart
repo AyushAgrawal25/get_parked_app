@@ -122,7 +122,6 @@ class _ImageInsertPageState extends State<ImageInsertPage> {
   AppState gpAppState;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     gpAppState = Provider.of(context, listen: false);
@@ -315,7 +314,6 @@ class _ImageInsertPageState extends State<ImageInsertPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 }

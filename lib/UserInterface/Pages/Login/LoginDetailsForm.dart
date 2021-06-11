@@ -29,6 +29,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:getparked/Utils/ToastUtils.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -437,7 +438,6 @@ class _LoginDetailsFormState extends State<LoginDetailsForm> {
           isLoadinForPhNumVerification = true;
         });
 
-        //TODO: Add Firebase verification.
         String otpData = await UserServices().verifyPhoneNumber(
             phNum: gpDialCode + gpPhNum, authToken: widget.authToken);
         setState(() {
@@ -507,16 +507,12 @@ class _LoginDetailsFormState extends State<LoginDetailsForm> {
           isLoadinForOTPResend = true;
         });
 
-        //TODO: Add Firebase verification.
         String otpData = await UserServices().verifyPhoneNumber(
             phNum: gpDialCode + gpPhNum, authToken: widget.authToken);
         setState(() {
           gpCorrectOTP = otpData;
           isLoadinForOTPResend = false;
         });
-
-        // AuthProvider()
-        //     .firebasePhoneVerification(phoneNumber: gpDialCode + gpPhNum);
 
         if (gpCorrectOTP != null) {
           PhoneNumberOTPPopUp().show(context,
@@ -929,7 +925,7 @@ class _LoginDetailsFormState extends State<LoginDetailsForm> {
       } else if (uploadStatus == UserDetailsUploadStatus.invalidToken) {
         await AuthProvider().firebaseLogout();
       } else {
-        // TODO: toast try again.
+        ToastUtils.showMessage("Try Again..");
       }
       setState(() {
         isLoading = false;
@@ -940,46 +936,16 @@ class _LoginDetailsFormState extends State<LoginDetailsForm> {
   }
 
   navigateToHome() async {
-    // TODO: navigate to Home Page.
     print("Sending you to HomePage...");
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
         return SplashScreenPage();
       }),
     );
-
-    // await NotificationUtils().init();
-
-    // UserDetails gpUserDetails = await UserAuth().getUserDetailsFromUserId(
-    //     widget.userData.id, widget.userData.accessToken);
-
-    // setState(() {
-    //   if (widget.userData != null) {
-    //     // globalAppState.userData=widget.userData;
-    //     Provider.of<AppState>(context, listen: false)
-    //         .setUserData(widget.userData);
-    //   }
-
-    //   if (gpUserDetails != null) {
-    //     // globalAppState.userDetails=gpUserDetails;
-    //     Provider.of<AppState>(context, listen: false)
-    //         .setUserDetails(gpUserDetails);
-    //   }
-
-    //   // globalAppState.parkingLordData=null;
-    //   Provider.of<AppState>(context, listen: false).setParkingLordData(null);
-    // });
-
-    // Navigator.pushReplacement(context, MaterialPageRoute(
-    //   builder: (context) {
-    //     return HomePage();
-    //   },
-    // ));
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     if (otpTimer != null) {
       otpTimer.cancel();

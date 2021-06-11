@@ -18,7 +18,6 @@ const String USER_ROUTE = "/app/users";
 const String PROFILE_PICS_ROUTE = "/images/profilePics";
 
 class UserServices {
-  // TODO: get user data from it.
   Future getUser(
       {@required String authToken, @required BuildContext context}) async {
     try {
@@ -203,6 +202,49 @@ class UserServices {
     }
   }
 
+  Future<UserDetailsUpdateStatus> updateUserDetails(
+      {@required String authToken,
+      @required AppState appState,
+      String firstName,
+      String lastName,
+      String dialCode,
+      String phoneNumber}) async {
+    try {
+      Map<String, dynamic> reqBody = {
+        "firstName": firstName,
+        "lastName": lastName,
+        "dialCode": dialCode,
+        "phoneNumber": phoneNumber,
+      };
+      Uri url = Uri.parse(domainName + USER_ROUTE + "/userDetails");
+      http.Response resp = await http.put(url,
+          body: JSONUtils().postBody(reqBody),
+          headers: <String, String>{
+            AUTH_TOKEN: authToken,
+            CONTENT_TYPE_KEY: JSON_CONTENT_VALUE,
+          });
+      // print(resp.body);
+      if (resp.statusCode == 200) {
+        Map updatedUserDetails = json.decode(resp.body)["data"];
+        UserDetails userDetails = UserDetails.fromMap(updatedUserDetails);
+        appState.setUserDetails(userDetails);
+
+        return UserDetailsUpdateStatus.successful;
+      } else if (resp.statusCode == 403) {
+        return UserDetailsUpdateStatus.invalidToken;
+      } else if (resp.statusCode == 400) {
+        return UserDetailsUpdateStatus.userDetailsNotFound;
+      } else if (resp.statusCode == 500) {
+        return UserDetailsUpdateStatus.serverError;
+      }
+
+      return UserDetailsUpdateStatus.failed;
+    } catch (e) {
+      print(e);
+      return UserDetailsUpdateStatus.failed;
+    }
+  }
+
   Future<UploadProfilePicStatus> uploadProfilePic(
       {@required File profilePic, @required String authToken}) async {
     try {
@@ -241,6 +283,14 @@ enum UserCreateStatus {
   failed
 }
 enum UserDetailsUploadStatus {
+  successful,
+  userDetailsNotFound,
+  invalidToken,
+  serverError,
+  failed
+}
+
+enum UserDetailsUpdateStatus {
   successful,
   userDetailsNotFound,
   invalidToken,

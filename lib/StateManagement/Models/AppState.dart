@@ -39,8 +39,7 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  // TODO: create this.
-  // // Camera Position
+  // Camera Position
   CameraPosition currentCameraPosition;
   void setCurrentCameraPosition(CameraPosition gpCamPos) {
     currentCameraPosition = gpCamPos;

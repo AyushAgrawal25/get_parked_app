@@ -44,7 +44,6 @@ class _ImagePickerAndInserterState extends State<ImagePickerAndInserter> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     gpAppState = Provider.of<AppState>(context, listen: false);
@@ -412,7 +411,6 @@ class _ImagePickerAndInserterState extends State<ImagePickerAndInserter> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 }

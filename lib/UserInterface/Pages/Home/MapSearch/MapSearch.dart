@@ -36,7 +36,6 @@ class _MapSearchPageState extends State<MapSearchPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     gpAppState = Provider.of<AppState>(context, listen: false);
@@ -408,7 +407,6 @@ class _MapSearchPageState extends State<MapSearchPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 }

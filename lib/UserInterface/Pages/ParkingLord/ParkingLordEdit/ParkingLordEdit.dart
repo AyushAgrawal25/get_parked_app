@@ -31,7 +31,6 @@ class _ParkingLordEditState extends State<ParkingLordEdit> {
   AppState gpAppState;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     gpAppState = Provider.of(context, listen: false);
@@ -276,7 +275,6 @@ class _ParkingLordEditState extends State<ParkingLordEdit> {
 
   onSavePressed() async {
     SystemSound.play(SystemSoundType.click);
-    // TODO: create this function.
     if (isFormValid) {
       widget.changeLoadStatus(true);
       await ParkingLordServices().updateDetails(

@@ -14,7 +14,6 @@ class UserDetails {
     return UserDetailsUtils.setGenderTypeFromString(gender);
   }
 
-  // TODO: whenever use this function add email to it.
   UserDetails.fromMap(Map userDetailsMap) {
     id = userDetailsMap["id"];
     email = userDetailsMap["email"];

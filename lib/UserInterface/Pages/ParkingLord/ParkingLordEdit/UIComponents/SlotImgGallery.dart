@@ -27,7 +27,6 @@ class SlotImgGallery extends StatefulWidget {
 class _SlotImgGalleryState extends State<SlotImgGallery> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     gpAppState = Provider.of<AppState>(context, listen: false);
     pageController = PageController(initialPage: widget.focusIndex);
@@ -167,7 +166,6 @@ class _SlotImgGalleryState extends State<SlotImgGallery> {
   }
 
   onDeleteImg() async {
-    // TODO: create this function.
     setState(() {
       isLoading = true;
     });

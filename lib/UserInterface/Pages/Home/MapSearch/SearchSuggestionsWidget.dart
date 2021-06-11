@@ -31,7 +31,6 @@ class _SearchSuggestionsWidgetState extends State<SearchSuggestionsWidget> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     SearchSuggestionsController controller = SearchSuggestionsController();
     controller.textChanged = (String text) {

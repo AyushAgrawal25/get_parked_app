@@ -19,7 +19,6 @@ class _PinProtectionWidgetState extends State<PinProtectionWidget> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     gpAppState = Provider.of<AppState>(context, listen: false);

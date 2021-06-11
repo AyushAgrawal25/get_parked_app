@@ -39,7 +39,6 @@ class _ParkingLordState extends State<ParkingLord> {
   AppState gpAppState;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     gpAppState = Provider.of(context, listen: false);
   }

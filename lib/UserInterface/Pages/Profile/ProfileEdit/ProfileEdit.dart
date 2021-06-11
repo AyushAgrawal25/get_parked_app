@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:getparked/BussinessLogic/UserServices.dart';
 import 'package:getparked/Utils/ContactUtils.dart';
 import 'package:getparked/Utils/DomainUtils.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
@@ -15,6 +16,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
+import 'package:getparked/Utils/FileUtils.dart';
+import 'package:getparked/Utils/ToastUtils.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -439,29 +442,29 @@ class _ProfileEditState extends State<ProfileEdit> {
 
   File gpProfilePicImg;
   onImageInsert(imgFile) async {
-    // TODO: Add this function on done.
-    // if (imgFile != null) {
-    //   setState(() {
-    //     gpProfilePicImg = imgFile;
-    //   });
-    //   bool updateStatus = await UserAuth().uploadProfilePic(
-    //       imgFile, gpAppState.userData.id, gpAppState.userData.accessToken);
+    if (imgFile != null) {
+      setState(() {
+        gpProfilePicImg = imgFile;
+      });
 
-    //   // Changing Profile Pic
-    //   if (updateStatus) {
-    //     if (gpAppState.userDetails.profilePicUrl != null) {
-    //       // Updating ProfilePic
-    //       await FileUtils.updateCacheImage(
-    //           formatImgUrl(gpAppState.userDetails.profilePicUrl));
+      UploadProfilePicStatus uploadStatus = await UserServices()
+          .uploadProfilePic(
+              profilePic: gpProfilePicImg, authToken: gpAppState.authToken);
+      if (uploadStatus == UploadProfilePicStatus.successful) {
+        if (gpAppState.userDetails.profilePicUrl != null) {
+          // TODO: resolve Image cache issue.
+          await FileUtils.updateCacheImage(
+              formatImgUrl(gpAppState.userDetails.profilePicUrl));
 
-    //       // Updating ProfilePic
-    //       await FileUtils.updateCacheImage(
-    //           formatImgUrl(gpAppState.userDetails.profilePicThumbnailUrl));
+          // Updating ProfilePic
+          await FileUtils.updateCacheImage(
+              formatImgUrl(gpAppState.userDetails.profilePicThumbnailUrl));
 
-    //       // gpAppState.setUserDetails(gpAppState.userDetails);
-    //     }
-    //   }
-    // }
+          await UserServices()
+              .getUser(authToken: gpAppState.authToken, context: context);
+        }
+      }
+    }
   }
 
   onSavePressed() async {
@@ -470,25 +473,26 @@ class _ProfileEditState extends State<ProfileEdit> {
       setState(() {
         isLoading = true;
       });
-      // TODO: Call The API
-      // bool userDetailsUpdateStatus = await UserAuth().updateUserDetails(
-      //     gpAppState.userData.id, gpAppState.userData.accessToken,
-      //     dialCode: gpDialCode,
-      //     firstName: gpFirstName,
-      //     lastName: gpLastName,
-      //     phoneNumber: gpPhoneNumber);
-      // if (userDetailsUpdateStatus) {
-      //   UserDetails gpNewUserDetails = await UserAuth()
-      //       .getUserDetailsFromUserId(
-      //           gpAppState.userData.id, gpAppState.userData.accessToken);
-      //   gpAppState.setUserDetails(gpNewUserDetails);
-      // }
+      UserDetailsUpdateStatus updateStatus = await UserServices()
+          .updateUserDetails(
+              authToken: gpAppState.authToken,
+              appState: gpAppState,
+              dialCode: gpDialCode,
+              firstName: gpFirstName,
+              lastName: gpLastName,
+              phoneNumber: gpPhoneNumber);
+
       setState(() {
         isLoading = false;
       });
-      Navigator.of(context).pop();
+      if (updateStatus == UserDetailsUpdateStatus.successful) {
+        Navigator.of(context).pop();
+        ToastUtils.showMessage("User Details Updated");
+      } else {
+        ToastUtils.showMessage("Failed");
+      }
     } else {
-      // TODO: Show Error
+      // Add Error if required.
 
     }
   }
