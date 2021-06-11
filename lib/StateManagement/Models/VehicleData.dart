@@ -103,7 +103,9 @@ class VehicleData {
       length = vehicleData["length"];
       breadth = vehicleData["breadth"];
       height = vehicleData["height"];
-      fair = vehicleData["fair"];
+      fair = (vehicleData["fair"] != null)
+          ? (vehicleData["fair"]).toDouble()
+          : 0.0;
       data = vehicleData;
       status = vehicleData["status"];
     }

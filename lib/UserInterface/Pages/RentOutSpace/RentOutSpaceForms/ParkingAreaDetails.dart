@@ -321,7 +321,7 @@ class _ParkingAreaDetailsState extends State<ParkingAreaDetails> {
       SlotData gpSlotData = widget.slotData;
       gpSlotData.latitude = gpLocationLat;
       gpSlotData.longitude = gpLocationLong;
-      gpSlotData.countryCode = gpLocationISOCode;
+      gpSlotData.isoCountryCode = gpLocationISOCode;
       gpSlotData.locationName = gpLocationName;
       gpSlotData.address = gpSlotAddress;
       gpSlotData.country = gpParkingSlotCountry;

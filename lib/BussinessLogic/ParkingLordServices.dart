@@ -40,14 +40,14 @@ class ParkingLordServices {
           "landmark": slotData.landmark,
           "locationName": slotData.locationName,
           "country": slotData.country,
-          "isoCountryCode": slotData.countryCode,
+          "isoCountryCode": slotData.isoCountryCode,
           "latitude": slotData.latitude,
           "longitude": slotData.longitude,
           "breadth": slotData.breadth,
           "height": slotData.height,
           "length": slotData.length,
-          "securityDepositTime": slotData.securityDepositHours,
-          "spaceType": slotData.spaceType,
+          "securityDepositTime": slotData.securityDepositTime,
+          "spaceType": SlotDataUtils.getSpaceTypeAsString(slotData.spaceType),
           "startTime": slotData.startTime,
           "endTime": slotData.endTime
         },
@@ -126,10 +126,12 @@ class ParkingLordServices {
         Map parkingLordMap = json.decode(resp.body)["data"];
         ParkingLordData parkingLordData =
             ParkingLordData.fromMap(parkingLordMap);
+
+        // SlotData slotData = SlotData.fromMap(parkingLordMap);
         appState.setParkingLordData(parkingLordData);
         return ParkingLordGetStatus.successful;
       } else if (resp.statusCode == 400) {
-        // User not registered.
+        // User not registered as parking lord.
         return ParkingLordGetStatus.successful;
       } else if (resp.statusCode == 403) {
         return ParkingLordGetStatus.invlidToken;

@@ -494,7 +494,8 @@ class _ParkingSlotSpecsState extends State<ParkingSlotSpecs> {
       gpSlotData.name = gpSlotName;
       gpSlotData.startTime = gpStartTime;
       gpSlotData.endTime = gpEndTime;
-      gpSlotData.spaceType = gpParkingSpaceType;
+      gpSlotData.spaceType =
+          (gpParkingSpaceType == 1) ? SlotSpaceType.sheded : SlotSpaceType.open;
       gpSlotData.length = gpSpaceLength;
       gpSlotData.breadth = gpSpaceBreadth;
       gpSlotData.height = gpSpaceHeight;

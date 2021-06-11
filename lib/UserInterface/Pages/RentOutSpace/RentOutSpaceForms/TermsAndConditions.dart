@@ -168,7 +168,7 @@ class _RentOutSpaceTermsAndConditionsState
   onAgreePressed() async {
     if (isFormEntriesValid) {
       SlotData gpSlotData = widget.slotData;
-      gpSlotData.securityDepositHours = gpSecurityHrsValue;
+      gpSlotData.securityDepositTime = gpSecurityHrsValue;
 
       loadHandler(true);
       bool postStatus = await widget.onAgree(gpSlotData);

@@ -14,25 +14,25 @@ class ParkingLordData {
   String pincode;
   String landmark;
   String locationName;
-  String locationCountry;
-  String locationISOCountryCode;
+  String country;
+  String isoCountryCode;
 
-  double locationLatitude;
-  double locationLongitude;
+  double latitude;
+  double longitude;
 
   double rating;
   List<VehicleData> vehicles;
   SlotImageData mainImage;
   List<SlotImageData> images;
 
-  double specLength;
-  double specBreadth;
-  double specHeight;
+  double length;
+  double breadth;
+  double height;
 
-  int specParkingStartTime;
-  int specParkingEndTime;
-  int specSpaceParkingType;
-  int specSecurityDepositTime;
+  int startTime;
+  int endTime;
+  SlotSpaceType spaceType;
+  int securityDepositTime;
   int status;
 
   Map data;
@@ -94,37 +94,37 @@ class ParkingLordData {
 
       // Location Country
       if (parkingLordMap["locationCountry"] != null) {
-        locationCountry = parkingLordMap["locationCountry"];
+        country = parkingLordMap["locationCountry"];
       }
 
       // Location ISO Country Code
       if (parkingLordMap["isoCountryCode"] != null) {
-        locationISOCountryCode = parkingLordMap["isoCountryCode"];
+        isoCountryCode = parkingLordMap["isoCountryCode"];
       }
 
       //Location Latitude
       if (parkingLordMap["latitude"] != null) {
-        locationLatitude = (parkingLordMap["latitude"]).toDouble();
+        latitude = (parkingLordMap["latitude"]).toDouble();
       }
 
       //Location Longitude
       if (parkingLordMap["longitude"] != null) {
-        locationLongitude = (parkingLordMap["longitude"]).toDouble();
+        longitude = (parkingLordMap["longitude"]).toDouble();
       }
 
       // Length
       if (parkingLordMap["length"] != null) {
-        specLength = (parkingLordMap["length"]).toDouble();
+        length = (parkingLordMap["length"]).toDouble();
       }
 
       // Breadth
       if (parkingLordMap["breadth"] != null) {
-        specBreadth = (parkingLordMap["breadth"]).toDouble();
+        breadth = (parkingLordMap["breadth"]).toDouble();
       }
 
       // Height
       if (parkingLordMap["height"] != null) {
-        specHeight = (parkingLordMap["height"]).toDouble();
+        height = (parkingLordMap["height"]).toDouble();
       }
 
       // Rating
@@ -174,22 +174,23 @@ class ParkingLordData {
 
       // Start Time
       if (parkingLordMap["startTime"] != null) {
-        specParkingStartTime = parkingLordMap["startTime"];
+        startTime = parkingLordMap["startTime"];
       }
 
       // End Time
       if (parkingLordMap["endTime"] != null) {
-        specParkingEndTime = parkingLordMap["endTime"];
+        endTime = parkingLordMap["endTime"];
       }
 
       // Parking Type
       if (parkingLordMap["spaceType"] != null) {
-        specSpaceParkingType = parkingLordMap["spaceType"];
+        spaceType =
+            SlotDataUtils.getSpaceTypeFromString(parkingLordMap["spaceType"]);
       }
 
       // Deposit Time
       if (parkingLordMap["securityDepositTime"] != null) {
-        specSecurityDepositTime = parkingLordMap["securityDepositTime"];
+        securityDepositTime = parkingLordMap["securityDepositTime"];
       }
 
       // Status

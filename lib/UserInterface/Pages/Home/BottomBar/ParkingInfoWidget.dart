@@ -31,14 +31,12 @@ class _ParkingInfoWidgetState extends State<ParkingInfoWidget> {
           widget.slotData.startTime, widget.slotData.endTime);
 
       switch (widget.slotData.spaceType) {
-        case 1:
+        case SlotSpaceType.sheded:
           parkingTypeText = "Shed Available";
           break;
-        case 2:
+        case SlotSpaceType.open:
           parkingTypeText = "Shed Unavailable";
           break;
-        default:
-          parkingTypeText = "";
       }
     }
 

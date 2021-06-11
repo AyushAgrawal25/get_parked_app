@@ -1,4 +1,5 @@
 import 'package:getparked/StateManagement/Models/BookingData.dart';
+import 'package:getparked/StateManagement/Models/SlotImageData.dart';
 import 'package:getparked/StateManagement/Models/UserDetails.dart';
 import 'package:getparked/StateManagement/Models/VehicleData.dart';
 
@@ -14,7 +15,7 @@ class SlotData {
   String landmark;
   String locationName;
   String country;
-  String countryCode;
+  String isoCountryCode;
 
   // User Details
   UserDetails userDetails;
@@ -33,13 +34,13 @@ class SlotData {
   int endTime;
 
   // Parking Type
-  int spaceType;
+  SlotSpaceType spaceType;
 
   // Rating
   double rating;
 
   // Security Deposit Hours
-  int securityDepositHours;
+  int securityDepositTime;
 
   // Images
   List<String> imageUrls;
@@ -62,6 +63,180 @@ class SlotData {
   // Status
   int status;
 
+  SlotData.fromMap(Map slotMap) {
+    if (slotMap != null) {
+      data = slotMap;
+
+      // Slot Id;
+      if (slotMap["id"] != null) {
+        id = slotMap["id"];
+      }
+
+      // Name
+      if (slotMap["name"] != null) {
+        name = slotMap["name"];
+      }
+
+      // Address
+      if (slotMap["address"] != null) {
+        address = slotMap["address"];
+      }
+
+      // State
+      if (slotMap["state"] != null) {
+        state = slotMap["state"];
+      }
+
+      // City
+      if (slotMap["city"] != null) {
+        city = slotMap["city"];
+      }
+
+      // Pincode
+      if (slotMap["pincode"] != null) {
+        pincode = slotMap["pincode"];
+      }
+
+      // Landmark
+      if (slotMap["landmark"] != null) {
+        landmark = slotMap["landmark"];
+      }
+
+      // Location Name
+      if (slotMap["locationName"] != null) {
+        locationName = slotMap["locationName"];
+      }
+
+      // Location Country
+      if (slotMap["locationCountry"] != null) {
+        country = slotMap["locationCountry"];
+      }
+
+      // Location ISO Country Code
+      if (slotMap["isoCountryCode"] != null) {
+        isoCountryCode = slotMap["isoCountryCode"];
+      }
+
+      //Location Latitude
+      if (slotMap["latitude"] != null) {
+        latitude = (slotMap["latitude"]).toDouble();
+      }
+
+      //Location Longitude
+      if (slotMap["longitude"] != null) {
+        longitude = (slotMap["longitude"]).toDouble();
+      }
+
+      // Length
+      if (slotMap["length"] != null) {
+        length = (slotMap["length"]).toDouble();
+      }
+
+      // Breadth
+      if (slotMap["breadth"] != null) {
+        breadth = (slotMap["breadth"]).toDouble();
+      }
+
+      // Height
+      if (slotMap["height"] != null) {
+        height = (slotMap["height"]).toDouble();
+      }
+
+      // Rating
+      if (slotMap["rating"] != null) {
+        rating = (slotMap["rating"]).toDouble();
+      }
+
+      // Images
+      imageUrls = [];
+      if (slotMap["images"] != null) {
+        // Image Urls
+        slotMap["images"].forEach((slotImage) {
+          SlotImageData imageData = SlotImageData.fromMap(slotImage);
+          if (imageData.type == SlotImageType.main) {
+            thumbnailUrl = imageData.thumbnailUrl;
+            mainImageUrl = imageData.imageUrl;
+          } else {
+            imageUrls.add(imageData.imageUrl);
+          }
+        });
+      } else if (slotMap["slotImages"] != null) {
+        // Image Urls
+        slotMap["slotImages"].forEach((slotImage) {
+          SlotImageData imageData = SlotImageData.fromMap(slotImage);
+          if (imageData.type == SlotImageType.main) {
+            thumbnailUrl = imageData.thumbnailUrl;
+            mainImageUrl = imageData.imageUrl;
+          } else {
+            imageUrls.add(imageData.imageUrl);
+          }
+        });
+      }
+
+      vehicles = [];
+      // Vehicles
+      if (slotMap["vehicles"] != null) {
+        // Vehicles
+        slotMap["vehicles"].forEach((slotVehicle) {
+          VehicleData vehicleData = VehicleData.fromMap(slotVehicle);
+          vehicles.add(vehicleData);
+        });
+      } else if (slotMap["slotVehicles"] != null) {
+        // Vehicles
+        slotMap["slotVehicles"].forEach((slotVehicle) {
+          VehicleData vehicleData = VehicleData.fromMap(slotVehicle);
+          vehicles.add(vehicleData);
+        });
+      }
+
+      // TODO: update this bookin data too.
+      bookings = [];
+      if (slotMap["bookings"] != null) {
+        // Bookings
+        slotMap["bookings"].forEach((slotBooking) {
+          BookingData bookingData =
+              BookingDataUtils.mapToBookingData(slotBooking);
+          bookings.add(bookingData);
+        });
+      } else if (slotMap["slotBookings"] != null) {
+        // Bookings
+        slotMap["slotBookings"].forEach((slotBooking) {
+          BookingData bookingData =
+              BookingDataUtils.mapToBookingData(slotBooking);
+          bookings.add(bookingData);
+        });
+      }
+
+      // User Details
+      userDetails = UserDetailsUtils.fromMapToUserDetails(slotMap);
+
+      // Start Time
+      if (slotMap["startTime"] != null) {
+        startTime = slotMap["startTime"];
+      }
+
+      // End Time
+      if (slotMap["endTime"] != null) {
+        endTime = slotMap["endTime"];
+      }
+
+      // Parking Type
+      if (slotMap["spaceType"] != null) {
+        spaceType = SlotDataUtils.getSpaceTypeFromString(slotMap["spaceType"]);
+      }
+
+      // Deposit Time
+      if (slotMap["securityDepositTime"] != null) {
+        securityDepositTime = slotMap["securityDepositTime"];
+      }
+
+      // Status
+      if (slotMap["status"] != null) {
+        status = slotMap["status"];
+      }
+    }
+  }
+
   SlotData(
       {this.id,
       this.name,
@@ -73,7 +248,7 @@ class SlotData {
       this.landmark,
       this.locationName,
       this.country,
-      this.countryCode,
+      this.isoCountryCode,
       this.latitude,
       this.longitude,
       this.length,
@@ -83,7 +258,7 @@ class SlotData {
       this.endTime,
       this.spaceType,
       this.rating,
-      this.securityDepositHours,
+      this.securityDepositTime,
       this.vehicles,
       this.bookings,
       this.imageUrls,
@@ -178,7 +353,7 @@ class SlotDataUtils {
         landmark: slotMap["slotLandmark"],
         locationName: slotMap["slotLocationName"],
         country: slotMap["slotLocationCountry"],
-        countryCode: slotMap["slotLocationISOCountryCode"],
+        isoCountryCode: slotMap["slotLocationISOCountryCode"],
         latitude: (slotMap["slotLocationLatitude"] != null)
             ? (slotMap["slotLocationLatitude"]).toDouble()
             : 0.0,
@@ -196,8 +371,10 @@ class SlotDataUtils {
             : null,
         startTime: slotMap["slotSpecParkingStartTime"],
         endTime: slotMap["slotSpecParkingEndTime"],
-        securityDepositHours: slotMap["slotSpecSecurityDepositTime"],
-        spaceType: slotMap["slotSpecSpaceParkingType"],
+        securityDepositTime: slotMap["slotSpecSecurityDepositTime"],
+        spaceType: (slotMap["slotSpecSpaceParkingType"] == "Open")
+            ? SlotSpaceType.open
+            : SlotSpaceType.sheded,
         rating: rating,
         imageUrls: imageUrls,
         mainImageUrl: mainImageUrl,
@@ -245,4 +422,20 @@ class SlotDataUtils {
 
     return slotData;
   }
+
+  static String getSpaceTypeAsString(SlotSpaceType type) {
+    if (type == SlotSpaceType.open) {
+      return "Open";
+    }
+    return "Sheded";
+  }
+
+  static SlotSpaceType getSpaceTypeFromString(String type) {
+    if (type == "Open") {
+      return SlotSpaceType.open;
+    }
+    return SlotSpaceType.sheded;
+  }
 }
+
+enum SlotSpaceType { open, sheded }

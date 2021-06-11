@@ -412,7 +412,7 @@ class _ParkingRequestFormState extends State<ParkingRequestForm> {
 
                                   Container(
                                     child: Text(
-                                      "${widget.slotData.securityDepositHours} Hours",
+                                      "${widget.slotData.securityDepositTime} Hours",
                                       style: GoogleFonts.roboto(
                                           fontSize: 17.5,
                                           fontWeight: FontWeight.w500,

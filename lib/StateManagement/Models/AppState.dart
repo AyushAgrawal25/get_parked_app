@@ -176,7 +176,7 @@ class AppState extends ChangeNotifier {
           (parkingRequest.getParkingRequestDataType() ==
               ParkingRequestDataType.booked_ParkingGoingON)) {
         double secDeposit = parkingRequest.vehicleData.fair *
-            parkingRequest.slotData.securityDepositHours;
+            parkingRequest.slotData.securityDepositTime;
         walletSecurityDeposit += secDeposit;
       }
     });
