@@ -6,7 +6,7 @@ import 'package:getparked/StateManagement/Models/VehicleData.dart';
 class ParkingRequestData {
   int id;
   int parkingHours;
-  int spaceType;
+  SlotSpaceType spaceType;
 
   // Booking Data
   BookingData bookingData;
@@ -30,61 +30,60 @@ class ParkingRequestData {
   int status;
 
   ParkingRequestData.fromMap(Map parkingRequestMap) {
-    id = parkingRequestMap["slotParkingRequestId"];
-    parkingHours = parkingRequestMap["slotParkingRequestParkingHours"];
-    spaceType = parkingRequestMap["slotParkingRequestParkingType"];
+    id = parkingRequestMap["id"];
+    parkingHours = parkingRequestMap["id"];
+    spaceType =
+        SlotDataUtils.getSpaceTypeFromString(parkingRequestMap["spaceType"]);
 
     // Booking Data
     Map bookingMap;
-    if ((parkingRequestMap["slotBooking"]) != null) {
-      bookingMap = parkingRequestMap["slotBooking"];
+    if ((parkingRequestMap["SlotBooking"]) != null) {
+      bookingMap = parkingRequestMap["SlotBooking"];
     } else if ((parkingRequestMap["booking"]) != null) {
       bookingMap = parkingRequestMap["booking"];
-    } else if ((parkingRequestMap["bookingData"]) != null) {
-      bookingMap = parkingRequestMap["bookingData"];
+    } else if ((parkingRequestMap["slotBooking"]) != null) {
+      bookingMap = parkingRequestMap["slotBooking"];
     }
     if (bookingMap != null) {
-      if (bookingMap["slotBookingId"] != null) {
+      if (bookingMap["id"] != null) {
         bookingData = BookingData.fromMap(bookingMap);
       }
     }
 
     // Slot Data
-    slotId = parkingRequestMap["slotParkingRequestSlotId"];
-    if (parkingRequestMap["slotData"] != null) {
-      slotData = SlotDataUtils.mapToSlotData(parkingRequestMap["slotData"]);
+    slotId = parkingRequestMap["slotId"];
+    if (parkingRequestMap["slot"] != null) {
+      slotData = SlotData.fromMap(parkingRequestMap["slot"]);
+    } else if (parkingRequestMap["slotData"] != null) {
+      slotData = SlotData.fromMap(parkingRequestMap["slotData"]);
     }
 
     // User Details
-    userId = parkingRequestMap["slotParkingRequestUserId"];
+    userId = parkingRequestMap["userId"];
     if (parkingRequestMap["userData"] != null) {
-      userDetails =
-          UserDetailsUtils.fromMapToUserDetails(parkingRequestMap["userData"]);
+      userDetails = UserDetails.fromMap(parkingRequestMap["userData"]);
+    } else if (parkingRequestMap["user"] != null) {
+      userDetails = UserDetails.fromMap(parkingRequestMap["user"]);
     } else if (parkingRequestMap["userDetail"] != null) {
-      userDetails = UserDetailsUtils.fromMapToUserDetails(
-          parkingRequestMap["userDetail"]);
+      userDetails = UserDetails.fromMap(parkingRequestMap["userDetail"]);
     } else if (parkingRequestMap["userDetails"] != null) {
-      userDetails = UserDetailsUtils.fromMapToUserDetails(
-          parkingRequestMap["userDetails"]);
+      userDetails = UserDetails.fromMap(parkingRequestMap["userDetails"]);
     }
 
     // Vehicle Data
-    vehicleId = parkingRequestMap["slotParkingRequestVehicleId"];
+    vehicleId = parkingRequestMap["vehicleId"];
     if (parkingRequestMap["vehicleData"] != null) {
-      vehicleData =
-          VehicleDataUtils.mapToVehicleData(parkingRequestMap["vehicleData"]);
+      vehicleData = VehicleData.fromMap(parkingRequestMap["vehicleData"]);
     } else if (parkingRequestMap["vehicle"] != null) {
-      vehicleData =
-          VehicleDataUtils.mapToVehicleData(parkingRequestMap["vehicle"]);
+      vehicleData = VehicleData.fromMap(parkingRequestMap["vehicle"]);
     } else if (parkingRequestMap["slotVehicle"] != null) {
-      vehicleData =
-          VehicleDataUtils.mapToVehicleData(parkingRequestMap["slotVehicle"]);
+      vehicleData = VehicleData.fromMap(parkingRequestMap["slotVehicle"]);
     }
 
     data = parkingRequestMap;
 
-    time = parkingRequestMap["slotParkingRequestTime"];
-    status = parkingRequestMap["slotParkingRequestStatus"];
+    time = parkingRequestMap["time"];
+    status = parkingRequestMap["status"];
   }
 
   ParkingRequestDataType getParkingRequestDataType() {

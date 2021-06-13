@@ -26,7 +26,7 @@ class BookingData {
   int vehicleId;
   VehicleData vehicleData;
 
-  int spaceType;
+  SlotSpaceType spaceType;
   int parkingHours;
   int otp;
 
@@ -58,7 +58,7 @@ class BookingData {
   });
 
   BookingData.fromMap(Map bookingMap) {
-    id = bookingMap["slotBookingId"];
+    id = bookingMap["id"];
 
     // Parking Data
     Map parkingMap;
@@ -68,9 +68,12 @@ class BookingData {
       parkingMap = bookingMap["parking"];
     } else if (bookingMap["slotParking"] != null) {
       parkingMap = bookingMap["slotParking"];
+    } else if (bookingMap["SlotParking"] != null) {
+      parkingMap = bookingMap["SlotParking"];
     }
+
     if (parkingMap != null) {
-      if (parkingMap["slotParkingId"] != null) {
+      if (parkingMap["id"] != null) {
         parkingData = ParkingData.fromMap(parkingMap);
       }
     }
@@ -89,48 +92,48 @@ class BookingData {
     }
 
     // User Details
-    userId = bookingMap["slotBookingUserId"];
+    userId = bookingMap["userId"];
     if (bookingMap["userData"] != null) {
-      userDetails =
-          UserDetailsUtils.fromMapToUserDetails(bookingMap["userData"]);
+      userDetails = UserDetails.fromMap(bookingMap["userData"]);
     } else if (bookingMap["userDetails"] != null) {
-      userDetails =
-          UserDetailsUtils.fromMapToUserDetails(bookingMap["userDetails"]);
+      userDetails = UserDetails.fromMap(bookingMap["userDetails"]);
     } else if (bookingMap["user"] != null) {
-      userDetails = UserDetailsUtils.fromMapToUserDetails(bookingMap["user"]);
+      userDetails = UserDetails.fromMap(bookingMap["user"]);
     }
 
     // Slot Data
-    slotId = bookingMap["slotBookingSlotId"];
+    slotId = bookingMap["slotId"];
     if (bookingMap["slotData"] != null) {
-      slotData = SlotDataUtils.mapToSlotData(bookingMap["slotData"]);
+      slotData = SlotData.fromMap(bookingMap["slotData"]);
+    } else if (bookingMap["slot"] != null) {
+      slotData = SlotData.fromMap(bookingMap["slot"]);
     }
 
     // Vehicle Data
-    vehicleId = bookingMap["slotBookingVehicleId"];
+    vehicleId = bookingMap["vehicleId"];
     if (bookingMap["slotVehicle"] != null) {
-      vehicleData =
-          VehicleDataUtils.mapToVehicleData(bookingMap["slotVehicle"]);
+      vehicleData = VehicleData.fromMap(bookingMap["slotVehicle"]);
     } else if (bookingMap["vehicle"] != null) {
-      vehicleData = VehicleDataUtils.mapToVehicleData(bookingMap["vehicle"]);
+      vehicleData = VehicleData.fromMap(bookingMap["vehicle"]);
     } else if (bookingMap["vehicleData"] != null) {
-      vehicleData =
-          VehicleDataUtils.mapToVehicleData(bookingMap["vehicleData"]);
+      vehicleData = VehicleData.fromMap(bookingMap["vehicleData"]);
     }
 
-    parkingRequestId = bookingMap["slotBookingParkingRequestId"];
-    spaceType = bookingMap["slotBookingParkingType"];
-    parkingHours = bookingMap["slotBookingParkingHours"];
+    parkingRequestId = bookingMap["parkingRequestId"];
+    spaceType = SlotDataUtils.getSpaceTypeFromString(bookingMap["spaceType"]);
+    parkingHours = bookingMap["parkingHours"];
 
-    otp = bookingMap["slotBookingOTP"];
+    otp = (bookingMap["parkingOTP"] != null)
+        ? int.parse(bookingMap["parkingOTP"])
+        : 0;
 
     // Duration
-    time = bookingMap["slotBookingTime"];
-    duration = bookingMap["slotBookingDuration"];
-    exceedDuration = bookingMap["slotBookingExceedDuration"];
+    time = bookingMap["time"];
+    duration = bookingMap["duration"];
+    exceedDuration = bookingMap["exceedDuration"];
 
     data = bookingMap;
-    status = bookingMap["slotBookingStatus"];
+    status = bookingMap["status"];
   }
 
   BookingDataType getBookingDataType() {
@@ -161,18 +164,19 @@ class BookingData {
 class BookingDataUtils {
   static mapToBookingData(Map bookingMap) {
     BookingData bookingData = BookingData(
-        id: bookingMap["slotBookingId"],
-        userId: bookingMap["slotBookingUserId"],
-        slotId: bookingMap["slotBookingSlotId"],
-        parkingRequestId: bookingMap["slotBookingParkingRequestId"],
-        vehicleId: bookingMap["slotBookingVehicleId"],
-        spaceType: bookingMap["slotBookingParkingType"],
-        parkingHours: bookingMap["slotBookingParkingHours"],
-        otp: bookingMap["slotBookingOTP"],
-        time: bookingMap["slotBookingTime"],
-        duration: bookingMap["slotBookingDuration"],
-        exceedDuration: bookingMap["slotBookingExceedDuration"],
-        status: bookingMap["slotBookingStatus"]);
+        id: bookingMap["id"],
+        userId: bookingMap["userId"],
+        slotId: bookingMap["slotId"],
+        parkingRequestId: bookingMap["parkingRequestId"],
+        vehicleId: bookingMap["vehicleId"],
+        spaceType:
+            SlotDataUtils.getSpaceTypeFromString(bookingMap["spaceType"]),
+        parkingHours: bookingMap["parkingHours"],
+        otp: bookingMap["parkingOTP"],
+        time: bookingMap["time"],
+        duration: bookingMap["duration"],
+        exceedDuration: bookingMap["exceedDuration"],
+        status: bookingMap["status"]);
 
     return bookingData;
   }

@@ -23,7 +23,7 @@ class ParkingData {
   BookingData bookingData;
 
   int withdrawOTP;
-  int spaceType;
+  SlotSpaceType spaceType;
   int parkingHours;
 
   // Complete Data
@@ -33,54 +33,56 @@ class ParkingData {
   int status;
 
   ParkingData.fromMap(Map parkingMap) {
-    id = parkingMap["slotParkingId"];
+    id = parkingMap["id"];
 
     // Vehicle Data
-    vehicleId = parkingMap["slotParkingVehicleId"];
+    vehicleId = parkingMap["vehicleId"];
     if (parkingMap["vehicleData"] != null) {
-      vehicleData =
-          VehicleDataUtils.mapToVehicleData(parkingMap["vehicleData"]);
+      vehicleData = VehicleData.fromMap(parkingMap["vehicleData"]);
     } else if (parkingMap["vehicle"] != null) {
-      vehicleData = VehicleDataUtils.mapToVehicleData(parkingMap["vehicle"]);
+      vehicleData = VehicleData.fromMap(parkingMap["vehicle"]);
     } else if (parkingMap["slotVehicle"] != null) {
-      vehicleData =
-          VehicleDataUtils.mapToVehicleData(parkingMap["slotVehicle"]);
+      vehicleData = VehicleData.fromMap(parkingMap["slotVehicle"]);
     }
 
     // User Details
-    userId = parkingMap["slotParkingUserId"];
+    userId = parkingMap["userId"];
     if (parkingMap["userData"] != null) {
-      userDetails =
-          UserDetailsUtils.fromMapToUserDetails(parkingMap["userData"]);
+      userDetails = UserDetails.fromMap(parkingMap["userData"]);
     } else if (parkingMap["userDetails"] != null) {
-      userDetails =
-          UserDetailsUtils.fromMapToUserDetails(parkingMap["userDetails"]);
+      userDetails = UserDetails.fromMap(parkingMap["userDetails"]);
+    } else if (parkingMap["user"] != null) {
+      userDetails = UserDetails.fromMap(parkingMap["user"]);
     }
 
     // Slot Data
-    slotId = parkingMap["slotParkingSlotId"];
+    slotId = parkingMap["slotId"];
     if (parkingMap["slotData"] != null) {
-      slotData = SlotDataUtils.mapToSlotData(parkingMap["slotData"]);
+      slotData = SlotData.fromMap(parkingMap["slotData"]);
+    } else if (parkingMap["slot"] != null) {
+      slotData = SlotData.fromMap(parkingMap["slot"]);
     }
 
     // Booking Data
-    bookingId = parkingMap["slotParkingBookingId"];
+    bookingId = parkingMap["bookingId"];
     if (parkingMap["bookingData"] != null) {
       bookingData = BookingData.fromMap(parkingMap["bookingData"]);
     } else if (parkingMap["booking"] != null) {
       bookingData = BookingData.fromMap(parkingMap["booking"]);
     } else if (parkingMap["slotBooking"] != null) {
       bookingData = BookingData.fromMap(parkingMap["slotBooking"]);
+    } else if (parkingMap["SlotBooking"] != null) {
+      bookingData = BookingData.fromMap(parkingMap["SlotBooking"]);
     }
 
-    withdrawOTP = parkingMap["slotParkingWithdrawOTP"];
-    parkingHours = parkingMap["slotParkingParkingHours"];
-    spaceType = parkingMap["slotParkingParkingType"];
+    withdrawOTP = parkingMap["withdrawOTP"];
+    parkingHours = parkingMap["parkingHours"];
+    spaceType = SlotDataUtils.getSpaceTypeFromString(parkingMap["spaceType"]);
 
     data = parkingMap;
 
-    time = parkingMap["slotParkingTime"];
-    status = parkingMap["slotParkingStatus"];
+    time = parkingMap["time"];
+    status = parkingMap["status"];
   }
 
   ParkingDataType getParkingDataType() {

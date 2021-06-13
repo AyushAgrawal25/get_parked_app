@@ -171,6 +171,17 @@ class SlotData {
             imageUrls.add(imageData.imageUrl);
           }
         });
+      } else if (slotMap["SlotImages"] != null) {
+        // Image Urls
+        slotMap["SlotImages"].forEach((slotImage) {
+          SlotImageData imageData = SlotImageData.fromMap(slotImage);
+          if (imageData.type == SlotImageType.main) {
+            thumbnailUrl = imageData.thumbnailUrl;
+            mainImageUrl = imageData.imageUrl;
+          } else {
+            imageUrls.add(imageData.imageUrl);
+          }
+        });
       }
 
       vehicles = [];

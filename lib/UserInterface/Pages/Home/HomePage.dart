@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:getparked/BussinessLogic/SlotsServices.dart';
 import 'package:getparked/BussinessLogic/VehiclesServices.dart';
 import 'package:getparked/StateManagement/Models/VehicleTypeData.dart';
 import 'package:getparked/Utils/ContactUtils.dart';
@@ -442,11 +443,14 @@ class _HomePageState extends State<HomePage> {
                         //   },
                         // ));
 
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) {
-                            return IconTestPage();
-                          },
-                        ));
+                        // Navigator.of(context).push(MaterialPageRoute(
+                        //   builder: (context) {
+                        //     return IconTestPage();
+                        //   },
+                        // ));
+
+                        SlotsServices().getParkingRequestsForUser(
+                            authToken: gpAppState.authToken);
 
                         // Navigator.of(context).push(MaterialPageRoute(
                         //   builder: (context) {
