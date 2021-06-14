@@ -49,10 +49,13 @@ class ParkingData {
     userId = parkingMap["userId"];
     if (parkingMap["userData"] != null) {
       userDetails = UserDetails.fromMap(parkingMap["userData"]);
+    } else if ((parkingMap["user"] != null) &&
+        (parkingMap["user"]["userDetails"] != null)) {
+      userDetails = UserDetails.fromMap(parkingMap["user"]["userDetails"]);
+    } else if (parkingMap["userDetail"] != null) {
+      userDetails = UserDetails.fromMap(parkingMap["userDetail"]);
     } else if (parkingMap["userDetails"] != null) {
       userDetails = UserDetails.fromMap(parkingMap["userDetails"]);
-    } else if (parkingMap["user"] != null) {
-      userDetails = UserDetails.fromMap(parkingMap["user"]);
     }
 
     // Slot Data

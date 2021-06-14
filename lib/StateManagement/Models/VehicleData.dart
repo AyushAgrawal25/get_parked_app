@@ -100,9 +100,15 @@ class VehicleData {
       typeMasterId = vehicleData["vehicleMasterId"];
       setType(vehicleData["type"]);
       name = vehicleData["name"];
-      length = vehicleData["length"];
-      breadth = vehicleData["breadth"];
-      height = vehicleData["height"];
+      length = (vehicleData["length"] != null)
+          ? (vehicleData["length"]).toDouble()
+          : 0.0;
+      breadth = (vehicleData["breadth"] != null)
+          ? (vehicleData["breadth"]).toDouble()
+          : 0.0;
+      height = (vehicleData["height"] != null)
+          ? (vehicleData["height"]).toDouble()
+          : 0.0;
       fair = (vehicleData["fair"] != null)
           ? (vehicleData["fair"]).toDouble()
           : 0.0;
@@ -112,51 +118,6 @@ class VehicleData {
   }
 }
 
-class VehicleDataUtils {
-  static mapToVehicleData(Map vehicleMap) {
-    VehicleType vehicleType;
-    switch (vehicleMap["slotVehicleTypeMasterId"]) {
-      case 1:
-        vehicleType = VehicleType.bike;
-        break;
-      case 2:
-        vehicleType = VehicleType.mini;
-        break;
-      case 3:
-        vehicleType = VehicleType.sedan;
-        break;
-      case 4:
-        vehicleType = VehicleType.van;
-        break;
-      case 5:
-        vehicleType = VehicleType.suv;
-        break;
-      default:
-    }
-
-    VehicleData vehicleData = VehicleData(
-        id: vehicleMap["slotVehicleId"],
-        slotId: vehicleMap["slotVehicleSlotId"],
-        typeMasterId: vehicleMap["slotVehicleTypeMasterId"],
-        type: vehicleType,
-        name: vehicleMap["slotVehicleMasterName"],
-        length: (vehicleMap["slotVehicleMasterLength"] != null)
-            ? (vehicleMap["slotVehicleMasterLength"]).toDouble()
-            : null,
-        breadth: (vehicleMap["slotVehicleMasterBreadth"] != null)
-            ? (vehicleMap["slotVehicleMasterBreadth"]).toDouble()
-            : null,
-        height: (vehicleMap["slotVehicleMasterHeight"] != null)
-            ? (vehicleMap["slotVehicleMasterHeight"]).toDouble()
-            : null,
-        fair: (vehicleMap["slotVehicleFair"] != null)
-            ? (vehicleMap["slotVehicleFair"]).toDouble()
-            : 0.0,
-        data: vehicleMap,
-        status: vehicleMap["slotVehicleStatus"]);
-
-    return vehicleData;
-  }
-}
+class VehicleDataUtils {}
 
 enum VehicleType { bike, mini, sedan, van, suv }

@@ -182,14 +182,24 @@ class AppState extends ChangeNotifier {
     });
   }
 
-  // User Parkings Data
-  List<ParkingRequestData> userParkings = [];
+  // User Parking Requests.
+  Map<int, ParkingRequestData> userParkingsStore = {};
+  // Setter Method.
   void setUserParkings(List<ParkingRequestData> gpUserParkings) {
-    gpUserParkings
-        .sort((firstOne, lastOne) => lastOne.id.compareTo(firstOne.id));
-    this.userParkings = gpUserParkings;
+    gpUserParkings.forEach((userParking) {
+      userParkingsStore[userParking.id] = userParking;
+    });
     setWalletSecurityDeposit();
     notifyListeners();
+  }
+
+  // Getter Method.
+  List<ParkingRequestData> get userParkings {
+    List<ParkingRequestData> parkingReqs = [];
+    userParkingsStore.entries.forEach((element) {
+      parkingReqs.add(element.value);
+    });
+    return parkingReqs;
   }
 
   // Security Deposits
@@ -214,12 +224,20 @@ class AppState extends ChangeNotifier {
   }
 
   // Slot Parkings Data
-  List<ParkingRequestData> slotParkings = [];
+  Map<int, ParkingRequestData> slotParkingsStore = {};
   void setSlotParkings(List<ParkingRequestData> gpSlotParkings) {
-    gpSlotParkings
-        .sort((firstOne, lastOne) => lastOne.id.compareTo(firstOne.id));
-    this.slotParkings = gpSlotParkings;
+    gpSlotParkings.forEach((slotParking) {
+      slotParkingsStore[slotParking.id] = slotParking;
+    });
     notifyListeners();
+  }
+
+  List<ParkingRequestData> get slotParkings {
+    List<ParkingRequestData> parkingReqs = [];
+    slotParkingsStore.entries.forEach((element) {
+      parkingReqs.add(element.value);
+    });
+    return parkingReqs;
   }
 
   // Map Places

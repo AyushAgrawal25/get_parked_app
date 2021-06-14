@@ -159,15 +159,13 @@ class ParkingLordData {
       if (parkingLordMap["vehicles"] != null) {
         // Vehicles
         parkingLordMap["vehicles"].forEach((slotVehicle) {
-          VehicleData vehicleData =
-              VehicleDataUtils.mapToVehicleData(slotVehicle);
+          VehicleData vehicleData = VehicleData.fromMap(slotVehicle);
           vehicles.add(vehicleData);
         });
       } else if (parkingLordMap["slotVehicles"] != null) {
         // Vehicles
         parkingLordMap["slotVehicles"].forEach((slotVehicle) {
-          VehicleData vehicleData =
-              VehicleDataUtils.mapToVehicleData(slotVehicle);
+          VehicleData vehicleData = VehicleData.fromMap(slotVehicle);
           vehicles.add(vehicleData);
         });
       }
@@ -201,7 +199,7 @@ class ParkingLordData {
   }
 
   SlotData toSlotData() {
-    SlotData gpPLSlotData = SlotDataUtils.mapToSlotData(this.data);
+    SlotData gpPLSlotData = SlotData.fromMap(this.data);
     return gpPLSlotData;
   }
 }

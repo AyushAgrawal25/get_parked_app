@@ -2,8 +2,8 @@ import 'package:getparked/UserInterface/Theme/AppTheme.dart';
 import 'package:getparked/UserInterface/Widgets/EdgeLessButton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:getparked/UserInterface/Widgets/OTPTextField.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pin_code_text_field/pin_code_text_field.dart';
 
 class OTPPopUp {
   show(String correctOTP, String otpDetail, Function onCorrectOTP,
@@ -115,33 +115,20 @@ class _OTPPopUpContentState extends State<OTPPopUpContent> {
 
           // Input Text Field
           Container(
-            width: 120,
-            child: PinCodeTextField(
-              autofocus: true,
-              highlight: true,
-              keyboardType: TextInputType.phone,
-              highlightColor: qbAppSecondaryBlueColor,
-              pinBoxColor: qbAppTextColor,
-              pinBoxHeight: 22.5,
-              pinBoxWidth: 22.5,
-              controller: otpController,
-              onTextChanged: (String otp) {
-                setState(() {
-                  enteredOTP = otp;
-                  if ((showError) &&
-                      (!toShowOTPIncorrectError(
-                          enteredOTP, widget.correctOTP))) {
-                    showError = false;
-                  }
-                });
-              },
-              pinBoxDecoration:
-                  ProvidedPinBoxDecoration.underlinedPinBoxDecoration,
-              wrapAlignment: WrapAlignment.spaceAround,
-              pinTextStyle: GoogleFonts.roboto(
-                  fontSize: 17.5 / MediaQuery.of(context).textScaleFactor,
-                  fontWeight: FontWeight.w500,
-                  color: qbAppTextColor),
+            alignment: Alignment.center,
+            child: Container(
+              child: OTPTextField(
+                onChanged: (String otp) {
+                  setState(() {
+                    enteredOTP = otp;
+                    if ((showError) &&
+                        (!toShowOTPIncorrectError(
+                            enteredOTP, widget.correctOTP))) {
+                      showError = false;
+                    }
+                  });
+                },
+              ),
             ),
           ),
 

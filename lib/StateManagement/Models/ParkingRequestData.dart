@@ -62,8 +62,10 @@ class ParkingRequestData {
     userId = parkingRequestMap["userId"];
     if (parkingRequestMap["userData"] != null) {
       userDetails = UserDetails.fromMap(parkingRequestMap["userData"]);
-    } else if (parkingRequestMap["user"] != null) {
-      userDetails = UserDetails.fromMap(parkingRequestMap["user"]);
+    } else if ((parkingRequestMap["user"] != null) &&
+        (parkingRequestMap["user"]["userDetails"] != null)) {
+      userDetails =
+          UserDetails.fromMap(parkingRequestMap["user"]["userDetails"]);
     } else if (parkingRequestMap["userDetail"] != null) {
       userDetails = UserDetails.fromMap(parkingRequestMap["userDetail"]);
     } else if (parkingRequestMap["userDetails"] != null) {

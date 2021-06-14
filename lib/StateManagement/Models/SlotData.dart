@@ -5,6 +5,7 @@ import 'package:getparked/StateManagement/Models/VehicleData.dart';
 
 class SlotData {
   int id;
+  int userId;
   String name;
 
   // Address
@@ -219,7 +220,17 @@ class SlotData {
       }
 
       // User Details
-      userDetails = UserDetailsUtils.fromMapToUserDetails(slotMap);
+      userId = slotMap["userId"];
+      if (slotMap["userData"] != null) {
+        userDetails = UserDetails.fromMap(slotMap["userData"]);
+      } else if ((slotMap["user"] != null) &&
+          (slotMap["user"]["userDetails"] != null)) {
+        userDetails = UserDetails.fromMap(slotMap["user"]["userDetails"]);
+      } else if (slotMap["userDetail"] != null) {
+        userDetails = UserDetails.fromMap(slotMap["userDetail"]);
+      } else if (slotMap["userDetails"] != null) {
+        userDetails = UserDetails.fromMap(slotMap["userDetails"]);
+      }
 
       // Start Time
       if (slotMap["startTime"] != null) {
@@ -310,15 +321,13 @@ class SlotDataUtils {
     if (slotMap["vehicles"] != null) {
       // Vehicles
       slotMap["vehicles"].forEach((slotVehicle) {
-        VehicleData vehicleData =
-            VehicleDataUtils.mapToVehicleData(slotVehicle);
+        VehicleData vehicleData = VehicleData.fromMap(slotVehicle);
         vehicles.add(vehicleData);
       });
     } else if (slotMap["slotVehicles"] != null) {
       // Vehicles
       slotMap["slotVehicles"].forEach((slotVehicle) {
-        VehicleData vehicleData =
-            VehicleDataUtils.mapToVehicleData(slotVehicle);
+        VehicleData vehicleData = VehicleData.fromMap(slotVehicle);
         vehicles.add(vehicleData);
       });
     }

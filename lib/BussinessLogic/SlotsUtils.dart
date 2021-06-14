@@ -146,29 +146,29 @@ class SlotsUtils {
   }
 
   //Parking Request
-  Future<bool> sendParkingRequest(Map requestData) async {
-    try {
-      Response requestResponse = await gpDio.post(
-          domainName + "/appRoute/slots/parkingRequest",
-          data: requestData);
-      if (requestResponse.data["status"] == 1) {
-        return true;
-      } else {
-        return false;
-      }
-    } catch (excp) {
-      return false;
-    }
-  }
+  // Future<bool> sendParkingRequest(Map requestData) async {
+  //   try {
+  //     Response requestResponse = await gpDio.post(
+  //         domainName + "/appRoute/slots/parkingRequest",
+  //         data: requestData);
+  //     if (requestResponse.data["status"] == 1) {
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   } catch (excp) {
+  //     return false;
+  //   }
+  // }
 
   //Parking Request Response
-  Future<Map> responseParkingRequest(Map responseData) async {
-    Response requestResponse = await gpDio.post(
-        domainName + "/appRoute/slots/parkingRequestResponse",
-        data: responseData);
+  // Future<Map> responseParkingRequest(Map responseData) async {
+  //   Response requestResponse = await gpDio.post(
+  //       domainName + "/appRoute/slots/parkingRequestResponse",
+  //       data: responseData);
 
-    return requestResponse.data;
-  }
+  //   return requestResponse.data;
+  // }
 
   // Booking
   Future<Map> booking(Map bookingData, String userAccessToken) async {

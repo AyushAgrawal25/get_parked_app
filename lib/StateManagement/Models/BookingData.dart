@@ -95,10 +95,13 @@ class BookingData {
     userId = bookingMap["userId"];
     if (bookingMap["userData"] != null) {
       userDetails = UserDetails.fromMap(bookingMap["userData"]);
+    } else if ((bookingMap["user"] != null) &&
+        (bookingMap["user"]["userDetails"] != null)) {
+      userDetails = UserDetails.fromMap(bookingMap["user"]["userDetails"]);
+    } else if (bookingMap["userDetail"] != null) {
+      userDetails = UserDetails.fromMap(bookingMap["userDetail"]);
     } else if (bookingMap["userDetails"] != null) {
       userDetails = UserDetails.fromMap(bookingMap["userDetails"]);
-    } else if (bookingMap["user"] != null) {
-      userDetails = UserDetails.fromMap(bookingMap["user"]);
     }
 
     // Slot Data

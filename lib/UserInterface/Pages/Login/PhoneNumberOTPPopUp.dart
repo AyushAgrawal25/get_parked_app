@@ -1,9 +1,9 @@
 import 'package:getparked/UserInterface/Widgets/EdgeLessButton.dart';
 import 'package:flutter/material.dart';
+import 'package:getparked/UserInterface/Widgets/OTPTextField.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';
 import 'package:getparked/UserInterface/Widgets/CustomButton.dart';
-import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:getparked/UserInterface/Widgets/qbFAB.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
@@ -229,41 +229,21 @@ class _PhoneNumberOTPPopUpContentState
             // ),
 
             Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.only(top: 13.5, left: 20, right: 20),
-              child: PinPut(
-                withCursor: true,
-                fieldsCount: 4,
-                onChanged: (String otp) {
-                  // print(otp + " Entered Value...");
-                  setState(() {
-                    gpUserEnteredOTP = otp;
-                    if ((showError) &&
-                        (!toShowOTPIncorrectError(
-                            gpUserEnteredOTP, widget.correctOTP))) {
-                      showError = false;
-                    }
-                  });
-                },
-                fieldsAlignment: MainAxisAlignment.spaceEvenly,
-                eachFieldHeight: 40,
-                eachFieldWidth: 40,
-                eachFieldMargin: EdgeInsets.symmetric(horizontal: 2.5),
-                keyboardType: TextInputType.phone,
-                selectedFieldDecoration: BoxDecoration(
-                  border:
-                      Border.all(color: Colors.deepPurpleAccent, width: 1.5),
-                  borderRadius: BorderRadius.circular(360),
-                ),
-                followingFieldDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5.0),
-                  border: Border.all(
-                    width: 1.5,
-                    color: Colors.deepPurpleAccent.withOpacity(.5),
-                  ),
-                ),
-              ),
-            ),
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(top: 13.5, left: 20, right: 20),
+                child: OTPTextField(
+                  onChanged: (String otp) {
+                    // print(otp + " Entered Value...");
+                    setState(() {
+                      gpUserEnteredOTP = otp;
+                      if ((showError) &&
+                          (!toShowOTPIncorrectError(
+                              gpUserEnteredOTP, widget.correctOTP))) {
+                        showError = false;
+                      }
+                    });
+                  },
+                )),
 
             (showError)
                 ? Container(

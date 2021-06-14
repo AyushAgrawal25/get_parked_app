@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:getparked/BussinessLogic/SlotsServices.dart';
 import 'package:getparked/BussinessLogic/VehiclesServices.dart';
+import 'package:getparked/StateManagement/Models/VehicleData.dart';
 import 'package:getparked/StateManagement/Models/VehicleTypeData.dart';
 import 'package:getparked/Utils/ContactUtils.dart';
 import 'package:getparked/Utils/FlushBarUtils.dart';
@@ -69,10 +70,29 @@ class _HomePageState extends State<HomePage> {
     initializeContacts();
     initializeVehiclesTypeData();
     initializeMapPlacesForCity();
+
+    // Parkings
+    initializeParkingsForUser();
+    initializeParkingsForParkingLord();
+
+    // TODO: initialize transactions
+  }
+
+  // initialize parkings for user
+  initializeParkingsForUser() async {
+    List<ParkingRequestData> parkingReqs = await SlotsServices()
+        .getParkingRequestsForUser(authToken: gpAppState.authToken);
+    gpAppState.setUserParkings(parkingReqs);
+  }
+
+  // initialize parkings for parking lord.
+  initializeParkingsForParkingLord() async {
+    List<ParkingRequestData> parkingReqs = await SlotsServices()
+        .getParkingRequestsForSlot(authToken: gpAppState.authToken);
+    gpAppState.setSlotParkings(parkingReqs);
   }
 
   initializeVehiclesTypeData() async {
-    // TODO: create this function
     vehiclesTypeData =
         await VehiclesServices().getTypes(authToken: gpAppState.authToken);
     gpAppState.setVehiclesTypeData(vehiclesTypeData);
@@ -443,14 +463,11 @@ class _HomePageState extends State<HomePage> {
                         //   },
                         // ));
 
-                        // Navigator.of(context).push(MaterialPageRoute(
-                        //   builder: (context) {
-                        //     return IconTestPage();
-                        //   },
-                        // ));
-
-                        SlotsServices().getParkingRequestsForUser(
-                            authToken: gpAppState.authToken);
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) {
+                            return IconTestPage();
+                          },
+                        ));
 
                         // Navigator.of(context).push(MaterialPageRoute(
                         //   builder: (context) {

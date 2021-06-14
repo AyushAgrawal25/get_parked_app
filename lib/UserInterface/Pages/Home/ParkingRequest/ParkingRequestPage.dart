@@ -1,3 +1,4 @@
+import 'package:getparked/BussinessLogic/SlotsServices.dart';
 import 'package:getparked/Utils/FlushBarUtils.dart';
 import 'package:getparked/BussinessLogic/SlotsUtils.dart';
 import 'package:getparked/Utils/DomainUtils.dart';
@@ -618,22 +619,22 @@ class _ParkingRequestFormState extends State<ParkingRequestForm> {
     }
 
     if (isFormValid) {
-      Map requestData = {
-        "userId": gpAppState.userData.id,
-        "userAccessToken": gpAppState.authToken,
-        "slotId": widget.slotData.id,
-        "slotUserId": widget.slotData.userDetails.id,
-        "slotVehicleId": gpSelectedVehicleData.id,
-        "slotParkingType": widget.slotData.spaceType,
-        "slotParkingHours": parkingHour
-      };
-
       setState(() {
         isLoading = true;
       });
 
-      bool parkingRequestSendStatus =
-          await SlotsUtils().sendParkingRequest(requestData);
+      bool parkingRequestSendStatus = false;
+      ParkingRequestStatus requestStatus = await SlotsServices()
+          .sendParkingRequest(
+              authToken: gpAppState.authToken,
+              parkingHours: int.parse(parkingHour),
+              slotId: widget.slotData.id,
+              spaceType: widget.slotData.spaceType,
+              vehicleId: gpSelectedVehicleData.id);
+      if (requestStatus == ParkingRequestStatus.success) {
+        parkingRequestSendStatus = true;
+      }
+
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) {
           return SuccessAndFailurePage(

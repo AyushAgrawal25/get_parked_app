@@ -1,3 +1,4 @@
+import 'package:getparked/UserInterface/Widgets/ParkingDetailsPage/ParkingDetailsPage.dart';
 import 'package:getparked/Utils/DomainUtils.dart';
 import 'package:getparked/StateManagement/Models/ParkingRequestData.dart';
 import 'package:getparked/StateManagement/Models/UserDetails.dart';
@@ -175,11 +176,10 @@ class _ParkingCardState extends State<ParkingCard> {
   }
 
   onParkingCardTap() {
-    // TODO: create the page and uncomment this.
-    // Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-    //   return ParkingDetailsPage(
-    //       parkingRequest: widget.parkingRequestData, accType: widget.type);
-    // }));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return ParkingDetailsPage(
+          parkingRequest: widget.parkingRequestData, accType: widget.type);
+    }));
   }
 }
 
