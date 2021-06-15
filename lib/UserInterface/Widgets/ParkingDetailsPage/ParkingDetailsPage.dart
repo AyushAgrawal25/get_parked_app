@@ -370,7 +370,7 @@ class _ParkingDetailsPageState extends State<ParkingDetailsPage> {
           // OTP
           toShowOTP = true;
           otpType = ParkingOTPType.parking;
-          otp = gpParkingRequestData.bookingData.otp.toString();
+          otp = gpParkingRequestData.bookingData.parkingOTP.toString();
 
           bookingStartTime = gpParkingRequestData.bookingData.time;
           isCallOptionAvailable = true;
@@ -667,7 +667,7 @@ class _ParkingDetailsPageState extends State<ParkingDetailsPage> {
                   // OTP
                   toShowOTP = true;
                   otpType = ParkingOTPType.parking;
-                  otp = widget.booking.otp.toString();
+                  otp = widget.booking.parkingOTP.toString();
 
                   bookingStartTime = widget.booking.time;
                   bookingDuration = widget.booking.duration;

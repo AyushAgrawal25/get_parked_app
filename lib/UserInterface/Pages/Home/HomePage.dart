@@ -13,6 +13,7 @@ import 'package:getparked/BussinessLogic/PlacesApiUtils.dart';
 import 'package:getparked/BussinessLogic/PlacesDataCollection.dart';
 import 'package:getparked/BussinessLogic/SlotsUtils.dart';
 import 'package:getparked/BussinessLogic/SocketUtils.dart';
+import 'package:getparked/Utils/TransactionUtils.dart';
 import 'package:getparked/Utils/VehiclesUtils.dart';
 import 'package:getparked/StateManagement/Models/AppOverlayStyleData.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
@@ -31,6 +32,7 @@ import 'package:getparked/UserInterface/Pages/Login/LoginDetailsForm.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:getparked/encryptionConfig.dart';
 import 'package:provider/provider.dart';
 import './MapSearch/MapSearch.dart';
 import './MenuAndSearchBar/MenuAndSeaarchButton.dart';
@@ -468,6 +470,11 @@ class _HomePageState extends State<HomePage> {
                             return IconTestPage();
                           },
                         ));
+
+                        // print(TransactionUtils().encryptedToken(
+                        //     {"id": "SomeId", "token": "SomeToken"}));
+
+                        // print(ENCRYPTION_KEY.substring(0, 16));
 
                         // Navigator.of(context).push(MaterialPageRoute(
                         //   builder: (context) {

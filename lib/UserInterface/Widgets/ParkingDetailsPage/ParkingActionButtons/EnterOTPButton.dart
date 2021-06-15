@@ -97,7 +97,7 @@ class _EnterOTPButtonState extends State<EnterOTPButton> {
 
   showEnterOTPDialog(Function onCorrectOTP) async {
     OTPPopUp().show(
-        widget.bookingData.otp.toString(),
+        widget.bookingData.parkingOTP.toString(),
         "Enter OTP recieved from customer for Verification before Parking.",
         onCorrectOTP,
         context);

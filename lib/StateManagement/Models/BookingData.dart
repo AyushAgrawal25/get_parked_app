@@ -28,7 +28,7 @@ class BookingData {
 
   SlotSpaceType spaceType;
   int parkingHours;
-  int otp;
+  int parkingOTP;
 
   String time;
 
@@ -49,7 +49,7 @@ class BookingData {
     this.vehicleId,
     this.userId,
     this.slotId,
-    this.otp,
+    this.parkingOTP,
     this.time,
     this.duration,
     this.exceedDuration,
@@ -126,7 +126,7 @@ class BookingData {
     spaceType = SlotDataUtils.getSpaceTypeFromString(bookingMap["spaceType"]);
     parkingHours = bookingMap["parkingHours"];
 
-    otp = (bookingMap["parkingOTP"] != null)
+    parkingOTP = (bookingMap["parkingOTP"] != null)
         ? int.parse(bookingMap["parkingOTP"])
         : 0;
 
@@ -164,26 +164,7 @@ class BookingData {
   }
 }
 
-class BookingDataUtils {
-  static mapToBookingData(Map bookingMap) {
-    BookingData bookingData = BookingData(
-        id: bookingMap["id"],
-        userId: bookingMap["userId"],
-        slotId: bookingMap["slotId"],
-        parkingRequestId: bookingMap["parkingRequestId"],
-        vehicleId: bookingMap["vehicleId"],
-        spaceType:
-            SlotDataUtils.getSpaceTypeFromString(bookingMap["spaceType"]),
-        parkingHours: bookingMap["parkingHours"],
-        otp: bookingMap["parkingOTP"],
-        time: bookingMap["time"],
-        duration: bookingMap["duration"],
-        exceedDuration: bookingMap["exceedDuration"],
-        status: bookingMap["status"]);
-
-    return bookingData;
-  }
-}
+class BookingDataUtils {}
 
 enum BookingDataType {
   failed,

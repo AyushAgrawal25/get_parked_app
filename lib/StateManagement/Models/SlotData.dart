@@ -201,20 +201,18 @@ class SlotData {
         });
       }
 
-      // TODO: update this bookin data too.
+      // TODO: update this bookings data too.
       bookings = [];
       if (slotMap["bookings"] != null) {
         // Bookings
         slotMap["bookings"].forEach((slotBooking) {
-          BookingData bookingData =
-              BookingDataUtils.mapToBookingData(slotBooking);
+          BookingData bookingData = BookingData.fromMap(slotBooking);
           bookings.add(bookingData);
         });
       } else if (slotMap["slotBookings"] != null) {
         // Bookings
         slotMap["slotBookings"].forEach((slotBooking) {
-          BookingData bookingData =
-              BookingDataUtils.mapToBookingData(slotBooking);
+          BookingData bookingData = BookingData.fromMap(slotBooking);
           bookings.add(bookingData);
         });
       }
@@ -336,15 +334,13 @@ class SlotDataUtils {
     if (slotMap["bookings"] != null) {
       // Bookings
       slotMap["bookings"].forEach((slotBooking) {
-        BookingData bookingData =
-            BookingDataUtils.mapToBookingData(slotBooking);
+        BookingData bookingData = BookingData.fromMap(slotBooking);
         bookings.add(bookingData);
       });
     } else if (slotMap["slotBookings"] != null) {
       // Bookings
       slotMap["slotBookings"].forEach((slotBooking) {
-        BookingData bookingData =
-            BookingDataUtils.mapToBookingData(slotBooking);
+        BookingData bookingData = BookingData.fromMap(slotBooking);
         bookings.add(bookingData);
       });
     }

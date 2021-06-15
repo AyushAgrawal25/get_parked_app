@@ -160,6 +160,8 @@ class SlotsServices {
         return BookSlotStatus.balanceLow;
       } else if (resp.statusCode == 422) {
         return BookSlotStatus.requestNotFound;
+      } else if (resp.statusCode == 423) {
+        return BookSlotStatus.requestNotAccepted;
       } else if (resp.statusCode == 500) {
         return BookSlotStatus.spaceUnavailable;
       }
@@ -187,6 +189,7 @@ enum BookSlotStatus {
   spaceUnavailable,
   balanceLow,
   requestNotFound,
+  requestNotAccepted,
   internalServerError,
   failed
 }
