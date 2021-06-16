@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:getparked/BussinessLogic/SlotsServices.dart';
+import 'package:getparked/BussinessLogic/TransactionServices.dart';
 import 'package:getparked/BussinessLogic/VehiclesServices.dart';
 import 'package:getparked/StateManagement/Models/VehicleData.dart';
 import 'package:getparked/StateManagement/Models/VehicleTypeData.dart';
@@ -465,17 +466,23 @@ class _HomePageState extends State<HomePage> {
                         //   },
                         // ));
 
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) {
-                            return IconTestPage();
-                          },
-                        ));
+                        // Navigator.of(context).push(MaterialPageRoute(
+                        //   builder: (context) {
+                        //     return IconTestPage();
+                        //   },
+                        // ));
 
-                        // print(TransactionUtils().encryptedToken(
-                        //     {"id": "SomeId", "token": "SomeToken"}));
-
-                        // print(ENCRYPTION_KEY.substring(0, 16));
-
+                        String txnCode = await TransactionServices()
+                            .getTransactionCode(
+                                authToken: gpAppState.authToken);
+                        if (txnCode != null) {
+                          print(await TransactionServices().addMoneyToWallet(
+                              authToken: gpAppState.authToken,
+                              ref: "UPI Reference Code",
+                              txnCode: txnCode,
+                              status: 1,
+                              amount: 12.5));
+                        }
                         // Navigator.of(context).push(MaterialPageRoute(
                         //   builder: (context) {
                         //     return CurveTest();
