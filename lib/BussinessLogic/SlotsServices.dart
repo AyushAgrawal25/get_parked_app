@@ -13,13 +13,16 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 const String SLOTS_ROUTE = "/app/slots";
+const String SLOT_PARKING_REQUESTS_ROUTE = "/app/slots/parkingRequests";
+const String SLOT_BOOKINGS_ROUTE = "/app/slots/bookings";
 const String SLOT_IMAGES_ROUTE = "/images/slotImages";
 
 class SlotsServices {
   Future<List<ParkingRequestData>> getParkingRequestsForUser(
       {@required String authToken}) async {
     try {
-      Uri url = Uri.parse(domainName + SLOTS_ROUTE + "/parkingRequestsForUser");
+      Uri url =
+          Uri.parse(domainName + SLOT_PARKING_REQUESTS_ROUTE + "/forUser");
       http.Response resp = await http.get(url, headers: {
         CONTENT_TYPE_KEY: JSON_CONTENT_VALUE,
         AUTH_TOKEN: authToken
@@ -44,7 +47,8 @@ class SlotsServices {
   Future<List<ParkingRequestData>> getParkingRequestsForSlot(
       {@required String authToken}) async {
     try {
-      Uri url = Uri.parse(domainName + SLOTS_ROUTE + "/parkingRequestsForSlot");
+      Uri url =
+          Uri.parse(domainName + SLOT_PARKING_REQUESTS_ROUTE + "/forSlot");
       http.Response resp = await http.get(url, headers: {
         CONTENT_TYPE_KEY: JSON_CONTENT_VALUE,
         AUTH_TOKEN: authToken
@@ -73,7 +77,7 @@ class SlotsServices {
       @required SlotSpaceType spaceType,
       @required int parkingHours}) async {
     try {
-      Uri url = Uri.parse(domainName + SLOTS_ROUTE + "/parkingRequest");
+      Uri url = Uri.parse(domainName + SLOT_PARKING_REQUESTS_ROUTE + "/send");
       Map<String, dynamic> reqBody = {
         "slotId": slotId,
         "vehicleId": vehicleId,
@@ -107,7 +111,8 @@ class SlotsServices {
       @required int parkingRequestId,
       @required int response}) async {
     try {
-      Uri url = Uri.parse(domainName + SLOTS_ROUTE + "/parkingRequestResponse");
+      Uri url =
+          Uri.parse(domainName + SLOT_PARKING_REQUESTS_ROUTE + "/respond");
       Map<String, dynamic> reqBody = {
         "parkingRequestId": parkingRequestId,
         "response": response
@@ -140,7 +145,7 @@ class SlotsServices {
   Future<BookSlotStatus> bookSlot(
       {@required String authToken, @required int parkingRequestId}) async {
     try {
-      Uri url = Uri.parse(domainName + SLOTS_ROUTE + "/booking");
+      Uri url = Uri.parse(domainName + SLOT_BOOKINGS_ROUTE + "/book");
       Map<String, dynamic> reqBody = {
         "parkingRequestId": parkingRequestId,
       };
