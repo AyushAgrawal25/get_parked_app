@@ -1,3 +1,4 @@
+import 'package:getparked/BussinessLogic/SlotsServices.dart';
 import 'package:getparked/BussinessLogic/SlotsUtils.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/BookingData.dart';
@@ -59,16 +60,11 @@ class _EnterOTPButtonState extends State<EnterOTPButton> {
   onCorrectOTPEntered() async {
     // Navigator.of(context).pop();
     // Parking
-    Map parkingData = {
-      "slotId": gpAppState.parkingLordData.id,
-      "slotBookingId": widget.bookingData.id
-    };
 
     this.widget.changeLoadStatus(true);
 
-    Map parkingResp = await SlotsUtils()
-        .initiateParking(parkingData, gpAppState.parkingLordData.token);
-    print(parkingResp);
+    ParkingStatus parkingStatus = await SlotsServices().parking(
+        authToken: gpAppState.authToken, bookingId: widget.bookingData.id);
 
     // await Future.delayed(Duration(seconds: 2));
 
@@ -81,7 +77,7 @@ class _EnterOTPButtonState extends State<EnterOTPButton> {
 
             this.widget.changeLoadStatus(false);
           },
-          status: (parkingResp["status"] == 1)
+          status: (parkingStatus == ParkingStatus.success)
               ? SuccessAndFailureStatus.success
               : SuccessAndFailureStatus.failure,
           // status: (true)

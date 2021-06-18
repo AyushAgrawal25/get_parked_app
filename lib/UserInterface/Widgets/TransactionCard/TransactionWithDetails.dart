@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:getparked/StateManagement/Models/UserData.dart';
 import 'package:getparked/Utils/DomainUtils.dart';
 import 'package:getparked/StateManagement/Models/SlotData.dart';
 import 'package:getparked/StateManagement/Models/TransactionData.dart';
@@ -15,10 +16,10 @@ import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TransactionWithDetails extends StatelessWidget {
-  final int transactionType;
-  final int accountType;
-  final int withAccountType;
-  final int moneyTransferType;
+  final TransactionDataType transactionType;
+  final UserAccountType accountType;
+  final UserAccountType withAccountType;
+  final MoneyTransferType moneyTransferType;
   final double amount;
   final UserDetails userDetails;
   final SlotData slotData;
@@ -108,43 +109,43 @@ class TransactionWithDetails extends StatelessWidget {
     String withName = "";
     String subtitle = "";
     switch (this.withAccountType) {
-      case 0:
+      case UserAccountType.user:
         withName = this.userDetails.firstName.trim() +
             " " +
             this.userDetails.lastName.trim();
         break;
-      case 1:
+      case UserAccountType.slot:
         withName = this.slotData.name.trim();
         break;
-      case 2:
+      case UserAccountType.admin:
         withName = appName;
     }
 
     // Setting Subtitle
     switch (this.transactionType) {
-      case 1:
+      case TransactionDataType.real:
         {
           // Real Transaction
           switch (this.moneyTransferType) {
-            case 0:
+            case MoneyTransferType.remove:
               subtitle = "Money Withdrawn";
               break;
 
-            case 1:
+            case MoneyTransferType.add:
               subtitle = "Money Added";
               break;
           }
           break;
         }
-      case 2:
+      case TransactionDataType.nonReal:
         {
           // Non Real Transaction
           switch (this.moneyTransferType) {
-            case 0:
+            case MoneyTransferType.remove:
               subtitle = "Debited To";
               break;
 
-            case 1:
+            case MoneyTransferType.add:
               subtitle = "Credited From";
               break;
           }

@@ -1,3 +1,4 @@
+import 'package:getparked/BussinessLogic/SlotsServices.dart';
 import 'package:getparked/BussinessLogic/SlotsUtils.dart';
 // import 'package:getparked/BussinessLogic/TransactionUtils.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
@@ -60,7 +61,7 @@ class _WithdrawParkingButtonState extends State<WithdrawParkingButton> {
       ),
       onPressed: () {
         OTPPopUp().show(
-            widget.bookingData.parkingData.withdrawOTP.toString(),
+            widget.bookingData.parkingData.withdrawOTP,
             "Enter OTP recieved from customer for Verification before Parking Completion.",
             onCorrectOTPEntered,
             context);
@@ -111,19 +112,14 @@ class _WithdrawParkingButtonState extends State<WithdrawParkingButton> {
           .inMinutes;
     }
 
-    Map parkingWithdrawData = {
-      "slotId": gpAppState.parkingLordData.id,
-      "slotParkingId": widget.bookingData.parkingData.id,
-      "duration": duration + 1,
-      "exceedDuration": exceedDuration
-    };
-    print(parkingWithdrawData);
-
     this.widget.changeLoadStatus(true);
 
-    Map parkingWithdrawResp = await SlotsUtils()
-        .parkingWithdraw(parkingWithdrawData, gpAppState.parkingLordData.token);
-    print(parkingWithdrawResp);
+    ParkingWithdrawStatus withdrawStatus = await SlotsServices()
+        .parkingWithdraw(
+            authToken: gpAppState.authToken,
+            parkingId: widget.bookingData.parkingData.id,
+            duration: duration,
+            exceedDuration: exceedDuration);
 
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) {
@@ -133,7 +129,7 @@ class _WithdrawParkingButtonState extends State<WithdrawParkingButton> {
             Navigator.of(context).pop();
             this.widget.changeLoadStatus(false);
           },
-          status: (parkingWithdrawResp["status"] == 1)
+          status: (withdrawStatus == ParkingWithdrawStatus.success)
               ? SuccessAndFailureStatus.success
               : SuccessAndFailureStatus.failure,
           statusText: "Parking Completion",

@@ -22,7 +22,7 @@ class ParkingData {
   int bookingId;
   BookingData bookingData;
 
-  int withdrawOTP;
+  String withdrawOTP;
   SlotSpaceType spaceType;
   int parkingHours;
 

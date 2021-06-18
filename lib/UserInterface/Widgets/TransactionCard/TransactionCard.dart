@@ -68,9 +68,8 @@ class _TransactionCardState extends State<TransactionCard> {
           children: [
             TransactionWithDetails(
               accountType: widget.transactionData.accountType,
-              withAccountType:
-                  widget.transactionData.transactionWithAccountType,
-              moneyTransferType: widget.transactionData.moneyTransferType,
+              withAccountType: widget.transactionData.withAccountType,
+              moneyTransferType: widget.transactionData.transferType,
               slotData: widget.transactionData.withSlotData,
               amount: widget.transactionData.amount,
               transactionType: widget.transactionData.type,

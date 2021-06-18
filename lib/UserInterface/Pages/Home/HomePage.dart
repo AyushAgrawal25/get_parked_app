@@ -466,12 +466,18 @@ class _HomePageState extends State<HomePage> {
                         //   },
                         // ));
 
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) {
-                            return IconTestPage();
-                          },
-                        ));
+                        // Navigator.of(context).push(MaterialPageRoute(
+                        //   builder: (context) {
+                        //     return IconTestPage();
+                        //   },
+                        // ));
 
+                        print(await SlotsServices().sendParkingRequest(
+                            authToken: gpAppState.authToken,
+                            slotId: 1,
+                            vehicleId: 1,
+                            spaceType: SlotSpaceType.open,
+                            parkingHours: 4));
                         // Navigator.of(context).push(MaterialPageRoute(
                         //   builder: (context) {
                         //     return CurveTest();

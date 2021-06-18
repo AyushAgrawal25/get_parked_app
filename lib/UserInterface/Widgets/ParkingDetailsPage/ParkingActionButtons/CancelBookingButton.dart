@@ -1,3 +1,4 @@
+import 'package:getparked/BussinessLogic/SlotsServices.dart';
 import 'package:getparked/BussinessLogic/SlotsUtils.dart';
 // import 'package:getparked/BussinessLogic/TransactionUtils.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
@@ -57,98 +58,96 @@ class _CancelBookingButtonState extends State<CancelBookingButton> {
       ),
       onPressed: () async {
         // TODO: Uncomment this.
-        // int duration = DateTime.now()
-        //     .toLocal()
-        //     .difference(DateTime.parse(widget.bookingData.time).toLocal())
-        //     .inMinutes;
-        // int exceedDuration = 0;
-        // int endTime = widget.slotData.endTime;
-        // // print("End Time : " + endTime.toString());
+        int duration = DateTime.now()
+            .toLocal()
+            .difference(DateTime.parse(widget.bookingData.time).toLocal())
+            .inMinutes;
+        int exceedDuration = 0;
+        int endTime = widget.slotData.endTime;
+        print("End Time : " + endTime.toString());
 
-        // if ((DateTime.now().toLocal().hour > endTime) ||
-        //     ((DateTime.now().toLocal().hour == endTime) &&
-        //         (DateTime.now().toLocal().minute > 0))) {
-        //   print("Time Exceed");
+        if ((DateTime.now().toLocal().hour > endTime) ||
+            ((DateTime.now().toLocal().hour == endTime) &&
+                (DateTime.now().toLocal().minute > 0))) {
+          print("Time Exceed");
 
-        //   // Setting Up Date
-        //   String day = "";
-        //   if (DateTime.now().toLocal().day > 9) {
-        //     day = DateTime.parse(widget.bookingData.time)
-        //         .toLocal()
-        //         .day
-        //         .toString();
-        //   } else {
-        //     day = "0" +
-        //         DateTime.parse(widget.bookingData.time)
-        //             .toLocal()
-        //             .day
-        //             .toString();
-        //   }
+          // Setting Up Date
+          String day = "";
+          if (DateTime.now().toLocal().day > 9) {
+            day = DateTime.parse(widget.bookingData.time)
+                .toLocal()
+                .day
+                .toString();
+          } else {
+            day = "0" +
+                DateTime.parse(widget.bookingData.time)
+                    .toLocal()
+                    .day
+                    .toString();
+          }
 
-        //   String month = "";
-        //   if (DateTime.now().toLocal().month > 9) {
-        //     month = DateTime.parse(widget.bookingData.time)
-        //         .toLocal()
-        //         .month
-        //         .toString();
-        //   } else {
-        //     month = "0" +
-        //         DateTime.parse(widget.bookingData.time)
-        //             .toLocal()
-        //             .month
-        //             .toString();
-        //   }
+          String month = "";
+          if (DateTime.now().toLocal().month > 9) {
+            month = DateTime.parse(widget.bookingData.time)
+                .toLocal()
+                .month
+                .toString();
+          } else {
+            month = "0" +
+                DateTime.parse(widget.bookingData.time)
+                    .toLocal()
+                    .month
+                    .toString();
+          }
 
-        //   String year =
-        //       DateTime.parse(widget.bookingData.time).toLocal().year.toString();
+          String year =
+              DateTime.parse(widget.bookingData.time).toLocal().year.toString();
 
-        //   String hour = "";
-        //   if (endTime > 9) {
-        //     hour = endTime.toString();
-        //   } else {
-        //     hour = "0" + endTime.toString();
-        //   }
+          String hour = "";
+          if (endTime > 9) {
+            hour = endTime.toString();
+          } else {
+            hour = "0" + endTime.toString();
+          }
 
-        //   exceedDuration = DateTime.now()
-        //       .toLocal()
-        //       .difference(
-        //           DateTime.parse("$year-$month-$day $hour:00:00").toLocal())
-        //       .inMinutes;
-        // }
+          exceedDuration = DateTime.now()
+              .toLocal()
+              .difference(
+                  DateTime.parse("$year-$month-$day $hour:00:00").toLocal())
+              .inMinutes;
+        }
 
-        // Map bookingCancellationData = {
-        //   "userId": gpAppState.userData.id,
-        //   "slotBookingId": widget.bookingData.id,
-        //   "duration": duration + 1,
-        //   "exceedDuration": exceedDuration
-        // };
-
-        // // print(bookingCancellationData);
-
-        // this.widget.changeLoadStatus(true);
+        this.widget.changeLoadStatus(true);
 
         // Map bookingCancellationResp = await SlotsUtils().bookingCancellation(
         //     bookingCancellationData, gpAppState.userData.accessToken);
         // print(bookingCancellationResp);
 
-        // Navigator.of(context).push(MaterialPageRoute(
-        //   builder: (context) {
-        //     return SuccessAndFailurePage(
-        //       buttonText: "Go Back",
-        //       onButtonPressed: () {
-        //         Navigator.of(context).pop();
+        BookingCancellationStatus cancellationStatus = await SlotsServices()
+            .cancelBooking(
+                authToken: gpAppState.authToken,
+                bookingId: widget.bookingData.id,
+                duration: duration,
+                exceedDuration: exceedDuration);
 
-        //         this.widget.changeLoadStatus(false);
-        //       },
-        //       status: (bookingCancellationResp["status"] == 1)
-        //           ? SuccessAndFailureStatus.success
-        //           : SuccessAndFailureStatus.failure,
-        //       statusText: "Booking Cancellation",
-        //     );
-        //   },
-        // )).then((value) {
-        //   this.widget.changeLoadStatus(false);
-        // });
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) {
+            return SuccessAndFailurePage(
+              buttonText: "Go Back",
+              onButtonPressed: () {
+                Navigator.of(context).pop();
+
+                this.widget.changeLoadStatus(false);
+              },
+              status: (cancellationStatus == BookingCancellationStatus.success)
+                  ? SuccessAndFailureStatus.success
+                  : SuccessAndFailureStatus.failure,
+              statusText: "Booking Cancellation",
+            );
+          },
+        )).then((value) {
+          this.widget.changeLoadStatus(false);
+        });
       },
     );
   }

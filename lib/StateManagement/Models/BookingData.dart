@@ -84,9 +84,16 @@ class BookingData {
       transactionMap = bookingMap["transactionData"];
     } else if (bookingMap["transaction"] != null) {
       transactionMap = bookingMap["transaction"];
+    } else if (bookingMap["fromSlotToUserTransaction"] != null) {
+      // For User
+      transactionMap = bookingMap["fromSlotToUserTransaction"];
+    } else if (bookingMap["fromUserToSlotTransaction"] != null) {
+      // For Slot
+      transactionMap = bookingMap["fromUserToSlotTransaction"];
     }
+
     if (transactionMap != null) {
-      if (transactionMap["transactionId"] != null) {
+      if (transactionMap["id"] != null) {
         transactionData = TransactionData.fromMap(transactionMap);
       }
     }

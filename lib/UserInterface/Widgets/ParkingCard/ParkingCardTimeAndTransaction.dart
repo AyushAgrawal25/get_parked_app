@@ -1,3 +1,4 @@
+import 'package:getparked/StateManagement/Models/TransactionData.dart';
 import 'package:getparked/Utils/DateTimeUtils.dart';
 import 'package:getparked/StateManagement/Models/ParkingRequestData.dart';
 import 'package:getparked/StateManagement/Models/BookingData.dart';
@@ -22,7 +23,8 @@ class ParkingCardTimeAndTransaction extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      (this.bookingData.transactionData.moneyTransferType == 1)
+                      (this.bookingData.transactionData.transferType ==
+                              MoneyTransferType.add)
                           ? Container(
                               child: Icon(
                                 Entypo.up_bold,

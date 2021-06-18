@@ -399,7 +399,8 @@ class _ParkingDetailsPageState extends State<ParkingDetailsPage> {
           if (widget.accType == ParkingDetailsAccType.slot) {
             statusOrActionButton = Container(
               child: WithdrawParkingButton(
-                  bookingData: widget.booking, changeLoadStatus: loadHandler),
+                  bookingData: widget.parkingRequest.bookingData,
+                  changeLoadStatus: loadHandler),
             );
           } else {
             statusOrActionButton = Container(
