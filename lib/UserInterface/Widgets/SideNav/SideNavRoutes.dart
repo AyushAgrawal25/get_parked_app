@@ -12,6 +12,7 @@
 import 'package:getparked/UserInterface/Pages/ParkingLord/ParkingLordPage.dart';
 import 'package:getparked/UserInterface/Pages/Profile/ProfilePage.dart';
 import 'package:getparked/UserInterface/Pages/RentOutSpace/RentOutSpaceFormsPage.dart';
+import 'package:getparked/UserInterface/Pages/Wallet/WalletPage.dart';
 import 'package:sailor/sailor.dart';
 
 class SideNavRoutes {
@@ -39,16 +40,16 @@ class SideNavRoutes {
             SailorTransition.fade_in
           ],
           defaultTransitionDuration: Duration(milliseconds: 250)),
-      // SailorRoute(
-      //     name: '/Wallet',
-      //     builder: (context, args, paramMap) {
-      //       return WalletPage();
-      //     },
-      //     defaultTransitions: [
-      //       SailorTransition.slide_from_left,
-      //       SailorTransition.fade_in
-      //     ],
-      //     defaultTransitionDuration: Duration(milliseconds: 250)),
+      SailorRoute(
+          name: '/Wallet',
+          builder: (context, args, paramMap) {
+            return WalletPage();
+          },
+          defaultTransitions: [
+            SailorTransition.slide_from_left,
+            SailorTransition.fade_in
+          ],
+          defaultTransitionDuration: Duration(milliseconds: 250)),
       // SailorRoute(
       //     name: '/Notifications',
       //     builder: (context, args, paramMap) {

@@ -70,8 +70,7 @@ class TransactionData {
 
     // TODO: complete this.
     // Transaction Type
-    type =
-        TransactionDataUtils.getTypeFromString(transactionMap["transferType"]);
+    type = TransactionDataUtils.getTypeFromString(transactionMap["type"]);
     switch (type) {
       case TransactionDataType.real:
         realTransaction =

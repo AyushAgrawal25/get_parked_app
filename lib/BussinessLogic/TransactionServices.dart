@@ -2,18 +2,60 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:getparked/BussinessLogic/UserServices.dart';
+import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/TransactionData.dart';
 import 'package:getparked/Utils/TransactionUtils.dart';
 import 'package:http/http.dart' as http;
 import 'package:getparked/Utils/DomainUtils.dart';
 import 'package:getparked/Utils/SecureStorageUtils.dart';
 import 'package:getparked/Utils/JSONUtils.dart';
+import 'package:provider/provider.dart';
 
 const TRANSACTIONS_ROUTE = "/app/transactions";
 
 class TransactionServices {
-  Future<List<TransactionData>> getAllTransactions(
-      {@required String authToken}) async {}
+  Future<TransactionGetStatus> getAllTransactions(
+      {@required BuildContext context}) async {
+    try {
+      AppState gpAppState = Provider.of<AppState>(context, listen: false);
+      Uri url = Uri.parse(domainName + TRANSACTIONS_ROUTE);
+      http.Response resp = await http.get(url, headers: {
+        AUTH_TOKEN: gpAppState.authToken,
+      });
+
+      if (resp.statusCode == 200) {
+        Map txnsData = json.decode(resp.body);
+        double walletMoney = (txnsData["walletBalance"] != null)
+            ? (txnsData["walletBalance"]).toDouble()
+            : 0.0;
+        gpAppState.setWalletMoney(walletMoney);
+
+        double vaultBalance = (txnsData["vaultBalance"] != null)
+            ? (txnsData["vaultBalance"]).toDouble()
+            : 0.0;
+        gpAppState.setVaultMoney(vaultBalance);
+
+        List<TransactionData> transactions = [];
+        List txnsMap = txnsData["transactions"];
+        txnsMap.forEach((txn) {
+          transactions.add(TransactionData.fromMap(txn));
+        });
+
+        gpAppState.setTransactions(transactions);
+
+        return TransactionGetStatus.successful;
+      } else if (resp.statusCode == 403) {
+        return TransactionGetStatus.invalidToken;
+      } else if (resp.statusCode == 500) {
+        return TransactionGetStatus.internalServerError;
+      }
+
+      return TransactionGetStatus.failed;
+    } catch (excp) {
+      print(excp);
+      return TransactionGetStatus.failed;
+    }
+  }
 
   Future<AddMoneyToWallStatus> addMoneyToWallet(
       {@required String authToken,
@@ -153,6 +195,13 @@ class TransactionServices {
       return TransactionRequestRespondStatus.failed;
     }
   }
+}
+
+enum TransactionGetStatus {
+  successful,
+  failed,
+  invalidToken,
+  internalServerError
 }
 
 enum AddMoneyToWallStatus {

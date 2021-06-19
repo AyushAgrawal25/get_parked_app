@@ -7,6 +7,7 @@ import 'package:getparked/UserInterface/Widgets/TransactionCard/TransactionWithD
 // import 'package:getparked/UserInterface/Widgets/TransactionDetailsPage/TransactionDetailsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:getparked/UserInterface/Widgets/TransactionDetailsPage/TransactionDetailsPage/TransactionDetailsPage.dart';
 
 class TransactionCard extends StatefulWidget {
   TransactionData transactionData;
@@ -23,12 +24,12 @@ class _TransactionCardState extends State<TransactionCard> {
       onTap: () {
         SystemSound.play(SystemSoundType.click);
         // TODO: create this page and uncomment this.
-        // Navigator.of(context).push(MaterialPageRoute(
-        //   builder: (context) {
-        //     return TransactionDetailsPage(
-        //         transactionData: widget.transactionData);
-        //   },
-        // ));
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) {
+            return TransactionDetailsPage(
+                transactionData: widget.transactionData);
+          },
+        ));
       },
       child: Container(
         // // Old Deco

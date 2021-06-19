@@ -40,9 +40,9 @@ class TransactionWithDetails extends StatelessWidget {
     width: 0,
   );
   setIconWidget() {
-    if (this.transactionType == 1) {
+    if (this.transactionType == TransactionDataType.real) {
       // Real Transaction
-      if (this.accountType == 0) {
+      if (this.accountType == UserAccountType.user) {
         // User OR Wallet Transaction
         iconWidget = Container(
           height: withImgSize,
@@ -67,9 +67,9 @@ class TransactionWithDetails extends StatelessWidget {
           ),
         );
       }
-    } else if (this.transactionType == 2) {
+    } else if (this.transactionType == TransactionDataType.nonReal) {
       // Non Real Transaction
-      if (this.withAccountType == 0) {
+      if (this.withAccountType == UserAccountType.user) {
         // Transaction With User
         String imgUrl = "";
         if (this.userDetails.profilePicThumbnailUrl != null) {
@@ -83,7 +83,7 @@ class TransactionWithDetails extends StatelessWidget {
             type: (this.userDetails.getGenderType() == UserGender.male)
                 ? DisplayPictureType.profilePictureMale
                 : DisplayPictureType.profilePictureFemale);
-      } else if (this.withAccountType == 1) {
+      } else if (this.withAccountType == UserAccountType.slot) {
         // Transaction With Slot
         String imgUrl = formatImgUrl(this.slotData.thumbnailUrl);
         iconWidget = DisplayPicture(
@@ -92,7 +92,7 @@ class TransactionWithDetails extends StatelessWidget {
             height: withImgSize,
             width: withImgSize,
             type: DisplayPictureType.slotMainImage);
-      } else if (this.withAccountType == 2) {
+      } else if (this.withAccountType == UserAccountType.admin) {
         // Transaction With App
         iconWidget = CustomIcon(
           icon: GPIcons.get_parked_logo,
@@ -190,7 +190,7 @@ class TransactionWithDetails extends StatelessWidget {
   setMoneyTransferTypeArrow() {
     IconData arrowIcon;
     Color arrowColor;
-    if (this.moneyTransferType == 0) {
+    if (this.moneyTransferType == MoneyTransferType.remove) {
       arrowIcon = Entypo.down_bold;
       arrowColor = qbAppPrimaryRedColor;
     } else {

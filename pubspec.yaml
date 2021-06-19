@@ -65,7 +65,7 @@ dependencies:
   qr_flutter: ^4.0.0
 
 # UPI
-  # upi_pay: ^0.2.4
+  upi_pay: ^1.0.0
 
 # Maps
   google_maps_flutter: ^2.0.6

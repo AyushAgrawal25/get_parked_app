@@ -157,7 +157,7 @@ class AppState extends ChangeNotifier {
   //   notifyListeners();
   // }
 
-  Map<int, TransactionData> transactionsStore;
+  Map<int, TransactionData> transactionsStore = {};
   void setTransactions(List<TransactionData> gpTransactions) {
     gpTransactions.forEach((txn) {
       transactionsStore[txn.id] = txn;

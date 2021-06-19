@@ -78,7 +78,8 @@ class _HomePageState extends State<HomePage> {
     initializeParkingsForUser();
     initializeParkingsForParkingLord();
 
-    // TODO: initialize transactions
+    // Transactions
+    initializeTransactions();
   }
 
   // initialize parkings for user
@@ -93,6 +94,11 @@ class _HomePageState extends State<HomePage> {
     List<ParkingRequestData> parkingReqs = await SlotsServices()
         .getParkingRequestsForSlot(authToken: gpAppState.authToken);
     gpAppState.setSlotParkings(parkingReqs);
+  }
+
+  // initialize transactions
+  initializeTransactions() async {
+    await TransactionServices().getAllTransactions(context: context);
   }
 
   initializeVehiclesTypeData() async {
@@ -482,12 +488,15 @@ class _HomePageState extends State<HomePage> {
                         //     status: 1,
                         //     amount: 10.25));
 
-                        print(await SlotsServices().sendParkingRequest(
-                            authToken: gpAppState.authToken,
-                            slotId: 2,
-                            vehicleId: 1,
-                            spaceType: SlotSpaceType.open,
-                            parkingHours: 4));
+                        // print(await SlotsServices().sendParkingRequest(
+                        //     authToken: gpAppState.authToken,
+                        //     slotId: 2,
+                        //     vehicleId: 1,
+                        //     spaceType: SlotSpaceType.open,
+                        //     parkingHours: 4));
+
+                        initializeTransactions();
+
                         // Navigator.of(context).push(MaterialPageRoute(
                         //   builder: (context) {
                         //     return CurveTest();
