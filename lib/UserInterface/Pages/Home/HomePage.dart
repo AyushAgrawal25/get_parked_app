@@ -472,9 +472,19 @@ class _HomePageState extends State<HomePage> {
                         //   },
                         // ));
 
+                        // String txnCode = await TransactionServices()
+                        //     .getTransactionCode(
+                        //         authToken: gpAppState.authToken);
+                        // print(await TransactionServices().addMoneyToWallet(
+                        //     authToken: gpAppState.authToken,
+                        //     ref: "Wallet Testing",
+                        //     txnCode: txnCode,
+                        //     status: 1,
+                        //     amount: 10.25));
+
                         print(await SlotsServices().sendParkingRequest(
                             authToken: gpAppState.authToken,
-                            slotId: 1,
+                            slotId: 2,
                             vehicleId: 1,
                             spaceType: SlotSpaceType.open,
                             parkingHours: 4));

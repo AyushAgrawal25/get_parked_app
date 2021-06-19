@@ -145,16 +145,36 @@ class AppState extends ChangeNotifier {
   }
 
   //Transactions Data
-  List<TransactionData> transactions;
+  // List<TransactionData> transactions;
+  // void setTransactions(List<TransactionData> gpTransactions) {
+  //   gpTransactions.sort((a, b) => DateTime.parse(b.time)
+  //       .toLocal()
+  //       .millisecondsSinceEpoch
+  //       .compareTo(DateTime.parse(a.time).toLocal().millisecondsSinceEpoch));
+  //   this.transactions = gpTransactions;
+  //   // this.setWalleMoney();
+  //   // this.setVaultMoney();
+  //   notifyListeners();
+  // }
+
+  Map<int, TransactionData> transactionsStore;
   void setTransactions(List<TransactionData> gpTransactions) {
-    gpTransactions.sort((a, b) => DateTime.parse(b.time)
+    gpTransactions.forEach((txn) {
+      transactionsStore[txn.id] = txn;
+    });
+    notifyListeners();
+  }
+
+  List<TransactionData> get transactions {
+    List<TransactionData> txns = [];
+    transactionsStore.entries.forEach((txnEntry) {
+      txns.add(txnEntry.value);
+    });
+    txns.sort((a, b) => DateTime.parse(b.time)
         .toLocal()
         .millisecondsSinceEpoch
         .compareTo(DateTime.parse(a.time).toLocal().millisecondsSinceEpoch));
-    this.transactions = gpTransactions;
-    // this.setWalleMoney();
-    // this.setVaultMoney();
-    notifyListeners();
+    return txns;
   }
 
   //Contacts Data
@@ -312,7 +332,6 @@ class AppState extends ChangeNotifier {
       this.userDetails,
       this.slotsMap,
       this.parkingLordData,
-      this.transactions,
       this.contacts});
 }
 
@@ -321,5 +340,4 @@ AppState globalAppState = AppState(
     parkingLordData: null,
     slotsMap: null,
     userData: null,
-    userDetails: null,
-    transactions: null);
+    userDetails: null);

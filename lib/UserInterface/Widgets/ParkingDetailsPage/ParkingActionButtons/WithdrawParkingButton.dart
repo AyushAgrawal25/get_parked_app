@@ -114,6 +114,9 @@ class _WithdrawParkingButtonState extends State<WithdrawParkingButton> {
 
     this.widget.changeLoadStatus(true);
 
+    if (exceedDuration > duration) {
+      exceedDuration = duration;
+    }
     ParkingWithdrawStatus withdrawStatus = await SlotsServices()
         .parkingWithdraw(
             authToken: gpAppState.authToken,

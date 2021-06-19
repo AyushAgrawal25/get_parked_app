@@ -26,7 +26,7 @@ class UserServices {
           Uri.parse(domainName + USER_ROUTE + "/getUser"),
           headers: {AUTH_TOKEN: authToken});
 
-      // print(resp.body);
+      print(resp.body);
       if (resp.statusCode == 200) {
         Map<String, dynamic> respMap = json.decode(resp.body);
         String refreshToken = respMap[REFRESH_TOKEN];

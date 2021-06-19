@@ -1,3 +1,4 @@
+import 'package:getparked/StateManagement/Models/NonRealTransactionData.dart';
 import 'package:getparked/StateManagement/Models/RealTransactionData.dart';
 import 'package:getparked/StateManagement/Models/UserData.dart';
 import 'package:getparked/StateManagement/Models/UserDetails.dart';
@@ -9,9 +10,9 @@ class TransactionData {
   // TransactionType
   TransactionDataType type;
   RealTransactionData realTransaction;
-  // TODO: create non real transaction
+  NonRealTransactionData nonRealTransaction;
 
-  //transactionFromAccountType
+  //transactionFromAccountType or your account type.
   UserAccountType accountType;
 
   // transactionAmount
@@ -24,11 +25,11 @@ class TransactionData {
   int withUserId;
   UserAccountType withAccountType;
 
-  // userData
+  // with userData and details
   Map transactionWithUserData;
   UserDetails withUserDetails;
 
-  // slotData
+  // with slotData
   Map transactionWithSlotData;
   SlotData withSlotData;
 
@@ -67,76 +68,43 @@ class TransactionData {
     transferType = TransactionDataUtils.getTransferTypeFromString(
         transactionMap["transferType"]);
 
+    // TODO: complete this.
     // Transaction Type
     type =
         TransactionDataUtils.getTypeFromString(transactionMap["transferType"]);
-    // switch (type) {
-    //   case 1:
-    //     transactionWithUserId = transactionMap["realTransactionUserId"];
-    //     transactionWithAccountType =
-    //         transactionMap["realTransactionAccountType"];
-    //     refCode = transactionMap["realTransactionRef"];
-
-    //     if (accountType == null) {
-    //       accountType = transactionMap["realTransactionAccountType"];
-    //     }
-
-    //     if (amount == null) {
-    //       amount = transactionMap["realTransactionAmount"];
-    //     }
-
-    //     if (moneyTransferType == null) {
-    //       moneyTransferType =
-    //           transactionMap["realTransactionMoneyTransferType"];
-    //     }
-
-    //     if (transactionWithUserId == null) {
-    //       transactionWithUserId = transactionMap["realTransactionUserId"];
-    //     }
-
-    //     if (transactionWithAccountType == null) {
-    //       transactionWithAccountType =
-    //           transactionMap["realTransactionAccountType"];
-    //     }
-
-    //     if (time == null) {
-    //       time = transactionMap["realTransactionTime"];
-    //     }
-
-    //     if (status == null) {
-    //       status = transactionMap["realTransactionStatus"];
-    //     }
-    //     break;
-
-    //   case 2:
-    //     transactionWithUserId = transactionMap["nonRealTransactionWithUserId"];
-    //     transactionWithAccountType =
-    //         transactionMap["nonRealTransactionWithAccountType"];
-    //     refCode = transactionMap["nonRealTransactionRef"];
-    //     break;
-    // }
-
-    // User Data
-    if ((transactionMap["user"] != null) &&
-        (transactionMap["user"]["userDetails"] != null)) {
-      withUserDetails =
-          UserDetails.fromMap(transactionMap["user"]["userDetails"]);
-      transactionWithUserData = transactionMap["user"];
+    switch (type) {
+      case TransactionDataType.real:
+        realTransaction =
+            RealTransactionData.fromMap(transactionMap["transactionReal"]);
+        if (realTransaction != null) {
+          withAccountType = realTransaction.accountType;
+          refCode = realTransaction.refCode;
+          withUserId = realTransaction.userId;
+          withUserDetails = realTransaction.userDetails;
+          withSlotData = realTransaction.slotData;
+        }
+        break;
+      case TransactionDataType.nonReal:
+        nonRealTransaction = NonRealTransactionData.fromMap(
+            transactionMap["transactionNonReal"]);
+        if (nonRealTransaction != null) {
+          withAccountType = nonRealTransaction.withUserAccountType;
+          refCode = nonRealTransaction.refCode;
+          withUserId = nonRealTransaction.withUserId;
+          withUserDetails = nonRealTransaction.withUserDetails;
+          withSlotData = nonRealTransaction.withSlotData;
+        }
+        break;
     }
 
-    //TODO: Think on this
-    // Slot Data
-    if (transactionMap["slotData"] != null) {
-      withSlotData = SlotDataUtils.mapToSlotData(transactionMap["slotData"]);
-      transactionWithSlotData = transactionMap["slotData"];
-    }
+    //TODO: Send slot data with transactions if required...
 
     data = transactionMap;
     time = transactionMap["time"];
     status = transactionMap["status"];
   }
 
-  TransactionStatus getTransactionDataType() {
+  TransactionStatus getTransactionStatus() {
     TransactionStatus type;
     switch (status) {
       case 0:

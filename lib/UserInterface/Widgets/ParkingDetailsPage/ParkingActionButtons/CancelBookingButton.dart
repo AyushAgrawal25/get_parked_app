@@ -116,7 +116,9 @@ class _CancelBookingButtonState extends State<CancelBookingButton> {
                   DateTime.parse("$year-$month-$day $hour:00:00").toLocal())
               .inMinutes;
         }
-
+        if (exceedDuration > duration) {
+          exceedDuration = duration;
+        }
         this.widget.changeLoadStatus(true);
 
         // Map bookingCancellationResp = await SlotsUtils().bookingCancellation(

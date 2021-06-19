@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:getparked/BussinessLogic/UserServices.dart';
+import 'package:getparked/StateManagement/Models/TransactionData.dart';
 import 'package:getparked/Utils/TransactionUtils.dart';
 import 'package:http/http.dart' as http;
 import 'package:getparked/Utils/DomainUtils.dart';
@@ -11,6 +12,9 @@ import 'package:getparked/Utils/JSONUtils.dart';
 const TRANSACTIONS_ROUTE = "/app/transactions";
 
 class TransactionServices {
+  Future<List<TransactionData>> getAllTransactions(
+      {@required String authToken}) async {}
+
   Future<AddMoneyToWallStatus> addMoneyToWallet(
       {@required String authToken,
       @required String ref,
