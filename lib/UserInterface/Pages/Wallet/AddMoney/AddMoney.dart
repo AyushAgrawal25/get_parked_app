@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:getparked/BussinessLogic/TransactionServices.dart';
 import 'package:getparked/StateManagement/Models/AppOverlayStyleData.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';
@@ -33,7 +34,9 @@ class _AddMoneyFormWithAmountState extends State<AddMoneyForm> {
   List<UPIAppRoundWidget> upiAppList = [];
 
   initiateUPI() async {
-    var appList = await UpiPay.getInstalledUpiApplications();
+    var appList = await UpiPay.getInstalledUpiApplications(
+        statusType: UpiApplicationDiscoveryAppStatusType.all);
+    print(appList);
     appList.forEach((app) {
       upiAppList.add(UPIAppRoundWidget(
         payFun: (UpiApplication upiApplication) {
@@ -47,74 +50,59 @@ class _AddMoneyFormWithAmountState extends State<AddMoneyForm> {
   }
 
   initiateUPIPayment(UpiApplication upiApplication, widget) async {
-    // print(gpAmount);
+    print(gpAmount);
 
-    // //Transaction Reference
-    // String txnRef =
-    //     await TransactionUtils().getTxnRefCode(gpAppState.userData.accessToken);
+    if ((gpAmount != null) && (gpAmount != "")) {
+      widget.changeLoadStatus(true, 0);
 
-    // var ran = new Random();
-    // if (txnRef == null) {
-    //   txnRef = "txn1";
-    //   for (int i = 0; i < 10; i++) {
-    //     txnRef += ran.nextInt(9).toString();
-    //   }
-    // }
+      //Transaction Reference
+      String txnCode = await TransactionServices()
+          .getTransactionCode(authToken: gpAppState.authToken);
+      print(txnCode);
 
-    // if ((gpAmount != null) && (gpAmount != "")) {
-    //   widget.changeLoadStatus(true, 0);
+      // UpiTransactionResponse upiTransactionResponse =
+      //     await UpiPay.initiateTransaction(
+      //   app: upiApplication,
+      //   receiverUpiAddress: '9827174909@ybl',
+      //   receiverName: 'Jayesh Kumar Agrawal',
+      //   transactionRef: txnCode,
+      //   amount: double.parse(gpAmount).toStringAsFixed(2),
+      //   transactionNote: 'Transaction With Get Parked',
+      // );
 
-    //   // UpiTransactionResponse upiTransactionResponse =
-    //   //     await UpiPay.initiateTransaction(
-    //   //   app: upiApplication,
-    //   //   receiverUpiAddress: 'agrawal.ayush2500@okaxis',
-    //   //   receiverName: 'Ayush Agrawal',
-    //   //   transactionRef: txnRef,
-    //   //   amount: double.parse(gpAmount).toStringAsFixed(2),
-    //   //   merchantCode: '7372',
-    //   //   transactionNote: 'Transaction With Get Parked',
-    //   // );
+      UpiTransactionResponse upiTransactionResponse =
+          await UpiPay.initiateTransaction(
+        app: upiApplication,
+        receiverUpiAddress: '9329718444@okbizaxis',
+        receiverName: 'Qpd Web Solutions',
+        transactionRef: txnCode,
+        amount: gpAmount,
+        transactionNote: 'Transaction With Get Parked',
+      );
 
-    //   UpiTransactionResponse upiTransactionResponse =
-    //       await UpiPay.initiateTransaction(
-    //     app: upiApplication,
-    //     receiverUpiAddress: '9329718444@okbizaxis',
-    //     receiverName: 'Qpd Web Solutions',
-    //     transactionRef: txnRef,
-    //     amount: gpAmount,
-    //     merchantCode: '7372',
-    //     transactionNote: 'Transaction With Get Parked',
-    //   );
+      int transactionStatus = 0;
+      switch (upiTransactionResponse.status) {
+        case UpiTransactionStatus.success:
+          transactionStatus = 1;
+          break;
 
-    //   int transactionStatus = 0;
-    //   switch (upiTransactionResponse.status) {
-    //     case UpiTransactionStatus.success:
-    //       transactionStatus = 1;
-    //       break;
+        case UpiTransactionStatus.failure:
+          transactionStatus = 2;
+          break;
 
-    //     case UpiTransactionStatus.failure:
-    //       transactionStatus = 2;
-    //       break;
+        default:
+      }
 
-    //     default:
-    //   }
+      AddMoneyToWallStatus addMoneyToWallStatus = await TransactionServices()
+          .addMoneyToWallet(
+              authToken: gpAppState.authToken,
+              ref: upiTransactionResponse.txnId,
+              txnCode: txnCode,
+              status: transactionStatus,
+              amount: double.parse(gpAmount));
 
-    //   Map transactionData = {
-    //     "userId": gpAppState.userData.id,
-    //     "accountType": 0,
-    //     "amount": double.parse(double.parse(gpAmount).toStringAsFixed(2)),
-    //     "ref": txnRef,
-    //     "refId": upiTransactionResponse.txnId,
-    //     "moneyTransferType": 1,
-    //     "status": transactionStatus
-    //   };
-
-    //   Map resp = await TransactionUtils()
-    //       .addMoneyToWallet(transactionData, gpAppState.userData.accessToken);
-    //   print(resp);
-
-    //   widget.changeLoadStatus(true, transactionStatus);
-    // }
+      widget.changeLoadStatus(true, transactionStatus);
+    }
   }
 
   // Amount

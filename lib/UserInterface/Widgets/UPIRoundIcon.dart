@@ -14,16 +14,38 @@ class UPIAppRoundWidget extends StatefulWidget {
 }
 
 class _UPIAppRoundWidgetState extends State<UPIAppRoundWidget> {
-  String appIconImageUrl =
-      "https://lh3.googleusercontent.com/AeMKuV3iGZsHPeSU_g13oYW0msutmjt3QiEbJvTiMh6dqFvyeTS-LHVs4Sa0d9q7RElI=s180";
+  String appIconPath = "assets/images/upiApps/";
 
   @override
   void initState() {
-    appIconImageUrl = formatImgUrl(
-        "/images/appIconImages/" + widget.upiApplication.getAppName());
-    print(appIconImageUrl);
-
     super.initState();
+    String appIconName = "Airtel.jpg";
+    if (widget.upiApplication == UpiApplication.airtel) {
+      appIconName = "Airtel.jpg";
+    } else if (widget.upiApplication == UpiApplication.amazonPay) {
+      appIconName = "Amazon Pay.jpg";
+    } else if (widget.upiApplication == UpiApplication.bhim) {
+      appIconName = "BHIM.jpg";
+    } else if (widget.upiApplication == UpiApplication.googlePay) {
+      appIconName = "Google Pay.jpg";
+    } else if (widget.upiApplication == UpiApplication.iMobile) {
+      appIconName = "iMobile by ICICI.jpg";
+    } else if (widget.upiApplication == UpiApplication.miPay) {
+      appIconName = "MiPay.jpg";
+    } else if (widget.upiApplication == UpiApplication.paytm) {
+      appIconName = "Paytm.jpg";
+    } else if (widget.upiApplication == UpiApplication.phonePe) {
+      appIconName = "PhonePe.jpg";
+    } else if (widget.upiApplication == UpiApplication.sbiPay) {
+      appIconName = "SBI Pay.jpg";
+    } else if (widget.upiApplication == UpiApplication.trueCaller) {
+      appIconName = "Truecaller.jpg";
+    } else if (widget.upiApplication == UpiApplication.whatsApp) {
+      appIconName = "whatsapp.PNG";
+    }
+
+    appIconPath += appIconName;
+    print(appIconPath);
   }
 
   @override
@@ -49,8 +71,8 @@ class _UPIAppRoundWidgetState extends State<UPIAppRoundWidget> {
                           ]),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(45445),
-                        child: Image.network(
-                          appIconImageUrl,
+                        child: Image.asset(
+                          appIconPath,
                           height: 45,
                           width: 45,
                         ),
