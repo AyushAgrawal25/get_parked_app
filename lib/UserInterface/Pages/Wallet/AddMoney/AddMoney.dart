@@ -66,7 +66,7 @@ class _AddMoneyFormWithAmountState extends State<AddMoneyForm> {
       //   app: upiApplication,
       //   receiverUpiAddress: '9827174909@ybl',
       //   receiverName: 'Jayesh Kumar Agrawal',
-      //   transactionRef: txnCode,
+      //   transactionRef: TransactionUtils().getEncryptedData(txnCode)["code"],
       //   amount: double.parse(gpAmount).toStringAsFixed(2),
       //   transactionNote: 'Transaction With Get Parked',
       // );
@@ -93,6 +93,7 @@ class _AddMoneyFormWithAmountState extends State<AddMoneyForm> {
 
         default:
       }
+      print(upiTransactionResponse.status);
 
       AddMoneyToWallStatus addMoneyToWallStatus = await TransactionServices()
           .addMoneyToWallet(

@@ -5,6 +5,8 @@ import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/ParkingRequestData.dart';
 import 'package:getparked/StateManagement/Models/SlotData.dart';
 import 'package:getparked/StateManagement/Models/VehicleData.dart';
+import 'package:getparked/UserInterface/Pages/Wallet/AddMoney/AddMoneyPage.dart';
+import 'package:getparked/UserInterface/Pages/Wallet/RequestMoney/SelectContact/SelectContact.dart';
 import 'package:getparked/UserInterface/Widgets/LowBalancePopUp.dart';
 import 'package:getparked/UserInterface/Widgets/SuccessAndFailure/SuccessAndFailurePage.dart';
 // import 'package:getparked/UserInterface/Pages/Wallet/RequestMoney/SelectContact/SelectContact.dart';
@@ -67,43 +69,11 @@ class _BookNowButtonState extends State<BookNowButton> {
             widget.slotData.securityDepositTime.toDouble();
         print(totalSecurityDeposit);
 
-        // TODO: Uncomment this when wallet is done.
-        // if (double.parse((gpAppState.walletMoney -
-        //             (gpAppState.walletSecurityDeposit + totalSecurityDeposit))
-        //         .toStringAsFixed(2)) >
-        //     0) {
-        
-        // TODO: remove this when wallet is done.
-        if (true) {
-          //Starting Load
-          this.widget.changeLoadStatus(true);
-
-          BookSlotStatus bookStatus = await SlotsServices().bookSlot(
-              authToken: gpAppState.authToken,
-              parkingRequestId: widget.parkingRequestData.id);
-
-          // TODO: handle low balance and unavailable space if required.
-
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) {
-              return SuccessAndFailurePage(
-                buttonText: "Continue",
-                onButtonPressed: () {
-                  Navigator.of(context).pop();
-
-                  //Stoping Load
-                  this.widget.changeLoadStatus(false);
-                },
-                status: (bookStatus == BookSlotStatus.success)
-                    ? SuccessAndFailureStatus.success
-                    : SuccessAndFailureStatus.failure,
-                statusText: "Booking",
-              );
-            },
-          )).then((value) {
-            //Stoping Load
-            this.widget.changeLoadStatus(false);
-          });
+        if (double.parse((gpAppState.walletMoney -
+                    (gpAppState.walletSecurityDeposit + totalSecurityDeposit))
+                .toStringAsFixed(2)) >
+            0) {
+          await bookSlot();
         } else {
           //Showing Add Money Alert Dialog
           showAlertDialog(onAddMoney, onPaymentRequest);
@@ -112,71 +82,72 @@ class _BookNowButtonState extends State<BookNowButton> {
     );
   }
 
+  bookSlot() async {
+    this.widget.changeLoadStatus(true);
+
+    BookSlotStatus bookStatus = await SlotsServices().bookSlot(
+        authToken: gpAppState.authToken,
+        parkingRequestId: widget.parkingRequestData.id);
+
+    // TODO: handle low balance and unavailable space if required.
+
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return SuccessAndFailurePage(
+          buttonText: "Continue",
+          onButtonPressed: () {
+            Navigator.of(context).pop();
+
+            //Stoping Load
+            this.widget.changeLoadStatus(false);
+          },
+          status: (bookStatus == BookSlotStatus.success)
+              ? SuccessAndFailureStatus.success
+              : SuccessAndFailureStatus.failure,
+          statusText: "Booking",
+        );
+      },
+    )).then((value) {
+      //Stoping Load
+      this.widget.changeLoadStatus(false);
+    });
+  }
+
   onAddMoney() async {
     // TODO: Uncomment this.
-    // // Navigate to Upi Page
-    // Navigator.of(context).push(MaterialPageRoute(
-    //   builder: (context) {
-    //     return AddMoneyPage(
-    //       formType: AddMoneyFormType.withAmount,
-    //       amount: double.parse(
-    //           ((gpAppState.walletSecurityDeposit + totalSecurityDeposit) -
-    //                   gpAppState.walletMoney)
-    //               .toStringAsFixed(2)),
-    //       onTransactionSuccessful: () async {
-    //         print("Transaction Successful");
-    //         Map bookingData = {
-    //           "userId": gpAppState.userData.id,
-    //           "slotId": widget.parkingRequestData.slotId,
-    //           "slotParkingRequestId": widget.parkingRequestData.id
-    //         };
+    // Navigate to Upi Page
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return AddMoneyPage(
+          formType: AddMoneyFormType.withAmount,
+          amount: double.parse(
+              ((gpAppState.walletSecurityDeposit + totalSecurityDeposit) -
+                      gpAppState.walletMoney)
+                  .toStringAsFixed(2)),
+          onTransactionSuccessful: () async {
+            print("Transaction Successful");
 
-    //         //Starting Load
-    //         this.widget.changeLoadStatus(true);
-
-    //         Map bookingResponse = await SlotsUtils()
-    //             .booking(bookingData, gpAppState.userData.accessToken);
-    //         print(bookingResponse);
-
-    //         Navigator.of(context).push(MaterialPageRoute(
-    //           builder: (context) {
-    //             return SuccessAndFailurePage(
-    //               buttonText: "Continue",
-    //               onButtonPressed: () {
-    //                 Navigator.of(context).pop();
-
-    //                 //Stoping Load
-    //                 this.widget.changeLoadStatus(false);
-    //               },
-    //               status: (bookingResponse["bookingStatus"] == 1)
-    //                   ? SuccessAndFailureStatus.success
-    //                   : SuccessAndFailureStatus.failure,
-    //               statusText: "Booking",
-    //             );
-    //           },
-    //         )).then((value) {
-    //           //Stoping Load
-    //           this.widget.changeLoadStatus(false);
-    //         });
-    //       },
-    //     );
-    //   },
-    // ));
+            // check it once.
+            bookSlot();
+          },
+        );
+      },
+    ));
   }
 
   onPaymentRequest() async {
     // TODO: Uncomment this.
     // Navigate to Payment Request Page
-    // Navigator.of(context).push(MaterialPageRoute(
-    //   builder: (context) {
-    //     return SelectContact(
-    //       amount: double.parse(
-    //           ((gpAppState.walletSecurityDeposit + totalSecurityDeposit) -
-    //                   gpAppState.walletMoney)
-    //               .toStringAsFixed(2)),
-    //     );
-    //   },
-    // ));
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return SelectContact(
+          amount: double.parse(
+              ((gpAppState.walletSecurityDeposit + totalSecurityDeposit) -
+                      gpAppState.walletMoney)
+                  .toStringAsFixed(2)),
+        );
+      },
+    ));
   }
 
   showAlertDialog(

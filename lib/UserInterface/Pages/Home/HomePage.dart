@@ -14,6 +14,7 @@ import 'package:getparked/BussinessLogic/PlacesApiUtils.dart';
 import 'package:getparked/BussinessLogic/PlacesDataCollection.dart';
 import 'package:getparked/BussinessLogic/SlotsUtils.dart';
 import 'package:getparked/BussinessLogic/SocketUtils.dart';
+import 'package:getparked/Utils/SecureStorageUtils.dart';
 import 'package:getparked/Utils/TransactionUtils.dart';
 import 'package:getparked/Utils/VehiclesUtils.dart';
 import 'package:getparked/StateManagement/Models/AppOverlayStyleData.dart';
@@ -123,22 +124,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   initializeAppSockets() async {
-    // TODO: Uncomment when done with backend.
-
-    // if (gpAppState.socketIO == null) {
-    //   IO.Socket gpSocketIO =
-    //       SocketUtils().init(onSocketConnection, onSocketDisconnect);
-    //   gpAppState.initSocketIO(gpSocketIO);
-    // }
+    if (gpAppState.socketIO == null) {
+      IO.Socket gpSocketIO =
+          SocketUtils().init(onSocketConnection, onSocketDisconnect);
+      gpAppState.initSocketIO(gpSocketIO);
+    }
   }
 
   onSocketConnection(IO.Socket gpSocketIO) {
-    // TODO: uncomment when socket is ready.
     // Joining User Socket Stream
-    // gpSocketIO.emit('join-user-stream', {
-    //   "userId": gpAppState.userData.id,
-    //   "userAccessToken": gpAppState.userData.accessToken
-    // });
+    gpSocketIO.emit('join-user-stream', {AUTH_TOKEN: gpAppState.authToken});
 
     initializeNotificationsSocket(gpSocketIO);
     initializeTransactionsSocket(gpSocketIO);
@@ -183,40 +178,44 @@ class _HomePageState extends State<HomePage> {
       // Setting Up Money
       gpAppState.setWalletMoney((data["walletAmout"]).toDouble());
       gpAppState.setVaultMoney((data["vaultAmount"]).toDouble());
+      print(data);
 
-      LocalDataUtils()
-          .savingAmountData(gpAppState.walletMoney, gpAppState.vaultMoney);
+      // LocalDataUtils()
+      //     .savingAmountData(gpAppState.walletMoney, gpAppState.vaultMoney);
 
-      List<TransactionData> transactions = [];
-      data["data"].forEach((transactionMap) {
-        transactions.add(TransactionData.fromMap(transactionMap));
-      });
-      print(transactions.length.toString() + " Transactions");
-      gpAppState.setTransactions(transactions);
+      // List<TransactionData> transactions = [];
+      // data["data"].forEach((transactionMap) {
+      //   transactions.add(TransactionData.fromMap(transactionMap));
+      // });
+      // print(transactions.length.toString() + " Transactions");
+      // gpAppState.setTransactions(transactions);
 
-      // Saving Data Locally
-      LocalDataUtils().saveLocalData(LocalDataType.transactions, data["data"]);
-      print("App Amount : " + data["appAmount"].toString());
+      // // Saving Data Locally
+      // LocalDataUtils().saveLocalData(LocalDataType.transactions, data["data"]);
+      // print("App Amount : " + data["appAmount"].toString());
     });
   }
 
   // For Slots
   initializeSlotsSocket(IO.Socket gpSocketIO) async {
-    gpSocketIO.on('slot-update', (data) {
-      List newSlotsData = data["data"]; //Checking is slots Updated or not.
-      // TODO: Replace with new function.
-      // bool isSlotsUpdated =
-      //     SlotsUtils().isSlotsUpdated(newSlotsData, gpAppState.slotsMap);
+    // gpSocketIO.on('slot-update', (data) {
+    //   // List newSlotsData = data["data"]; //Checking is slots Updated or not.
+    //   // bool isSlotsUpdated =
+    //   //     SlotsUtils().isSlotsUpdated(newSlotsData, gpAppState.slotsMap);
 
-      // if (isSlotsUpdated) {
-      //   gpAppState.setSlotsMap(
-      //       SlotsUtils().updateSlots(newSlotsData, gpAppState.slotsMap));
-      //   print("${gpAppState.slotsMap.length} Slots On Map");
-      // }
-    });
+    //   // if (isSlotsUpdated) {
+    //   //   gpAppState.setSlotsMap(
+    //   //       SlotsUtils().updateSlots(newSlotsData, gpAppState.slotsMap));
+    //   //   print("${gpAppState.slotsMap.length} Slots On Map");
+    //   // }
+    // });
 
-    // TODO: uncommnent when it is ready.
     onCameraChangeFun(gpAppState.currentCameraPosition);
+
+    // Use this room to get slot updates.
+    gpSocketIO.on("slots-update", (data) {
+      // TODO: complete this to use for slots marker in map.
+    });
   }
 
   // For Parkings
@@ -258,53 +257,57 @@ class _HomePageState extends State<HomePage> {
   }
 
   initializeOfflineNotifications() async {
+    // TODO: complete this function
     // Tmp Code
-    List notificationsData =
-        await LocalDataUtils().readLocalData(LocalDataType.notifications);
-    List<NotificationData> gpNotifications = [];
-    notificationsData.forEach((gpNotificationMap) {
-      gpNotifications.add(NotificationData.fromMap(gpNotificationMap));
-    });
+    // List notificationsData =
+    //     await LocalDataUtils().readLocalData(LocalDataType.notifications);
+    // List<NotificationData> gpNotifications = [];
+    // notificationsData.forEach((gpNotificationMap) {
+    //   gpNotifications.add(NotificationData.fromMap(gpNotificationMap));
+    // });
 
-    gpAppState.setNotifications(gpNotifications);
+    // gpAppState.setNotifications(gpNotifications);
   }
 
   initializeOfflineTransactions() async {
-    List transactionsData =
-        await LocalDataUtils().readLocalData(LocalDataType.transactions);
-    List<TransactionData> gpTransactions = [];
-    transactionsData.forEach((gpTransactionMap) {
-      gpTransactions.add(TransactionData.fromMap(gpTransactionMap));
-    });
+    // TODO: complete this function
+    // List transactionsData =
+    //     await LocalDataUtils().readLocalData(LocalDataType.transactions);
+    // List<TransactionData> gpTransactions = [];
+    // transactionsData.forEach((gpTransactionMap) {
+    //   gpTransactions.add(TransactionData.fromMap(gpTransactionMap));
+    // });
 
-    gpAppState.setTransactions(gpTransactions);
+    // gpAppState.setTransactions(gpTransactions);
 
-    // Setting Up Money
-    Map amtData = await LocalDataUtils().readAmountData();
-    gpAppState.setWalletMoney(amtData["walletAmount"]);
-    gpAppState.setVaultMoney(amtData["vaultAmount"]);
+    // // Setting Up Money
+    // Map amtData = await LocalDataUtils().readAmountData();
+    // gpAppState.setWalletMoney(amtData["walletAmount"]);
+    // gpAppState.setVaultMoney(amtData["vaultAmount"]);
   }
 
   initializeOfflineSlotParkings() async {
-    List slotParkingsData =
-        await LocalDataUtils().readLocalData(LocalDataType.slotParkings);
-    List<ParkingRequestData> gpSlotParkingRequests = [];
-    slotParkingsData.forEach((parking) {
-      gpSlotParkingRequests.add(ParkingRequestData.fromMap(parking));
-    });
+    // TODO: complete this function
+    // List slotParkingsData =
+    //     await LocalDataUtils().readLocalData(LocalDataType.slotParkings);
+    // List<ParkingRequestData> gpSlotParkingRequests = [];
+    // slotParkingsData.forEach((parking) {
+    //   gpSlotParkingRequests.add(ParkingRequestData.fromMap(parking));
+    // });
 
-    gpAppState.setSlotParkings(gpSlotParkingRequests);
+    // gpAppState.setSlotParkings(gpSlotParkingRequests);
   }
 
   initializeOfflineUserParkings() async {
-    List userParkingsData =
-        await LocalDataUtils().readLocalData(LocalDataType.userParkings);
-    List<ParkingRequestData> gpUserParkingRequests = [];
-    userParkingsData.forEach((parking) {
-      gpUserParkingRequests.add(ParkingRequestData.fromMap(parking));
-    });
+    // TODO: complete this function
+    // List userParkingsData =
+    //     await LocalDataUtils().readLocalData(LocalDataType.userParkings);
+    // List<ParkingRequestData> gpUserParkingRequests = [];
+    // userParkingsData.forEach((parking) {
+    //   gpUserParkingRequests.add(ParkingRequestData.fromMap(parking));
+    // });
 
-    gpAppState.setUserParkings(gpUserParkingRequests);
+    // gpAppState.setUserParkings(gpUserParkingRequests);
   }
 
   initializeAppOffline() async {
@@ -472,29 +475,27 @@ class _HomePageState extends State<HomePage> {
                         //   },
                         // ));
 
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) {
-                            return IconTestPage();
-                          },
-                        ));
-
                         // Navigator.of(context).push(MaterialPageRoute(
                         //   builder: (context) {
-                        //     SlotData slotData =
-                        //         gpAppState.parkingLordData.toSlotData();
-                        //     slotData.userDetails = gpAppState.userDetails;
-                        //     return ParkingRequestForm(
-                        //       slotData: slotData,
-                        //       vehicleType: VehicleType.suv,
-                        //       onParkingRequestSent: (status) {
-                        //         initializeParkingsForParkingLord();
-                        //         initializeParkingsForUser();
-                        //       },
-                        //     );
+                        //     return IconTestPage();
                         //   },
                         // ));
 
-                        initializeTransactions();
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) {
+                            SlotData slotData =
+                                gpAppState.parkingLordData.toSlotData();
+                            slotData.userDetails = gpAppState.userDetails;
+                            return ParkingRequestForm(
+                              slotData: slotData,
+                              vehicleType: VehicleType.suv,
+                              onParkingRequestSent: (status) {
+                                initializeParkingsForParkingLord();
+                                initializeParkingsForUser();
+                              },
+                            );
+                          },
+                        ));
 
                         // Navigator.of(context).push(MaterialPageRoute(
                         //   builder: (context) {
@@ -644,16 +645,15 @@ class _HomePageState extends State<HomePage> {
 
   onCameraChangeFun(CameraPosition gpCamPos) async {
     if ((gpAppState.isInternetConnected == true) && (gpCamPos != null)) {
-      // TODO:Uncomment When socket is ready
-      // gpAppState.socketIO.emit('CameraPosition-change', {
-      //   "socketId": gpAppState.socketIO.id,
-      //   "userId": gpAppState.userData.id,
-      //   "latitude": gpCamPos.target.latitude,
-      //   "longitude": gpCamPos.target.longitude,
-      //   "zoom": gpCamPos.zoom
-      // });
+      gpAppState.socketIO.emit('CameraPosition-change', {
+        "socketId": gpAppState.socketIO.id,
+        "userId": gpAppState.userData.id,
+        "latitude": gpCamPos.target.latitude,
+        "longitude": gpCamPos.target.longitude,
+        "zoom": gpCamPos.zoom
+      });
     }
-    // TODO: Uncommnent when it is ready.
+
     gpAppState.setCurrentCameraPosition(gpCamPos);
     if (gpAppState.isInternetConnected == true) {
       // TODO: Uncomment when ready.

@@ -7,6 +7,7 @@ class SocketUtils {
   IO.Socket init(onSocketConnected, onSocketDisconnected) {
     socketIO = IO.io(domainName, <String, dynamic>{
       'transports': ['websocket'],
+      'upgrade': false
     });
 
     socketIO.connect();

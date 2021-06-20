@@ -1,4 +1,5 @@
 import 'package:getparked/Utils/DomainUtils.dart';
+import 'package:getparked/Utils/SecureStorageUtils.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketUtils {
@@ -7,6 +8,7 @@ class SocketUtils {
   IO.Socket init(onSocketConnected, onSocketDisconnected) {
     socketIO = IO.io(domainName, <String, dynamic>{
       'transports': ['websocket'],
+      'upgrade': false,
     });
 
     socketIO.connect();
