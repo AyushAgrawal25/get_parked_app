@@ -1,3 +1,5 @@
+import 'package:getparked/StateManagement/Models/VehicleTypeData.dart';
+
 class VehicleData {
   int id;
   int slotId;
@@ -5,12 +7,13 @@ class VehicleData {
   // Vehicle Data
   int typeMasterId;
   VehicleType type;
-  String name;
-  double length;
-  double breadth;
-  double height;
+  VehicleTypeData typeData;
 
-  int getTypeMasterId() {
+  double fair;
+  Map data;
+  int status;
+
+  int getTypeId() {
     int tmId = 0;
     switch (type) {
       case VehicleType.bike:
@@ -74,23 +77,14 @@ class VehicleData {
     }
   }
 
-  double fair;
-
-  Map data;
-
-  int status;
-
   VehicleData(
       {this.id,
       this.slotId,
       this.typeMasterId,
       this.type,
-      this.name,
-      this.length,
-      this.breadth,
-      this.height,
       this.fair,
       this.data,
+      this.typeData,
       this.status});
 
   VehicleData.fromMap(Map vehicleData) {
@@ -99,16 +93,8 @@ class VehicleData {
       slotId = vehicleData["slotId"];
       typeMasterId = vehicleData["vehicleMasterId"];
       setType(vehicleData["type"]);
-      name = vehicleData["name"];
-      length = (vehicleData["length"] != null)
-          ? (vehicleData["length"]).toDouble()
-          : 0.0;
-      breadth = (vehicleData["breadth"] != null)
-          ? (vehicleData["breadth"]).toDouble()
-          : 0.0;
-      height = (vehicleData["height"] != null)
-          ? (vehicleData["height"]).toDouble()
-          : 0.0;
+      typeData = VehicleTypeData.fromMap(vehicleData["typeData"]);
+
       fair = (vehicleData["fair"] != null)
           ? (vehicleData["fair"]).toDouble()
           : 0.0;

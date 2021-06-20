@@ -334,7 +334,7 @@ class _ParkingRequestFormState extends State<ParkingRequestForm> {
                                     ),
                                     Container(
                                       child: Text(
-                                        gpSelectedVehicleData.name,
+                                        gpSelectedVehicleData.typeData.name,
                                         style: GoogleFonts.nunito(
                                             fontSize: 15,
                                             fontWeight: FontWeight.w600,

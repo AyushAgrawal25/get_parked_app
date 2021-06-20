@@ -7,6 +7,8 @@ class VehicleTypeData {
   double length;
   double breadth;
   double height;
+  double area;
+  int status;
 
   setType(String typeValue) {
     switch (typeValue) {
@@ -29,7 +31,14 @@ class VehicleTypeData {
   }
 
   VehicleTypeData(
-      {this.type, this.id, this.name, this.length, this.breadth, this.height});
+      {this.type,
+      this.id,
+      this.name,
+      this.length,
+      this.breadth,
+      this.height,
+      this.area,
+      this.status});
 
   VehicleTypeData.fromMap(Map vehicleTypeData) {
     id = vehicleTypeData["vehicleMasterId"];
@@ -44,5 +53,9 @@ class VehicleTypeData {
     height = (vehicleTypeData["height"] != null)
         ? (vehicleTypeData["height"]).toDouble()
         : 0.0;
+    area = (vehicleTypeData["area"] != null)
+        ? (vehicleTypeData["area"]).toDouble()
+        : 0.0;
+    status = vehicleTypeData["status"];
   }
 }

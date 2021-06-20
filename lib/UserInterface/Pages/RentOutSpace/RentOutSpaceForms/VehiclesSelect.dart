@@ -356,10 +356,8 @@ class _VehicleInfoBoxState extends State<VehicleInfoBox> {
             " " +
             widget.typeData.height.toString());
         VehicleData vehicleData = VehicleData(
-          breadth: widget.typeData.breadth,
+          typeData: widget.typeData,
           fair: double.parse(vehicleFair),
-          height: widget.typeData.height,
-          length: widget.typeData.length,
           status: 1,
           type: widget.typeData.type,
         );

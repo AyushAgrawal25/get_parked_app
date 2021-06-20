@@ -70,7 +70,8 @@ class _QRScannerPageState extends State<QRScannerPage> {
         gpSlotData.bookings.forEach((slotBooking) {
           gpSlotData.vehicles.forEach((slotVehicle) {
             if (slotBooking.vehicleId == slotVehicle.id) {
-              double area = slotVehicle.breadth * slotVehicle.length;
+              double area =
+                  slotVehicle.typeData.breadth * slotVehicle.typeData.length;
               allottedArea += area;
             }
           });
@@ -534,8 +535,8 @@ class _ParkingLordDetailsWidgetState extends State<ParkingLordDetailsWidget> {
     widget.slotData.vehicles.forEach((vehicle) {
       bool isAvailable = false;
       if (vehicle.status == 1) {
-        double vehicleArea = vehicle.breadth * vehicle.length;
-        if ((widget.slotData.height >= vehicle.height) &&
+        double vehicleArea = vehicle.typeData.breadth * vehicle.typeData.length;
+        if ((widget.slotData.height >= vehicle.typeData.height) &&
             (vehicleArea <= widget.availableArea)) {
           isAvailable = true;
         }

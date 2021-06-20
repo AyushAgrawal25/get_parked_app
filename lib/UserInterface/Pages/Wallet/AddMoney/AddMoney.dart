@@ -9,6 +9,7 @@ import 'package:getparked/UserInterface/Widgets/UPIRoundIcon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
+import 'package:getparked/Utils/TransactionUtils.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:getparked/UserInterface/Icons/g_p_icons_icons.dart';
@@ -75,7 +76,7 @@ class _AddMoneyFormWithAmountState extends State<AddMoneyForm> {
         app: upiApplication,
         receiverUpiAddress: '9329718444@okbizaxis',
         receiverName: 'Qpd Web Solutions',
-        transactionRef: txnCode,
+        transactionRef: TransactionUtils().getEncryptedData(txnCode)["code"],
         amount: gpAmount,
         transactionNote: 'Transaction With Get Parked',
       );

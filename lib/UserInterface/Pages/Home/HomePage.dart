@@ -472,28 +472,27 @@ class _HomePageState extends State<HomePage> {
                         //   },
                         // ));
 
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) {
+                            return IconTestPage();
+                          },
+                        ));
+
                         // Navigator.of(context).push(MaterialPageRoute(
                         //   builder: (context) {
-                        //     return IconTestPage();
+                        //     SlotData slotData =
+                        //         gpAppState.parkingLordData.toSlotData();
+                        //     slotData.userDetails = gpAppState.userDetails;
+                        //     return ParkingRequestForm(
+                        //       slotData: slotData,
+                        //       vehicleType: VehicleType.suv,
+                        //       onParkingRequestSent: (status) {
+                        //         initializeParkingsForParkingLord();
+                        //         initializeParkingsForUser();
+                        //       },
+                        //     );
                         //   },
                         // ));
-
-                        // String txnCode = await TransactionServices()
-                        //     .getTransactionCode(
-                        //         authToken: gpAppState.authToken);
-                        // print(await TransactionServices().addMoneyToWallet(
-                        //     authToken: gpAppState.authToken,
-                        //     ref: "Wallet Testing",
-                        //     txnCode: txnCode,
-                        //     status: 1,
-                        //     amount: 10.25));
-
-                        // print(await SlotsServices().sendParkingRequest(
-                        //     authToken: gpAppState.authToken,
-                        //     slotId: 2,
-                        //     vehicleId: 1,
-                        //     spaceType: SlotSpaceType.open,
-                        //     parkingHours: 4));
 
                         initializeTransactions();
 
