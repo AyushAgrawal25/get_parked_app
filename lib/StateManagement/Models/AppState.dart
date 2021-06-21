@@ -1,4 +1,5 @@
 // import 'package:getparked/BussinessLogic/ContactUtils.dart';
+import 'package:getparked/StateManagement/Models/SlotData.dart';
 import 'package:getparked/StateManagement/Models/VehicleTypeData.dart';
 import 'package:getparked/Utils/ContactUtils.dart';
 import 'package:getparked/Utils/InternetConnection.dart';
@@ -73,10 +74,22 @@ class AppState extends ChangeNotifier {
   }
 
   //Slots
-  List slotsMap;
-  void setSlotsMap(List gpSlotsMap) {
-    this.slotsMap = gpSlotsMap;
+  Map<int, SlotData> slotsStore = {};
+  void setSlots(SlotData slotData) {
+    if (slotData == null) {
+      return;
+    }
+
+    slotsStore[slotData.id] = slotData;
     notifyListeners();
+  }
+
+  List<SlotData> get slotsOnMap {
+    List<SlotData> slots = [];
+    slotsStore.entries.forEach((slotEntry) {
+      slots.add(slotEntry.value);
+    });
+    return slots;
   }
 
   // is Parking Lord
@@ -106,40 +119,12 @@ class AppState extends ChangeNotifier {
 
   //Wallet Money
   double walletMoney;
-  // void setWalleMoney() {
-  //   this.walletMoney = 0;
-  //   this.transactions.forEach((transaction) {
-  //     if ((transaction.status == 1) && (transaction.accountType == 0)) {
-  //       if (transaction.moneyTransferType == 1) {
-  //         this.walletMoney += transaction.amount;
-  //       } else if (transaction.moneyTransferType == 0) {
-  //         this.walletMoney -= transaction.amount;
-  //       }
-  //     }
-  //   });
-  //   this.walletMoney = double.parse(this.walletMoney.toStringAsFixed(2));
-  // }
-
   void setWalletMoney(double wallAmt) {
     this.walletMoney = wallAmt.toDouble();
   }
 
   // Vault Money
   double vaultMoney;
-  // void setVaultMoney() {
-  //   this.vaultMoney = 0;
-  //   this.transactions.forEach((transaction) {
-  //     if ((transaction.status == 1) && (transaction.accountType == 1)) {
-  //       if (transaction.moneyTransferType == 1) {
-  //         this.vaultMoney += transaction.amount;
-  //       } else if (transaction.moneyTransferType == 0) {
-  //         this.vaultMoney -= transaction.amount;
-  //       }
-  //     }
-  //   });
-  //   this.vaultMoney = double.parse(this.vaultMoney.toStringAsFixed(2));
-  // }
-
   void setVaultMoney(double vaultAmt) {
     this.vaultMoney = vaultAmt.toDouble();
   }
@@ -330,7 +315,6 @@ class AppState extends ChangeNotifier {
       {this.googlePlaces,
       this.userData,
       this.userDetails,
-      this.slotsMap,
       this.parkingLordData,
       this.contacts});
 }
@@ -338,6 +322,5 @@ class AppState extends ChangeNotifier {
 AppState globalAppState = AppState(
     googlePlaces: null,
     parkingLordData: null,
-    slotsMap: null,
     userData: null,
     userDetails: null);

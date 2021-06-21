@@ -215,6 +215,8 @@ class _HomePageState extends State<HomePage> {
     // Use this room to get slot updates.
     gpSocketIO.on("slots-update", (data) {
       // TODO: complete this to use for slots marker in map.
+      // SlotData slotData = SlotData.fromMap(data);
+      // gpAppState.setSlots(slotData);
     });
   }
 
@@ -359,9 +361,11 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     AppState gpAppStateListen = Provider.of<AppState>(context, listen: true);
     gpAppStateListen.applySpecificOverlayStyle(AppOverlayStyleType.map);
-    if (gpAppStateListen.slotsMap != null) {
-      settingUpMarkersAndBookings(gpAppStateListen);
-    }
+
+    // TODO: call this when sockets are ready.
+    // if (gpAppStateListen.slotsMap != null) {
+    //   settingUpMarkersAndBookings(gpAppStateListen);
+    // }
 
     // print(gpAppStateListen.userData);
     return WillPopScope(
@@ -612,21 +616,22 @@ class _HomePageState extends State<HomePage> {
   }
 
   onMarkerTap(int slotId, GPMapSlotMarkerType gpMapSlotMarkerType) {
-    setState(() {
-      gpSelectedMarkerSlotData =
-          SlotDataUtils.mapToSlotDataOnSlotId(gpAppState.slotsMap, slotId);
+    // TODO: Uncomment this when done with marker.
+    // setState(() {
+    //   gpSelectedMarkerSlotData =
+    //       SlotDataUtils.mapToSlotDataOnSlotId(gpAppState.slotsMap, slotId);
 
-      if (gpSelectedVehicleTypeData != null) {
-        if (gpMapSlotMarkerType == GPMapSlotMarkerType.spaceAvailable) {
-          isParkingInfoOpen = true;
-        } else {
-          isParkingInfoOpen = false;
-        }
-      } else {
-        FlushBarUtils.showTextResponsive(context, "Select Vehicle Type",
-            "Vehicle Must be Selected Before Proccessing");
-      }
-    });
+    //   if (gpSelectedVehicleTypeData != null) {
+    //     if (gpMapSlotMarkerType == GPMapSlotMarkerType.spaceAvailable) {
+    //       isParkingInfoOpen = true;
+    //     } else {
+    //       isParkingInfoOpen = false;
+    //     }
+    //   } else {
+    //     FlushBarUtils.showTextResponsive(context, "Select Vehicle Type",
+    //         "Vehicle Must be Selected Before Proccessing");
+    //   }
+    // });
   }
 
   onMapCreated(CameraPosition gpCamPos) async {
@@ -714,78 +719,79 @@ class _HomePageState extends State<HomePage> {
   }
 
   settingUpMarkersAndBookings(AppState appState) {
+    // TODO: Uncomment this when slots sockets and data are ready.
     // Setting Up Bookings
-    if (gpSelectedVehicleTypeData != null) {
-      // Slot Map Markers
-      List<GPMapSlotMarker> gpMapSlotMarkers = [];
+    // if (gpSelectedVehicleTypeData != null) {
+    //   // Slot Map Markers
+    //   List<GPMapSlotMarker> gpMapSlotMarkers = [];
 
-      appState.slotsMap.forEach((slotMap) {
-        double selectedVehicleArea = (gpSelectedVehicleTypeData.length *
-                gpSelectedVehicleTypeData.breadth)
-            .toDouble();
-        double availableSpace = (slotMap["slotAvailableSpace"] != null)
-            ? (slotMap["slotAvailableSpace"]).toDouble()
-            : 00.0;
+    //   appState.slotsMap.forEach((slotMap) {
+    //     double selectedVehicleArea = (gpSelectedVehicleTypeData.length *
+    //             gpSelectedVehicleTypeData.breadth)
+    //         .toDouble();
+    //     double availableSpace = (slotMap["slotAvailableSpace"] != null)
+    //         ? (slotMap["slotAvailableSpace"]).toDouble()
+    //         : 00.0;
 
-        // Setting Slot Marker Type
-        GPMapSlotMarkerType gpMapSlotMarkerType;
-        if ((DateTime.now().toLocal().hour >
-                slotMap["slotSpecParkingStartTime"]) &&
-            (DateTime.now().toLocal().hour <
-                slotMap["slotSpecParkingEndTime"])) {
-          if (availableSpace >= selectedVehicleArea) {
-            if (gpSelectedVehicleTypeData.height < slotMap["slotSpecHeight"]) {
-              // When Space Is Available
-              gpMapSlotMarkerType = GPMapSlotMarkerType.spaceAvailable;
-            } else {
-              // When Height is Unavailable
-              gpMapSlotMarkerType = GPMapSlotMarkerType.spaceUnavailable;
-            }
-          } else {
-            // When Space is Unavailable
-            gpMapSlotMarkerType = GPMapSlotMarkerType.spaceUnavailable;
-          }
-        } else {
-          // When Time is not Proper
-          gpMapSlotMarkerType = GPMapSlotMarkerType.unavailable;
-        }
+    //     // Setting Slot Marker Type
+    //     GPMapSlotMarkerType gpMapSlotMarkerType;
+    //     if ((DateTime.now().toLocal().hour >
+    //             slotMap["slotSpecParkingStartTime"]) &&
+    //         (DateTime.now().toLocal().hour <
+    //             slotMap["slotSpecParkingEndTime"])) {
+    //       if (availableSpace >= selectedVehicleArea) {
+    //         if (gpSelectedVehicleTypeData.height < slotMap["slotSpecHeight"]) {
+    //           // When Space Is Available
+    //           gpMapSlotMarkerType = GPMapSlotMarkerType.spaceAvailable;
+    //         } else {
+    //           // When Height is Unavailable
+    //           gpMapSlotMarkerType = GPMapSlotMarkerType.spaceUnavailable;
+    //         }
+    //       } else {
+    //         // When Space is Unavailable
+    //         gpMapSlotMarkerType = GPMapSlotMarkerType.spaceUnavailable;
+    //       }
+    //     } else {
+    //       // When Time is not Proper
+    //       gpMapSlotMarkerType = GPMapSlotMarkerType.unavailable;
+    //     }
 
-        // print(
-        // "${slotMap["slotName"]} is $gpMapSlotMarkerType \tSpace : $availableSpace");
+    //     // print(
+    //     // "${slotMap["slotName"]} is $gpMapSlotMarkerType \tSpace : $availableSpace");
 
-        // Adding Map Slot Marker
-        gpMapSlotMarkers.add(GPMapSlotMarker(
-            slotId: slotMap["slotId"],
-            latitude: slotMap["slotLocationLatitude"],
-            longitude: slotMap["slotLocationLongitude"],
-            type: gpMapSlotMarkerType));
-      });
-      gpMapController.setGPMapSlotMarkers(gpMapSlotMarkers);
-    } else {
-      // Slot Map Markers
-      List<GPMapSlotMarker> gpMapSlotMarkers = [];
+    //     // Adding Map Slot Marker
+    //     gpMapSlotMarkers.add(GPMapSlotMarker(
+    //         slotId: slotMap["slotId"],
+    //         latitude: slotMap["slotLocationLatitude"],
+    //         longitude: slotMap["slotLocationLongitude"],
+    //         type: gpMapSlotMarkerType));
+    //   });
+    //   gpMapController.setGPMapSlotMarkers(gpMapSlotMarkers);
+    // } else {
+    //   // Slot Map Markers
+    //   List<GPMapSlotMarker> gpMapSlotMarkers = [];
 
-      appState.slotsMap.forEach((slotMap) {
-        // Type of Slot Status
-        GPMapSlotMarkerType gpMapSlotMarkerType;
-        if ((DateTime.now().toLocal().hour >
-                slotMap["slotSpecParkingStartTime"]) &&
-            (DateTime.now().toLocal().hour <
-                slotMap["slotSpecParkingEndTime"])) {
-          gpMapSlotMarkerType = GPMapSlotMarkerType.spaceAvailable;
-        } else {
-          // When Time is not Proper
-          gpMapSlotMarkerType = GPMapSlotMarkerType.unavailable;
-        }
+    //   appState.slotsMap.forEach((slotMap) {
+    //     // Type of Slot Status
+    //     GPMapSlotMarkerType gpMapSlotMarkerType;
+    //     if ((DateTime.now().toLocal().hour >
+    //             slotMap["slotSpecParkingStartTime"]) &&
+    //         (DateTime.now().toLocal().hour <
+    //             slotMap["slotSpecParkingEndTime"])) {
+    //       gpMapSlotMarkerType = GPMapSlotMarkerType.spaceAvailable;
+    //     } else {
+    //       // When Time is not Proper
+    //       gpMapSlotMarkerType = GPMapSlotMarkerType.unavailable;
+    //     }
 
-        // Adding Map Slot Marker
-        gpMapSlotMarkers.add(GPMapSlotMarker(
-            slotId: slotMap["slotId"],
-            latitude: slotMap["slotLocationLatitude"],
-            longitude: slotMap["slotLocationLongitude"],
-            type: gpMapSlotMarkerType));
-      });
-      gpMapController.setGPMapSlotMarkers(gpMapSlotMarkers);
-    }
+    //     // Adding Map Slot Marker
+    //     gpMapSlotMarkers.add(GPMapSlotMarker(
+    //         slotId: slotMap["slotId"],
+    //         latitude: slotMap["slotLocationLatitude"],
+    //         longitude: slotMap["slotLocationLongitude"],
+    //         type: gpMapSlotMarkerType));
+    //   });
+    //   gpMapController.setGPMapSlotMarkers(gpMapSlotMarkers);
+    // }
   }
 }
