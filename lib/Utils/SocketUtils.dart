@@ -5,26 +5,32 @@ class SocketUtils {
   IO.Socket socketIO;
 
   IO.Socket init(onSocketConnected, onSocketDisconnected) {
-    socketIO = IO.io(domainName, <String, dynamic>{
-      'transports': ['websocket'],
-      'upgrade': false
-    });
+    try {
+      String socketURL = 'ws://' + HOST_NAME + ':' + HOST_PORT + '/';
+      socketIO = IO.io(socketURL, <String, dynamic>{
+        'transports': ['websocket'],
+        'autoConnect': false,
+      });
 
-    socketIO.connect();
-    socketIO.on("connect", (data) {
-      print("Connection Successfully Established...");
-      onSocketConnected(socketIO);
-    });
+      socketIO.connect();
+      socketIO.on("connect", (data) {
+        print("Connection Successfully Established...");
+        onSocketConnected(socketIO);
+      });
 
-    socketIO.on("reconnect", (data) {
-      print("Socket Connected Again.. Reconnection");
-    });
+      socketIO.on("reconnect", (data) {
+        print("Socket Connected Again.. Reconnection");
+      });
 
-    socketIO.on("disconnect", (data) {
-      print("Socket Disconnected Unexpectedly..");
-      onSocketDisconnected(socketIO);
-    });
+      socketIO.on("disconnect", (data) {
+        print("Socket Disconnected Unexpectedly..");
+        onSocketDisconnected(socketIO);
+      });
 
-    return socketIO;
+      return socketIO;
+    } catch (e) {
+      print(e);
+      return socketIO;
+    }
   }
 }

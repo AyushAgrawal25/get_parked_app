@@ -86,7 +86,7 @@ dependencies:
   flushbar: ^1.10.4
 
 # Socket
-  socket_io_client: ^1.0.1
+  socket_io_client: ^2.0.0-beta.4-nullsafety.0
 
 # Firebase
   firebase_auth: ^1.2.0

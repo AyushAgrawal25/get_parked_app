@@ -1,5 +1,7 @@
 import 'package:getparked/Utils/EncryptionUtils.dart';
 
+const String HOST_NAME = "192.168.42.175";
+const String HOST_PORT = "5000";
 String domainName = "http://192.168.42.175:5000";
 // String domainName = "http://3.21.53.195:3000";
 String appName = "Get Parked";
