@@ -75,13 +75,26 @@ class AppState extends ChangeNotifier {
 
   //Slots
   Map<int, SlotData> slotsStore = {};
-  void setSlots(SlotData slotData) {
-    if (slotData == null) {
+  void setSlots(List<SlotData> slotsData) {
+    if (slotsData == null) {
       return;
     }
+    bool toNotify = false;
+    slotsData.forEach((SlotData slotData) {
+      if (slotsStore[slotData.id] != null) {
+        if (slotsStore[slotData.id].availableSpace != slotData.availableSpace) {
+          toNotify = true;
+          slotsStore[slotData.id] = slotData;
+        }
+      } else {
+        slotsStore[slotData.id] = slotData;
+        toNotify = true;
+      }
+    });
 
-    slotsStore[slotData.id] = slotData;
-    notifyListeners();
+    if (toNotify) {
+      notifyListeners();
+    }
   }
 
   List<SlotData> get slotsOnMap {
@@ -90,6 +103,10 @@ class AppState extends ChangeNotifier {
       slots.add(slotEntry.value);
     });
     return slots;
+  }
+
+  SlotData findSlotFromMap(int slotId) {
+    return slotsStore[slotId];
   }
 
   // is Parking Lord
@@ -204,6 +221,10 @@ class AppState extends ChangeNotifier {
     userParkingsStore.entries.forEach((element) {
       parkingReqs.add(element.value);
     });
+    parkingReqs.sort((a, b) => DateTime.parse(b.time)
+        .toLocal()
+        .millisecondsSinceEpoch
+        .compareTo(DateTime.parse(a.time).toLocal().millisecondsSinceEpoch));
     return parkingReqs;
   }
 
@@ -242,6 +263,10 @@ class AppState extends ChangeNotifier {
     slotParkingsStore.entries.forEach((element) {
       parkingReqs.add(element.value);
     });
+    parkingReqs.sort((a, b) => DateTime.parse(b.time)
+        .toLocal()
+        .millisecondsSinceEpoch
+        .compareTo(DateTime.parse(a.time).toLocal().millisecondsSinceEpoch));
     return parkingReqs;
   }
 

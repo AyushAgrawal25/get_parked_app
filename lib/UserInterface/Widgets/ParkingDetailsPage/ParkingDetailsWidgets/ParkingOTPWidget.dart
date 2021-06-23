@@ -31,6 +31,7 @@ class ParkingOTPWidget extends StatelessWidget {
             "OTP is generated and sent to customer, you need to collect it from customer to complete of parking.";
       }
     }
+
     return Container(
       child: Column(
         mainAxisSize: MainAxisSize.min,

@@ -29,6 +29,7 @@ class SlotData {
   double length;
   double breadth;
   double height;
+  double availableSpace;
 
   // Timing
   int startTime;
@@ -248,6 +249,12 @@ class SlotData {
       // Deposit Time
       if (slotMap["securityDepositTime"] != null) {
         securityDepositTime = slotMap["securityDepositTime"];
+      }
+
+      if (slotMap["availableSpace"] != null) {
+        availableSpace = (slotMap["availableSpace"]).toDouble();
+      } else {
+        availableSpace = 0;
       }
 
       // Status

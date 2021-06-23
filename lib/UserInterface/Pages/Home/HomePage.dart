@@ -13,7 +13,7 @@ import 'package:getparked/Utils/MapPlacesUtils.dart';
 import 'package:getparked/BussinessLogic/PlacesApiUtils.dart';
 import 'package:getparked/BussinessLogic/PlacesDataCollection.dart';
 import 'package:getparked/BussinessLogic/SlotsUtils.dart';
-import 'package:getparked/BussinessLogic/SocketUtils.dart';
+import 'package:getparked/Utils/SocketUtils.dart';
 import 'package:getparked/Utils/SecureStorageUtils.dart';
 import 'package:getparked/Utils/TransactionUtils.dart';
 import 'package:getparked/Utils/VehiclesUtils.dart';
@@ -125,16 +125,16 @@ class _HomePageState extends State<HomePage> {
 
   initializeAppSockets() async {
     if (gpAppState.socketIO == null) {
-      IO.Socket gpSocketIO =
-          SocketUtils().init(onSocketConnection, onSocketDisconnect);
+      IO.Socket gpSocketIO = SocketUtils().init(
+          authToken: gpAppState.authToken,
+          onSocketConnected: onSocketConnection,
+          onSocketDisconnected: onSocketDisconnect);
       gpAppState.initSocketIO(gpSocketIO);
     }
   }
 
   onSocketConnection(IO.Socket gpSocketIO) {
-    // Joining User Socket Stream
-    gpSocketIO.emit('join-user-stream', {AUTH_TOKEN: gpAppState.authToken});
-
+    // User stream will be automatically once token is configured.
     initializeNotificationsSocket(gpSocketIO);
     initializeTransactionsSocket(gpSocketIO);
     initializeSlotsSocket(gpSocketIO);
@@ -176,9 +176,12 @@ class _HomePageState extends State<HomePage> {
   initializeTransactionsSocket(IO.Socket gpSocketIO) async {
     gpSocketIO.on('transaction-update', (data) {
       // Setting Up Money
-      gpAppState.setWalletMoney((data["walletAmout"]).toDouble());
-      gpAppState.setVaultMoney((data["vaultAmount"]).toDouble());
-      print(data);
+      if (data["walletAmout"] != null) {
+        gpAppState.setWalletMoney((data["walletAmout"]).toDouble());
+      }
+      if (data["vaultAmount"] != null) {
+        gpAppState.setVaultMoney((data["vaultAmount"]).toDouble());
+      }
 
       // LocalDataUtils()
       //     .savingAmountData(gpAppState.walletMoney, gpAppState.vaultMoney);
@@ -187,6 +190,14 @@ class _HomePageState extends State<HomePage> {
       // data["data"].forEach((transactionMap) {
       //   transactions.add(TransactionData.fromMap(transactionMap));
       // });
+
+      List<TransactionData> transactions = [];
+      List txns = data["transactions"];
+      txns.forEach((txn) {
+        transactions.add(TransactionData.fromMap(txn));
+      });
+      gpAppState.setTransactions(transactions);
+
       // print(transactions.length.toString() + " Transactions");
       // gpAppState.setTransactions(transactions);
 
@@ -198,58 +209,67 @@ class _HomePageState extends State<HomePage> {
 
   // For Slots
   initializeSlotsSocket(IO.Socket gpSocketIO) async {
-    // gpSocketIO.on('slot-update', (data) {
-    //   // List newSlotsData = data["data"]; //Checking is slots Updated or not.
-    //   // bool isSlotsUpdated =
-    //   //     SlotsUtils().isSlotsUpdated(newSlotsData, gpAppState.slotsMap);
-
-    //   // if (isSlotsUpdated) {
-    //   //   gpAppState.setSlotsMap(
-    //   //       SlotsUtils().updateSlots(newSlotsData, gpAppState.slotsMap));
-    //   //   print("${gpAppState.slotsMap.length} Slots On Map");
-    //   // }
-    // });
-
     onCameraChangeFun(gpAppState.currentCameraPosition);
 
     // Use this room to get slot updates.
     gpSocketIO.on("slots-update", (data) {
-      // TODO: complete this to use for slots marker in map.
-      // SlotData slotData = SlotData.fromMap(data);
-      // gpAppState.setSlots(slotData);
+      List slots = data;
+      if (slots != null) {
+        List<SlotData> slotsData = [];
+        slots.forEach((slot) {
+          slotsData.add(SlotData.fromMap(slot));
+        });
+        gpAppState.setSlots(slotsData);
+      }
     });
   }
 
   // For Parkings
   initializeParkingsSocket(IO.Socket gpSocketIO) async {
-    gpSocketIO.on("slot-parking-update", (data) {
-      if (data["data"] != null) {
-        List<ParkingRequestData> gpSlotParkingRequests = [];
-        data["data"].forEach((parking) {
-          gpSlotParkingRequests.add(ParkingRequestData.fromMap(parking));
-        });
-        gpAppState.setSlotParkings(gpSlotParkingRequests);
-        print(gpSlotParkingRequests.length.toString() + " Slot Parkings");
+    gpSocketIO.on("user-parking-update", (parkingReqData) {
+      // if (data["data"] != null) {
+      //   List<ParkingRequestData> gpUserParkingRequests = [];
+      //   data["data"].forEach((parking) {
+      //     gpUserParkingRequests.add(ParkingRequestData.fromMap(parking));
+      //   });
+      //   gpAppState.setUserParkings(gpUserParkingRequests);
+      //   print(gpUserParkingRequests.length.toString() + " User Parkings");
 
-        // Saving Data Locally
-        LocalDataUtils()
-            .saveLocalData(LocalDataType.slotParkings, data["data"]);
-      }
+      //   // Saving Data Locally
+      //   LocalDataUtils()
+      //       .saveLocalData(LocalDataType.userParkings, data["data"]);
+      // }
+
+      List parkings = parkingReqData;
+      List<ParkingRequestData> parkingReqs = [];
+      parkings.forEach((parking) {
+        parkingReqs.add(ParkingRequestData.fromMap(parking));
+      });
+
+      gpAppState.setUserParkings(parkingReqs);
     });
 
-    gpSocketIO.on("user-parking-update", (data) {
-      if (data["data"] != null) {
-        List<ParkingRequestData> gpUserParkingRequests = [];
-        data["data"].forEach((parking) {
-          gpUserParkingRequests.add(ParkingRequestData.fromMap(parking));
-        });
-        gpAppState.setUserParkings(gpUserParkingRequests);
-        print(gpUserParkingRequests.length.toString() + " User Parkings");
+    gpSocketIO.on("slot-parking-update", (parkingReqData) {
+      // if (data["data"] != null) {
+      //   List<ParkingRequestData> gpSlotParkingRequests = [];
+      //   data["data"].forEach((parking) {
+      //     gpSlotParkingRequests.add(ParkingRequestData.fromMap(parking));
+      //   });
+      //   gpAppState.setSlotParkings(gpSlotParkingRequests);
+      //   print(gpSlotParkingRequests.length.toString() + " Slot Parkings");
 
-        // Saving Data Locally
-        LocalDataUtils()
-            .saveLocalData(LocalDataType.userParkings, data["data"]);
-      }
+      //   // Saving Data Locally
+      //   LocalDataUtils()
+      //       .saveLocalData(LocalDataType.slotParkings, data["data"]);
+      // }
+
+      List parkings = parkingReqData;
+      List<ParkingRequestData> parkingReqs = [];
+      parkings.forEach((parking) {
+        parkingReqs.add(ParkingRequestData.fromMap(parking));
+      });
+
+      gpAppState.setSlotParkings(parkingReqs);
     });
   }
 
@@ -350,7 +370,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     gpAppState = Provider.of<AppState>(context, listen: false);
@@ -362,10 +381,9 @@ class _HomePageState extends State<HomePage> {
     AppState gpAppStateListen = Provider.of<AppState>(context, listen: true);
     gpAppStateListen.applySpecificOverlayStyle(AppOverlayStyleType.map);
 
-    // TODO: call this when sockets are ready.
-    // if (gpAppStateListen.slotsMap != null) {
-    //   settingUpMarkersAndBookings(gpAppStateListen);
-    // }
+    if (gpAppStateListen.slotsOnMap.length > 0) {
+      settingUpMarkersAndBookings(gpAppStateListen);
+    }
 
     // print(gpAppStateListen.userData);
     return WillPopScope(
@@ -616,22 +634,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   onMarkerTap(int slotId, GPMapSlotMarkerType gpMapSlotMarkerType) {
-    // TODO: Uncomment this when done with marker.
-    // setState(() {
-    //   gpSelectedMarkerSlotData =
-    //       SlotDataUtils.mapToSlotDataOnSlotId(gpAppState.slotsMap, slotId);
-
-    //   if (gpSelectedVehicleTypeData != null) {
-    //     if (gpMapSlotMarkerType == GPMapSlotMarkerType.spaceAvailable) {
-    //       isParkingInfoOpen = true;
-    //     } else {
-    //       isParkingInfoOpen = false;
-    //     }
-    //   } else {
-    //     FlushBarUtils.showTextResponsive(context, "Select Vehicle Type",
-    //         "Vehicle Must be Selected Before Proccessing");
-    //   }
-    // });
+    setState(() {
+      gpSelectedMarkerSlotData = gpAppState.findSlotFromMap(slotId);
+      if (gpSelectedVehicleTypeData != null) {
+        if (gpMapSlotMarkerType == GPMapSlotMarkerType.spaceAvailable) {
+          isParkingInfoOpen = true;
+        } else {
+          isParkingInfoOpen = false;
+        }
+      } else {
+        FlushBarUtils.showTextResponsive(context, "Select Vehicle Type",
+            "Vehicle Must be Selected Before Proccessing");
+      }
+    });
   }
 
   onMapCreated(CameraPosition gpCamPos) async {
@@ -719,79 +734,52 @@ class _HomePageState extends State<HomePage> {
   }
 
   settingUpMarkersAndBookings(AppState appState) {
-    // TODO: Uncomment this when slots sockets and data are ready.
-    // Setting Up Bookings
-    // if (gpSelectedVehicleTypeData != null) {
-    //   // Slot Map Markers
-    //   List<GPMapSlotMarker> gpMapSlotMarkers = [];
+    List<GPMapSlotMarker> gpMapSlotMarkers = [];
+    appState.slotsOnMap.forEach((slotData) {
+      if (gpSelectedVehicleTypeData != null) {
+        double vehicleArea = (gpSelectedVehicleTypeData.length *
+                gpSelectedVehicleTypeData.breadth)
+            .toDouble();
+        // Setting Up slot Marker
+        GPMapSlotMarkerType gpMapSlotMarkerType;
+        if ((DateTime.now().toLocal().hour >= slotData.startTime) &&
+            (DateTime.now().toLocal().hour < slotData.endTime)) {
+          if ((vehicleArea < slotData.availableSpace) &&
+              (gpSelectedVehicleTypeData.height <= slotData.height)) {
+            // Space is available for current type.
+            gpMapSlotMarkerType = GPMapSlotMarkerType.spaceAvailable;
+          } else {
+            // Space is available for current type.
+            gpMapSlotMarkerType = GPMapSlotMarkerType.spaceUnavailable;
+          }
+        } else {
+          // When Space is Unavailable
+          gpMapSlotMarkerType = GPMapSlotMarkerType.unavailable;
+        }
 
-    //   appState.slotsMap.forEach((slotMap) {
-    //     double selectedVehicleArea = (gpSelectedVehicleTypeData.length *
-    //             gpSelectedVehicleTypeData.breadth)
-    //         .toDouble();
-    //     double availableSpace = (slotMap["slotAvailableSpace"] != null)
-    //         ? (slotMap["slotAvailableSpace"]).toDouble()
-    //         : 00.0;
+        gpMapSlotMarkers.add(GPMapSlotMarker(
+            slotId: slotData.id,
+            latitude: slotData.latitude,
+            longitude: slotData.longitude,
+            type: gpMapSlotMarkerType));
+      } else {
+        GPMapSlotMarkerType gpMapSlotMarkerType;
+        if ((DateTime.now().toLocal().hour >= slotData.startTime) &&
+            (DateTime.now().toLocal().hour < slotData.endTime)) {
+          gpMapSlotMarkerType = GPMapSlotMarkerType.spaceAvailable;
+        } else {
+          // When Space is Unavailable
+          gpMapSlotMarkerType = GPMapSlotMarkerType.unavailable;
+        }
 
-    //     // Setting Slot Marker Type
-    //     GPMapSlotMarkerType gpMapSlotMarkerType;
-    //     if ((DateTime.now().toLocal().hour >
-    //             slotMap["slotSpecParkingStartTime"]) &&
-    //         (DateTime.now().toLocal().hour <
-    //             slotMap["slotSpecParkingEndTime"])) {
-    //       if (availableSpace >= selectedVehicleArea) {
-    //         if (gpSelectedVehicleTypeData.height < slotMap["slotSpecHeight"]) {
-    //           // When Space Is Available
-    //           gpMapSlotMarkerType = GPMapSlotMarkerType.spaceAvailable;
-    //         } else {
-    //           // When Height is Unavailable
-    //           gpMapSlotMarkerType = GPMapSlotMarkerType.spaceUnavailable;
-    //         }
-    //       } else {
-    //         // When Space is Unavailable
-    //         gpMapSlotMarkerType = GPMapSlotMarkerType.spaceUnavailable;
-    //       }
-    //     } else {
-    //       // When Time is not Proper
-    //       gpMapSlotMarkerType = GPMapSlotMarkerType.unavailable;
-    //     }
+        gpMapSlotMarkers.add(GPMapSlotMarker(
+            slotId: slotData.id,
+            latitude: slotData.latitude,
+            longitude: slotData.longitude,
+            type: gpMapSlotMarkerType));
+      }
+    });
 
-    //     // print(
-    //     // "${slotMap["slotName"]} is $gpMapSlotMarkerType \tSpace : $availableSpace");
-
-    //     // Adding Map Slot Marker
-    //     gpMapSlotMarkers.add(GPMapSlotMarker(
-    //         slotId: slotMap["slotId"],
-    //         latitude: slotMap["slotLocationLatitude"],
-    //         longitude: slotMap["slotLocationLongitude"],
-    //         type: gpMapSlotMarkerType));
-    //   });
-    //   gpMapController.setGPMapSlotMarkers(gpMapSlotMarkers);
-    // } else {
-    //   // Slot Map Markers
-    //   List<GPMapSlotMarker> gpMapSlotMarkers = [];
-
-    //   appState.slotsMap.forEach((slotMap) {
-    //     // Type of Slot Status
-    //     GPMapSlotMarkerType gpMapSlotMarkerType;
-    //     if ((DateTime.now().toLocal().hour >
-    //             slotMap["slotSpecParkingStartTime"]) &&
-    //         (DateTime.now().toLocal().hour <
-    //             slotMap["slotSpecParkingEndTime"])) {
-    //       gpMapSlotMarkerType = GPMapSlotMarkerType.spaceAvailable;
-    //     } else {
-    //       // When Time is not Proper
-    //       gpMapSlotMarkerType = GPMapSlotMarkerType.unavailable;
-    //     }
-
-    //     // Adding Map Slot Marker
-    //     gpMapSlotMarkers.add(GPMapSlotMarker(
-    //         slotId: slotMap["slotId"],
-    //         latitude: slotMap["slotLocationLatitude"],
-    //         longitude: slotMap["slotLocationLongitude"],
-    //         type: gpMapSlotMarkerType));
-    //   });
-    //   gpMapController.setGPMapSlotMarkers(gpMapSlotMarkers);
-    // }
+    gpMapController.setGPMapSlotMarkers(gpMapSlotMarkers);
   }
 }

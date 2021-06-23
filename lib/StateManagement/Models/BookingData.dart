@@ -28,7 +28,7 @@ class BookingData {
 
   SlotSpaceType spaceType;
   int parkingHours;
-  int parkingOTP;
+  String parkingOTP;
 
   String time;
 
@@ -133,9 +133,7 @@ class BookingData {
     spaceType = SlotDataUtils.getSpaceTypeFromString(bookingMap["spaceType"]);
     parkingHours = bookingMap["parkingHours"];
 
-    parkingOTP = (bookingMap["parkingOTP"] != null)
-        ? int.parse(bookingMap["parkingOTP"])
-        : 0;
+    parkingOTP = bookingMap["parkingOTP"];
 
     // Duration
     time = bookingMap["time"];

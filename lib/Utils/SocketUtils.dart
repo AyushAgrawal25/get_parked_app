@@ -1,15 +1,22 @@
+import 'package:flutter/cupertino.dart';
 import 'package:getparked/Utils/DomainUtils.dart';
+import 'package:getparked/Utils/SecureStorageUtils.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketUtils {
   IO.Socket socketIO;
 
-  IO.Socket init(onSocketConnected, onSocketDisconnected) {
+  IO.Socket init(
+      {@required String authToken,
+      Function(IO.Socket) onSocketConnected,
+      Function(IO.Socket) onSocketDisconnected}) {
     try {
       String socketURL = 'ws://' + HOST_NAME + ':' + HOST_PORT + '/';
+      print(socketURL);
       socketIO = IO.io(socketURL, <String, dynamic>{
         'transports': ['websocket'],
         'autoConnect': false,
+        'auth': {AUTH_TOKEN: authToken}
       });
 
       socketIO.connect();
