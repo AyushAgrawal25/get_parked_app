@@ -497,25 +497,9 @@ class _HomePageState extends State<HomePage> {
                         //   },
                         // ));
 
-                        // Navigator.of(context).push(MaterialPageRoute(
-                        //   builder: (context) {
-                        //     return IconTestPage();
-                        //   },
-                        // ));
-
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) {
-                            SlotData slotData =
-                                gpAppState.parkingLordData.toSlotData();
-                            slotData.userDetails = gpAppState.userDetails;
-                            return ParkingRequestForm(
-                              slotData: slotData,
-                              vehicleType: VehicleType.suv,
-                              onParkingRequestSent: (status) {
-                                initializeParkingsForParkingLord();
-                                initializeParkingsForUser();
-                              },
-                            );
+                            return IconTestPage();
                           },
                         ));
 
