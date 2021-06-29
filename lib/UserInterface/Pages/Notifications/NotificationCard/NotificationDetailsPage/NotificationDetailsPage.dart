@@ -14,7 +14,7 @@ import 'package:getparked/UserInterface/Widgets/TransactionDetailsPage/Transacti
 import 'package:provider/provider.dart';
 
 class NotificationDetailsPage extends StatefulWidget {
-  NotificationData notificationData;
+  final NotificationData notificationData;
 
   NotificationDetailsPage({@required this.notificationData});
   @override
@@ -51,8 +51,10 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
           ParkingRequestData parkingRequestData =
               notificationData.parkingRequestData;
           parkingRequestData.slotData = notificationData.senderSlotData;
-          parkingRequestData.slotData.userDetails =
-              notificationData.senderUserDetails;
+          if (parkingRequestData.slotData != null) {
+            parkingRequestData.slotData.userDetails =
+                notificationData.senderUserDetails;
+          }
           parkingRequestData.userDetails = notificationData.senderUserDetails;
 
           // Parking Request
@@ -72,7 +74,10 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
         {
           BookingData bookingData = notificationData.bookingData;
           bookingData.slotData = notificationData.senderSlotData;
-          bookingData.slotData.userDetails = notificationData.senderUserDetails;
+          if (bookingData.slotData != null) {
+            bookingData.slotData.userDetails =
+                notificationData.senderUserDetails;
+          }
           bookingData.userDetails = notificationData.senderUserDetails;
 
           // Booking
@@ -92,7 +97,10 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
         {
           ParkingData parkingData = notificationData.parkingData;
           parkingData.slotData = notificationData.senderSlotData;
-          parkingData.slotData.userDetails = notificationData.senderUserDetails;
+          if (parkingData.slotData != null) {
+            parkingData.slotData.userDetails =
+                notificationData.senderUserDetails;
+          }
           parkingData.userDetails = notificationData.senderUserDetails;
 
           BookingData bookingData = parkingData.bookingData;
@@ -116,8 +124,10 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
           }
           TransactionData transactionData = notificationData.transactionData;
           transactionData.withSlotData = notificationData.senderSlotData;
-          transactionData.withSlotData.userDetails =
-              notificationData.senderUserDetails;
+          if (transactionData.withSlotData != null) {
+            transactionData.withSlotData.userDetails =
+                notificationData.senderUserDetails;
+          }
           transactionData.withUserDetails = notificationData.senderUserDetails;
 
           notificationDetailsWidget = TransactionDetailsPage(
@@ -141,8 +151,10 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
             if (notificationData.senderSlotData != null) {
               transactionRequestData.fromSlotData =
                   widget.notificationData.senderSlotData;
-              transactionRequestData.fromSlotData.userDetails =
-                  transactionRequestData.fromUserDetails;
+              if (transactionRequestData.fromSlotData != null) {
+                transactionRequestData.fromSlotData.userDetails =
+                    transactionRequestData.fromUserDetails;
+              }
             }
           } else if (transactionRequestData.fromUserId ==
               gpAppStateListen.userData.id) {
@@ -154,8 +166,10 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
             if (gpAppStateListen.parkingLordData != null) {
               transactionRequestData.fromSlotData =
                   gpAppStateListen.parkingLordData.toSlotData();
-              transactionRequestData.fromSlotData.userDetails =
-                  transactionRequestData.fromUserDetails;
+              if (transactionRequestData.fromSlotData != null) {
+                transactionRequestData.fromSlotData.userDetails =
+                    transactionRequestData.fromUserDetails;
+              }
             }
           }
 
@@ -170,8 +184,10 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
             if (notificationData.senderSlotData != null) {
               transactionRequestData.withSlotData =
                   notificationData.senderSlotData;
-              transactionRequestData.withSlotData.userDetails =
-                  transactionRequestData.withUserDetails;
+              if (transactionRequestData.withSlotData != null) {
+                transactionRequestData.withSlotData.userDetails =
+                    transactionRequestData.withUserDetails;
+              }
             }
           } else if (transactionRequestData.withUserId ==
               gpAppStateListen.userData.id) {
@@ -183,8 +199,10 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
             if (gpAppStateListen.parkingLordData != null) {
               transactionRequestData.withSlotData =
                   gpAppStateListen.parkingLordData.toSlotData();
-              transactionRequestData.withSlotData.userDetails =
-                  transactionRequestData.withUserDetails;
+              if (transactionRequestData.withSlotData != null) {
+                transactionRequestData.withSlotData.userDetails =
+                    transactionRequestData.withUserDetails;
+              }
             }
           }
 

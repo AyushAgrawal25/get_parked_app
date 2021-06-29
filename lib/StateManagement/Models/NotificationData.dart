@@ -148,6 +148,7 @@ class NotificationData {
         .accountTypeFromString(notificationMap["senderAccountType"]);
 
     if (notificationMap["senderUser"] != null) {
+      print(notificationMap["senderUser"]);
       // User Details
       if (notificationMap["senderUser"]["userDetails"] != null) {
         senderUserDetails =

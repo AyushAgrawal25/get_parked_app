@@ -285,7 +285,8 @@ class _GPMapState extends State<GPMap> {
             zoomControlsEnabled: false,
             compassEnabled: false,
             liteModeEnabled: false,
-            markers: Set.from(mapMarkers)));
+            markers:
+                (mapMarkers != null) ? Set.from(mapMarkers) : Set<Marker>()));
   }
 }
 
