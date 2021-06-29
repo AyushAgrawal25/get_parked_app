@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:getparked/BussinessLogic/UserServices.dart';
+import 'package:getparked/UserInterface/Pages/Wallet/WalletPage.dart';
 import 'package:getparked/Utils/FileUtils.dart';
 // import 'package:getparked/BussinessLogic/UserAuth.dart';
 import 'package:getparked/Utils/DomainUtils.dart';
@@ -340,12 +341,11 @@ class _ProfileState extends State<Profile> {
 
   onWalletPressed() {
     SystemSound.play(SystemSoundType.click);
-    // TODO: add Wallet Page when done.
-    // Navigator.of(context).push(MaterialPageRoute(
-    //   builder: (context) {
-    //     return WalletPage();
-    //   },
-    // ));
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return WalletPage();
+      },
+    ));
   }
 }
 

@@ -123,17 +123,26 @@ class _ParkingDetailsPageState extends State<ParkingDetailsPage> {
       }
     } else {
       switch (widget.notificationType) {
-        case NotificationDataType.booking:
+        case NotificationDataType.booking_ForSlot:
+        case NotificationDataType.booking_ForUser:
+        case NotificationDataType.bookingCancellation_ForSlot:
+        case NotificationDataType.bookingCancellation_ForUser:
           appBarTitle = "Booking";
           gpUserDetails = widget.booking.userDetails;
           gpSlotData = widget.booking.slotData;
           break;
-        case NotificationDataType.parking:
+
+        case NotificationDataType.parking_ForSlot:
+        case NotificationDataType.parking_ForUser:
+        case NotificationDataType.parkingWithdraw_ForSlot:
+        case NotificationDataType.parkingWithdraw_ForUser:
           appBarTitle = "Parking";
           gpUserDetails = widget.parking.userDetails;
           gpSlotData = widget.parking.slotData;
           break;
+
         case NotificationDataType.parkingRequest:
+        case NotificationDataType.parkingRequestResponse:
           appBarTitle = "Parking Request";
           gpUserDetails = widget.parkingRequest.userDetails;
           gpSlotData = widget.parkingRequest.slotData;
@@ -491,6 +500,7 @@ class _ParkingDetailsPageState extends State<ParkingDetailsPage> {
     } else {
       switch (widget.notificationType) {
         case NotificationDataType.parkingRequest:
+        case NotificationDataType.parkingRequestResponse:
           {
             switch (widget.parkingRequest.getParkingRequestDataType()) {
               case ParkingRequestDataType.pending:
@@ -634,7 +644,10 @@ class _ParkingDetailsPageState extends State<ParkingDetailsPage> {
             parkingVehicleData = widget.parkingRequest.vehicleData;
             break;
           }
-        case NotificationDataType.booking:
+        case NotificationDataType.booking_ForSlot:
+        case NotificationDataType.booking_ForUser:
+        case NotificationDataType.bookingCancellation_ForSlot:
+        case NotificationDataType.bookingCancellation_ForUser:
           {
             switch (widget.booking.getBookingDataType()) {
               case BookingDataType.failed:
@@ -752,7 +765,10 @@ class _ParkingDetailsPageState extends State<ParkingDetailsPage> {
             parkingVehicleData = widget.booking.vehicleData;
             break;
           }
-        case NotificationDataType.parking:
+        case NotificationDataType.parking_ForSlot:
+        case NotificationDataType.parking_ForUser:
+        case NotificationDataType.parkingWithdraw_ForSlot:
+        case NotificationDataType.parkingWithdraw_ForUser:
           {
             switch (widget.parking.getParkingDataType()) {
               case ParkingDataType.completed:

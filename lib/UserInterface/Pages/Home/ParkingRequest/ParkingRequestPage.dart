@@ -379,7 +379,8 @@ class _ParkingRequestFormState extends State<ParkingRequestForm> {
                                   Container(
                                     child: Text(
                                       "Shed " +
-                                          ((widget.slotData.spaceType == 1)
+                                          ((widget.slotData.spaceType ==
+                                                  SlotSpaceType.sheded)
                                               ? "Available"
                                               : "Unavailable"),
                                       style: GoogleFonts.roboto(

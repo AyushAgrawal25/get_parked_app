@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:getparked/BussinessLogic/NotificationServices.dart';
 import 'package:getparked/BussinessLogic/SlotsServices.dart';
 import 'package:getparked/BussinessLogic/TransactionServices.dart';
 import 'package:getparked/BussinessLogic/VehiclesServices.dart';
@@ -81,6 +82,9 @@ class _HomePageState extends State<HomePage> {
 
     // Transactions
     initializeTransactions();
+
+    // Notifications
+    initializeNotifications();
   }
 
   // initialize parkings for user
@@ -100,6 +104,11 @@ class _HomePageState extends State<HomePage> {
   // initialize transactions
   initializeTransactions() async {
     await TransactionServices().getAllTransactions(context: context);
+  }
+
+  // initialize Notifications
+  initializeNotifications() async {
+    await NotificationServices().getAllNotifications(context: context);
   }
 
   initializeVehiclesTypeData() async {
@@ -497,11 +506,13 @@ class _HomePageState extends State<HomePage> {
                         //   },
                         // ));
 
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) {
-                            return IconTestPage();
-                          },
-                        ));
+                        // Navigator.of(context).push(MaterialPageRoute(
+                        //   builder: (context) {
+                        //     return IconTestPage();
+                        //   },
+                        // ));
+
+                        initializeNotifications();
 
                         // Navigator.of(context).push(MaterialPageRoute(
                         //   builder: (context) {

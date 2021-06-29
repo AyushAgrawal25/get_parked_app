@@ -327,7 +327,6 @@ class _VaultFutureAmountState extends State<VaultFutureAmount> {
   double futAmt = 0.0;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     startTimer();
   }
@@ -373,7 +372,6 @@ class _VaultFutureAmountState extends State<VaultFutureAmount> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     amtResetTimer.cancel();
   }

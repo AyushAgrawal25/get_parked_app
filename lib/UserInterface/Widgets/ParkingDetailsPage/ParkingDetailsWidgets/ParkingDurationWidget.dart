@@ -23,7 +23,6 @@ class _ParkingDurationWidgetState extends State<ParkingDurationWidget> {
   Timer timer;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     timer = Timer.periodic(const Duration(minutes: 1), (_timer) {
@@ -181,7 +180,6 @@ class _ParkingDurationWidgetState extends State<ParkingDurationWidget> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     timer.cancel();
   }

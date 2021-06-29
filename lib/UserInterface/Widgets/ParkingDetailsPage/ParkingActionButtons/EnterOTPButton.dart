@@ -28,7 +28,6 @@ class _EnterOTPButtonState extends State<EnterOTPButton> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     otpController = TextEditingController();

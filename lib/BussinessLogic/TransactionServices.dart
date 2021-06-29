@@ -120,6 +120,7 @@ class TransactionServices {
     }
   }
 
+  // TODO: update according to thunder client json file.
   Future<TransactionRequestSendStatus> moneyRequest(
       {@required String authToken,
       @required double amount,

@@ -15,9 +15,9 @@ import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SlotInfoWidget extends StatefulWidget {
-  SlotData slotData;
-  bool callingOption;
-  SlotInfoWidgetType type;
+  final SlotData slotData;
+  final bool callingOption;
+  final SlotInfoWidgetType type;
 
   SlotInfoWidget(
       {@required this.slotData,
@@ -67,15 +67,17 @@ class _SlotInfoWidgetState extends State<SlotInfoWidget> {
                           // Profile Pic
                           Container(
                             child: DisplayPicture(
-                              type: (true)
-                                  ? DisplayPictureType.profilePictureFemale
-                                  : DisplayPictureType.profilePictureMale,
-                              imgUrl: formatImgUrl(
-                                  widget.slotData.userDetails.profilePicUrl),
-                              isEditable: false,
-                              height: 45,
-                              width: 45,
-                            ),
+                                imgUrl: formatImgUrl(
+                                    widget.slotData.userDetails.profilePicUrl),
+                                isEditable: false,
+                                height: 45,
+                                width: 45,
+                                type: (UserDetailsUtils.setGenderTypeFromString(
+                                            widget
+                                                .slotData.userDetails.gender) ==
+                                        UserGender.female)
+                                    ? DisplayPictureType.profilePictureFemale
+                                    : DisplayPictureType.profilePictureMale),
                           ),
 
                           SizedBox(

@@ -23,7 +23,6 @@ class _TransactionCardState extends State<TransactionCard> {
     return GestureDetector(
       onTap: () {
         SystemSound.play(SystemSoundType.click);
-        // TODO: create this page and uncomment this.
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) {
             return TransactionDetailsPage(

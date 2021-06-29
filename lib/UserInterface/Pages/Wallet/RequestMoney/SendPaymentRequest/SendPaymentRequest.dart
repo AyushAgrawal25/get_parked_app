@@ -47,7 +47,6 @@ class _RequestPaymentState extends State<RequestPayment> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     gpAppState = Provider.of<AppState>(context, listen: false);

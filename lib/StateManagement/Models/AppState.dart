@@ -124,13 +124,24 @@ class AppState extends ChangeNotifier {
   }
 
   // New Notification Data
-  List<NotificationData> notifications;
-  void setNotifications(List<NotificationData> gpNotifications) {
-    gpNotifications.sort((a, b) => DateTime.parse(b.time)
+  List<NotificationData> get notifications {
+    List<NotificationData> notificationList = [];
+    notificationsStore.forEach((key, value) {
+      notificationList.add(value);
+    });
+
+    notificationList.sort((a, b) => DateTime.parse(b.time)
         .toLocal()
         .millisecondsSinceEpoch
         .compareTo(DateTime.parse(a.time).toLocal().millisecondsSinceEpoch));
-    this.notifications = gpNotifications;
+    return notificationList;
+  }
+
+  Map<int, NotificationData> notificationsStore = {};
+  void setNotifications(List<NotificationData> gpNotifications) {
+    gpNotifications.forEach((element) {
+      notificationsStore[element.id] = element;
+    });
     notifyListeners();
   }
 

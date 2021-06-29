@@ -34,7 +34,6 @@ class _CancelBookingButtonState extends State<CancelBookingButton> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     gpAppState = Provider.of<AppState>(context, listen: false);
@@ -57,7 +56,6 @@ class _CancelBookingButtonState extends State<CancelBookingButton> {
         ),
       ),
       onPressed: () async {
-        // TODO: Uncomment this.
         int duration = DateTime.now()
             .toLocal()
             .difference(DateTime.parse(widget.bookingData.time).toLocal())

@@ -288,7 +288,6 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 }

@@ -404,7 +404,8 @@ class _ParkingLordDetailsWidgetState extends State<ParkingLordDetailsWidget> {
                         Container(
                           child: Text(
                             "Shed " +
-                                ((widget.slotData.spaceType == 1)
+                                ((widget.slotData.spaceType ==
+                                        SlotSpaceType.sheded)
                                     ? "Available"
                                     : "unavailable"),
                             style: GoogleFonts.roboto(

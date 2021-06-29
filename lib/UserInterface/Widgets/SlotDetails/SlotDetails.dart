@@ -34,7 +34,6 @@ class _SlotDetailsWidgetState extends State<SlotDetailsWidget>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     qbAccAnimController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 250));

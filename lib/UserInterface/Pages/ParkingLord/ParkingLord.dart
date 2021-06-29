@@ -5,6 +5,7 @@ import 'package:getparked/StateManagement/Models/ParkingLordData.dart';
 import 'package:getparked/StateManagement/Models/UserDetails.dart';
 import 'package:getparked/UserInterface/Icons/g_p_icons_icons.dart';
 import 'package:getparked/UserInterface/Pages/ParkingLord/ParkingLordEdit/ParkingLordEditPage.dart';
+import 'package:getparked/UserInterface/Pages/Vault/VaultPage.dart';
 // import 'package:getparked/UserInterface/Pages/Vault/VaultPage.dart';
 import 'package:getparked/UserInterface/Widgets/Reviews/ReviewButton.dart';
 import 'package:getparked/UserInterface/Widgets/CustomIcon.dart';
@@ -397,11 +398,10 @@ class _ParkingLordState extends State<ParkingLord> {
   }
 
   onVaultPressed() {
-    // TODO: complete this function.
-    // SystemSound.play(SystemSoundType.click);
-    // Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-    //   return VaultPage();
-    // }));
+    SystemSound.play(SystemSoundType.click);
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return VaultPage();
+    }));
   }
 
   @override

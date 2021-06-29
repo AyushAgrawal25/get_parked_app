@@ -9,6 +9,7 @@
 // import 'package:getparked/UserInterface/Pages/About/AboutPage.dart';
 // import 'package:getparked/UserInterface/Pages/Settings/SettingsPage.dart';
 // import 'package:getparked/UserInterface/Pages/HelpAndFeedback/HelpAndFeedbackPage.dart';
+import 'package:getparked/UserInterface/Pages/Notifications/NotificationsPage.dart';
 import 'package:getparked/UserInterface/Pages/ParkingLord/ParkingLordPage.dart';
 import 'package:getparked/UserInterface/Pages/Profile/ProfilePage.dart';
 import 'package:getparked/UserInterface/Pages/RentOutSpace/RentOutSpaceFormsPage.dart';
@@ -51,16 +52,16 @@ class SideNavRoutes {
             SailorTransition.fade_in
           ],
           defaultTransitionDuration: Duration(milliseconds: 250)),
-      // SailorRoute(
-      //     name: '/Notifications',
-      //     builder: (context, args, paramMap) {
-      //       return NotificationsPage();
-      //     },
-      //     defaultTransitions: [
-      //       SailorTransition.slide_from_left,
-      //       SailorTransition.fade_in
-      //     ],
-      //     defaultTransitionDuration: Duration(milliseconds: 250)),
+      SailorRoute(
+          name: '/Notifications',
+          builder: (context, args, paramMap) {
+            return NotificationsPage();
+          },
+          defaultTransitions: [
+            SailorTransition.slide_from_left,
+            SailorTransition.fade_in
+          ],
+          defaultTransitionDuration: Duration(milliseconds: 250)),
       SailorRoute(
           name: '/RentOutSpace',
           builder: (context, args, paramMap) {

@@ -42,7 +42,6 @@ class _BookNowButtonState extends State<BookNowButton> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     gpAppState = Provider.of(context, listen: false);
@@ -89,8 +88,6 @@ class _BookNowButtonState extends State<BookNowButton> {
         authToken: gpAppState.authToken,
         parkingRequestId: widget.parkingRequestData.id);
 
-    // TODO: handle low balance and unavailable space if required.
-
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) {
         return SuccessAndFailurePage(
@@ -114,7 +111,6 @@ class _BookNowButtonState extends State<BookNowButton> {
   }
 
   onAddMoney() async {
-    // TODO: Uncomment this.
     // Navigate to Upi Page
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) {
@@ -136,7 +132,6 @@ class _BookNowButtonState extends State<BookNowButton> {
   }
 
   onPaymentRequest() async {
-    // TODO: Uncomment this.
     // Navigate to Payment Request Page
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) {
