@@ -11,6 +11,7 @@ import 'package:getparked/StateManagement/Models/UserData.dart';
 import 'package:getparked/UserInterface/Widgets/ParkingDetailsPage/ParkingDetailsPage.dart';
 import 'package:getparked/UserInterface/Widgets/ParkingCard/ParkingCard.dart';
 import 'package:getparked/UserInterface/Widgets/TransactionDetailsPage/TransactionDetailsPage.dart';
+import 'package:getparked/UserInterface/Widgets/TransactionRequestPage/TransactionRequestPage/TransactionRequestPage.dart';
 import 'package:provider/provider.dart';
 
 class NotificationDetailsPage extends StatefulWidget {
@@ -141,76 +142,75 @@ class _NotificationDetailsPageState extends State<NotificationDetailsPage> {
           TransactionRequestData transactionRequestData =
               notificationData.transactionRequestData;
           // From User Details And Slot Data
-          if (transactionRequestData.fromUserId ==
+          if (transactionRequestData.requesterUserId ==
               notificationData.senderUserId) {
             // From is Sender
             // User Details
-            transactionRequestData.fromUserDetails =
+            transactionRequestData.requesterUserDetails =
                 notificationData.senderUserDetails;
             // Slot Data
             if (notificationData.senderSlotData != null) {
-              transactionRequestData.fromSlotData =
+              transactionRequestData.requesterSlotData =
                   widget.notificationData.senderSlotData;
-              if (transactionRequestData.fromSlotData != null) {
-                transactionRequestData.fromSlotData.userDetails =
-                    transactionRequestData.fromUserDetails;
+              if (transactionRequestData.requesterSlotData != null) {
+                transactionRequestData.requesterSlotData.userDetails =
+                    transactionRequestData.requesterUserDetails;
               }
             }
-          } else if (transactionRequestData.fromUserId ==
+          } else if (transactionRequestData.requesterUserId ==
               gpAppStateListen.userData.id) {
             // From is You
             // User Details
-            transactionRequestData.fromUserDetails =
+            transactionRequestData.requesterUserDetails =
                 gpAppStateListen.userDetails;
             // Slot Data
             if (gpAppStateListen.parkingLordData != null) {
-              transactionRequestData.fromSlotData =
+              transactionRequestData.requesterSlotData =
                   gpAppStateListen.parkingLordData.toSlotData();
-              if (transactionRequestData.fromSlotData != null) {
-                transactionRequestData.fromSlotData.userDetails =
-                    transactionRequestData.fromUserDetails;
+              if (transactionRequestData.requesterSlotData != null) {
+                transactionRequestData.requesterSlotData.userDetails =
+                    transactionRequestData.requesterUserDetails;
               }
             }
           }
 
           // With User Details
-          if (transactionRequestData.withUserId ==
+          if (transactionRequestData.requestedFromUserId ==
               notificationData.senderUserId) {
             // With is Sender
             // User Details
-            transactionRequestData.withUserDetails =
+            transactionRequestData.requestedFromUserDetails =
                 notificationData.senderUserDetails;
             // Slot Data
             if (notificationData.senderSlotData != null) {
-              transactionRequestData.withSlotData =
+              transactionRequestData.requestedFromSlotData =
                   notificationData.senderSlotData;
-              if (transactionRequestData.withSlotData != null) {
-                transactionRequestData.withSlotData.userDetails =
-                    transactionRequestData.withUserDetails;
+              if (transactionRequestData.requestedFromSlotData != null) {
+                transactionRequestData.requestedFromSlotData.userDetails =
+                    transactionRequestData.requestedFromUserDetails;
               }
             }
-          } else if (transactionRequestData.withUserId ==
+          } else if (transactionRequestData.requestedFromUserId ==
               gpAppStateListen.userData.id) {
             // With is You
             // User Details
-            transactionRequestData.withUserDetails =
+            transactionRequestData.requestedFromUserDetails =
                 gpAppStateListen.userDetails;
             // Slot Data
             if (gpAppStateListen.parkingLordData != null) {
-              transactionRequestData.withSlotData =
+              transactionRequestData.requestedFromSlotData =
                   gpAppStateListen.parkingLordData.toSlotData();
-              if (transactionRequestData.withSlotData != null) {
-                transactionRequestData.withSlotData.userDetails =
-                    transactionRequestData.withUserDetails;
+              if (transactionRequestData.requestedFromSlotData != null) {
+                transactionRequestData.requestedFromSlotData.userDetails =
+                    transactionRequestData.requestedFromUserDetails;
               }
             }
           }
 
-          print("\nTransaction Page required...");
           // TODO: create this page
-          // notificationDetailsWidget = TransactionRequestPage(
-          //   transactionRequestData: transactionRequestData,
-          // );
+          notificationDetailsWidget = TransactionRequestPage(
+            transactionRequestData: transactionRequestData,
+          );
           break;
         }
     }

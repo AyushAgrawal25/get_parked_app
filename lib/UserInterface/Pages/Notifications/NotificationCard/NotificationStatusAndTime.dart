@@ -203,15 +203,15 @@ class _NotificationStatusAndTimeState extends State<NotificationStatusAndTime> {
       case NotificationDataType.transactionRequestResponse:
         {
           switch (widget.notificationData.transactionRequestData
-              .getTransactionRequestDataType()) {
-            case TransactionRequestDataType.accepted:
+              .getTransactionRequestStatus()) {
+            case TransactionRequestStatus.accepted:
               {
                 statusIcon = FontAwesome5.check_circle;
                 statusColor = qbAppSecondaryGreenColor;
                 statusText = "Paid";
                 break;
               }
-            case TransactionRequestDataType.pending:
+            case TransactionRequestStatus.pending:
               {
                 statusIcon = FontAwesome5.hourglass_half;
                 statusColor = qbAppSecondaryBlueColor;
@@ -219,7 +219,7 @@ class _NotificationStatusAndTimeState extends State<NotificationStatusAndTime> {
                 break;
               }
 
-            case TransactionRequestDataType.rejected:
+            case TransactionRequestStatus.rejected:
               {
                 statusIcon = FontAwesome.cancel_circled;
                 statusColor = qbAppPrimaryRedColor;

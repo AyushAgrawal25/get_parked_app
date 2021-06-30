@@ -1,3 +1,5 @@
+import 'package:getparked/StateManagement/Models/TransactionData.dart';
+import 'package:getparked/StateManagement/Models/UserData.dart';
 import 'package:getparked/StateManagement/Models/UserDetails.dart';
 import 'package:getparked/StateManagement/Models/SlotData.dart';
 
@@ -5,135 +7,107 @@ class TransactionRequestData {
   int id;
 
   // From Details
-  int fromUserId;
-  UserDetails fromUserDetails;
-  SlotData fromSlotData;
-  int fromAccountType;
+  int requesterUserId;
+  UserDetails requesterUserDetails;
+  SlotData requesterSlotData;
+  UserAccountType requesterAccountType;
 
   // With User Details
-  int withUserId;
-  UserDetails withUserDetails;
-  SlotData withSlotData;
-  int withAccountType;
+  int requestedFromUserId;
+  UserDetails requestedFromUserDetails;
+  SlotData requestedFromSlotData;
+  UserAccountType requestedFromAccountType;
 
-  // Amount
   double amount;
-
-  // Note
   String note;
+  MoneyTransferType transferType;
 
-  // Money Transfer Type
-  int moneyTransferType;
+  // Transactions
+  int requesterTransactionId;
+  TransactionData requesterTransaction;
+
+  int requestedFromTransactionId;
+  TransactionData requestedFromTransaction;
 
   String time;
   int status;
 
   TransactionRequestData.fromMap(Map transactionRequestMap) {
-    id = transactionRequestMap["transactionRequestId"];
+    id = transactionRequestMap["id"];
 
-    // From User Details
-    // UserId
-    fromUserId = transactionRequestMap["transactionRequestFromUserId"];
+    requesterUserId = transactionRequestMap["requesterUserId"];
+    requesterAccountType = UserDataUtils()
+        .accountTypeFromString(transactionRequestMap["requesterAccountType"]);
 
-    // User Details
-    Map fromUserDetailsMap;
-    if (transactionRequestMap["transactionRequestFromUserData"] != null) {
-      fromUserDetailsMap =
-          transactionRequestMap["transactionRequestFromUserData"];
-    } else if (transactionRequestMap["fromUserData"] != null) {
-      fromUserDetailsMap = transactionRequestMap["fromUserData"];
-    } else if (transactionRequestMap["transactionRequestFromUserDetails"] !=
-        null) {
-      fromUserDetailsMap =
-          transactionRequestMap["transactionRequestFromUserDetails"];
-    } else if (transactionRequestMap["fromUserDetails"] != null) {
-      fromUserDetailsMap = transactionRequestMap["fromUserDetails"];
-    }
-    if (fromUserDetailsMap != null) {
-      if (fromUserDetailsMap["userId"] != null) {
-        fromUserDetails = UserDetails.fromMap(fromUserDetailsMap);
+    if (transactionRequestMap["requesterUser"] != null) {
+      // Requester User Details
+      if (transactionRequestMap["requesterUser"]["userDetails"] != null) {
+        requesterUserDetails = UserDetails.fromMap(
+            transactionRequestMap["requesterUser"]["userDetails"]);
+      }
+
+      // Requester Slot Data
+      if (transactionRequestMap["requesterUser"]["slot"] != null) {
+        requesterSlotData =
+            SlotData.fromMap(transactionRequestMap["requesterUser"]["slot"]);
       }
     }
 
-    // Slot Data
-    Map fromSlotDataMap;
-    if (transactionRequestMap["transactionRequestFromSlotData"] != null) {
-      fromSlotDataMap = transactionRequestMap["transactionRequestFromSlotData"];
-    } else if (transactionRequestMap["fromSlotData"] != null) {
-      fromSlotDataMap = transactionRequestMap["fromSlotData"];
-    }
-    if (fromSlotDataMap != null) {
-      if (fromSlotDataMap["slotId"] != null) {
-        fromSlotData = SlotDataUtils.mapToSlotData(fromSlotDataMap);
+    // Requested From User Details
+    requestedFromUserId = transactionRequestMap["requestedFromUserId"];
+    requestedFromAccountType = UserDataUtils().accountTypeFromString(
+        transactionRequestMap["requestedFromAccountType"]);
+
+    if (transactionRequestMap["requestedFromUser"] != null) {
+      // Requester User Details
+      if (transactionRequestMap["requestedFromUser"]["userDetails"] != null) {
+        requestedFromUserDetails = UserDetails.fromMap(
+            transactionRequestMap["requestedFromUser"]["userDetails"]);
+      }
+
+      // Requester Slot Data
+      if (transactionRequestMap["requestedFromUser"]["slot"] != null) {
+        requestedFromSlotData = SlotData.fromMap(
+            transactionRequestMap["requestedFromUser"]["slot"]);
       }
     }
 
-    // Account Type
-    fromAccountType =
-        transactionRequestMap["transactionRequestFromAccountType"];
-
-    // With User Details
-    // UserId
-    withUserId = transactionRequestMap["transactionRequestWithUserId"];
-
-    // User Details
-    Map withUserDetailsMap;
-    if (transactionRequestMap["transactionRequestWithUserData"] != null) {
-      withUserDetailsMap =
-          transactionRequestMap["transactionRequestWithUserData"];
-    } else if (transactionRequestMap["withUserData"] != null) {
-      withUserDetailsMap = transactionRequestMap["withUserData"];
-    } else if (transactionRequestMap["transactionRequestWithUserDetails"] !=
-        null) {
-      withUserDetailsMap =
-          transactionRequestMap["transactionRequestWithUserDetails"];
-    } else if (transactionRequestMap["withUserDetails"] != null) {
-      withUserDetailsMap = transactionRequestMap["withUserDetails"];
-    }
-    if (withUserDetailsMap != null) {
-      if (withUserDetailsMap["userId"] != null) {
-        withUserDetails = UserDetails.fromMap(withUserDetailsMap);
-      }
+    // Transactions
+    if (transactionRequestMap["requesterTransactionId"] != null) {
+      requesterTransactionId = transactionRequestMap["requesterTransactionId"];
+      requesterTransaction = TransactionData.fromMap(
+          transactionRequestMap["requesterTransaction"]);
     }
 
-    // Slot Data
-    Map withSlotDataMap;
-    if (transactionRequestMap["transactionRequestWithSlotData"] != null) {
-      withSlotDataMap = transactionRequestMap["transactionRequestWithSlotData"];
-    } else if (transactionRequestMap["withSlotData"] != null) {
-      withSlotDataMap = transactionRequestMap["withSlotData"];
-    }
-    if (withSlotDataMap != null) {
-      if (withSlotDataMap["slotId"] != null) {
-        withSlotData = SlotDataUtils.mapToSlotData(withSlotDataMap);
-      }
+    if (transactionRequestMap["requestedFromTransactionId"] != null) {
+      requestedFromTransactionId =
+          transactionRequestMap["requestedFromTransactionId"];
+      requestedFromTransaction = TransactionData.fromMap(
+          transactionRequestMap["requestedFromTransaction"]);
     }
 
-    // Account Type
-    withAccountType =
-        transactionRequestMap["transactionRequestWithAccountType"];
-
-    amount = (transactionRequestMap["transactionRequestAmount"] != null)
-        ? (transactionRequestMap["transactionRequestAmount"]).toDouble()
+    amount = (transactionRequestMap["amount"] != null)
+        ? (transactionRequestMap["amount"]).toDouble()
         : 0.0;
-    note = transactionRequestMap["transactionRequestNote"];
-    moneyTransferType =
-        transactionRequestMap["transactionRequestMoneyTransferType"];
-    time = transactionRequestMap["transactionRequestTime"];
-    status = transactionRequestMap["transactionRequestStatus"];
+    note = transactionRequestMap["note"];
+    transferType = TransactionDataUtils.getTransferTypeFromString(
+        transactionRequestMap["transferType"]);
+
+    time = transactionRequestMap["time"];
+    status = transactionRequestMap["status"];
   }
 
-  TransactionRequestDataType getTransactionRequestDataType() {
-    TransactionRequestDataType type;
+  TransactionRequestStatus getTransactionRequestStatus() {
+    TransactionRequestStatus type;
     switch (status) {
       case 0:
-        type = TransactionRequestDataType.pending;
+        type = TransactionRequestStatus.pending;
         break;
       case 1:
-        type = TransactionRequestDataType.accepted;
+        type = TransactionRequestStatus.accepted;
         break;
       case 2:
-        type = TransactionRequestDataType.rejected;
+        type = TransactionRequestStatus.rejected;
         break;
     }
 
@@ -141,4 +115,4 @@ class TransactionRequestData {
   }
 }
 
-enum TransactionRequestDataType { pending, rejected, accepted }
+enum TransactionRequestStatus { pending, rejected, accepted }
