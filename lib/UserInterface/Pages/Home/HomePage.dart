@@ -164,7 +164,7 @@ class _HomePageState extends State<HomePage> {
   initializeNotificationsSocket(IO.Socket gpSocketIO) async {
     gpSocketIO.on('notification-update', (data) async {
       // Saving Data Locally
-      LocalDataUtils().saveLocalData(LocalDataType.notifications, data["data"]);
+      // LocalDataUtils().saveLocalData(LocalDataType.notifications, data["data"]);
 
       // // Tmp Code
       // data["data"].forEach((testNoti) {
@@ -173,10 +173,12 @@ class _HomePageState extends State<HomePage> {
       //   }
       // });
 
+      List notifications = data;
       List<NotificationData> gpNotifications = [];
-      data["data"].forEach((gpNotificationMap) {
-        gpNotifications.add(NotificationData.fromMap(gpNotificationMap));
+      notifications.forEach((element) {
+        gpNotifications.add(NotificationData.fromMap(element));
       });
+
       gpAppState.setNotifications(gpNotifications);
     });
   }
@@ -512,8 +514,6 @@ class _HomePageState extends State<HomePage> {
                         //   },
                         // ));
 
-                        initializeNotifications();
-
                         // Navigator.of(context).push(MaterialPageRoute(
                         //   builder: (context) {
                         //     return CurveTest();
@@ -732,6 +732,13 @@ class _HomePageState extends State<HomePage> {
     List<GPMapSlotMarker> gpMapSlotMarkers = [];
     appState.slotsOnMap.forEach((slotData) {
       if (gpSelectedVehicleTypeData != null) {
+        bool isVehicleAllowed = false;
+        slotData.vehicles.forEach((vehicleData) {
+          if (gpSelectedVehicleTypeData.type == vehicleData.type) {
+            isVehicleAllowed = true;
+          }
+        });
+
         double vehicleArea = (gpSelectedVehicleTypeData.length *
                 gpSelectedVehicleTypeData.breadth)
             .toDouble();
@@ -740,7 +747,8 @@ class _HomePageState extends State<HomePage> {
         if ((DateTime.now().toLocal().hour >= slotData.startTime) &&
             (DateTime.now().toLocal().hour < slotData.endTime)) {
           if ((vehicleArea < slotData.availableSpace) &&
-              (gpSelectedVehicleTypeData.height <= slotData.height)) {
+              (gpSelectedVehicleTypeData.height <= slotData.height) &&
+              (isVehicleAllowed)) {
             // Space is available for current type.
             gpMapSlotMarkerType = GPMapSlotMarkerType.spaceAvailable;
           } else {
