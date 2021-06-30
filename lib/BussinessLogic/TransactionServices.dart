@@ -120,19 +120,18 @@ class TransactionServices {
     }
   }
 
-  // TODO: update according to thunder client json file.
   Future<TransactionRequestSendStatus> moneyRequest(
       {@required String authToken,
       @required double amount,
-      @required int withUserId,
+      @required int requestedFromUserId,
       @required String note}) async {
     try {
       Map<String, dynamic> reqBody = {
         "amount": amount,
-        "fromAccountType": "User",
+        "requesterAccountType": "User",
         "transferType": "Add",
-        "withUserId": withUserId,
-        "withAccountType": "User",
+        "requestedFromUserId": requestedFromUserId,
+        "requestedFromAccountType": "User",
         "note": note
       };
 

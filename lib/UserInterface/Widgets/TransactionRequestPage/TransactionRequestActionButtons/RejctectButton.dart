@@ -1,6 +1,8 @@
+import 'package:getparked/BussinessLogic/TransactionServices.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/TransactionRequestData.dart';
 import 'package:getparked/UserInterface/Widgets/EdgeLessButton.dart';
+import 'package:getparked/UserInterface/Widgets/SuccessAndFailure/SuccessAndFailurePage.dart';
 import 'package:getparked/UserInterface/Widgets/qbFAB.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
@@ -28,38 +30,34 @@ class _RejectButtonState extends State<RejectButton> {
 
   rejectRequest() async {
     // TODO: Uncomment it when its ready.
-    // AppState gpAppState = Provider.of<AppState>(context, listen: false);
+    AppState gpAppState = Provider.of<AppState>(context, listen: false);
 
-    // widget.changeLoadStatus(true);
+    widget.changeLoadStatus(true);
 
-    // Map<String, dynamic> transactionRequestResponse = {
-    //   "transactionRequestId": widget.transactionRequestData.id,
-    //   "userId": gpAppState.userData.id,
-    //   "userAccountType": 0,
-    //   "transactionRequestResponse": 2
-    // };
+    TransactionRequestRespondStatus respondStatus = await TransactionServices()
+        .respondMoneyRequest(
+            authToken: gpAppState.authToken,
+            requestId: widget.transactionRequestData.id,
+            respone: 2);
 
-    // Map cnacelRequestResp = await TransactionUtils().moneyRequestResponse(
-    //     transactionRequestResponse, gpAppState.userData.accessToken);
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return SuccessAndFailurePage(
+          buttonText: "Continue",
+          onButtonPressed: () {
+            Navigator.of(context).pop();
 
-    // Navigator.of(context).push(MaterialPageRoute(
-    //   builder: (context) {
-    //     return SuccessAndFailurePage(
-    //       buttonText: "Continue",
-    //       onButtonPressed: () {
-    //         Navigator.of(context).pop();
-
-    //         widget.changeLoadStatus(false);
-    //       },
-    //       status: (cnacelRequestResp["status"] == 1)
-    //           ? SuccessAndFailureStatus.success
-    //           : SuccessAndFailureStatus.failure,
-    //       statusText: "Request Rejection",
-    //     );
-    //   },
-    // )).then((value) {
-    //   widget.changeLoadStatus(false);
-    // });
+            widget.changeLoadStatus(false);
+          },
+          status: (respondStatus == TransactionRequestRespondStatus.successful)
+              ? SuccessAndFailureStatus.success
+              : SuccessAndFailureStatus.failure,
+          statusText: "Request Rejection",
+        );
+      },
+    )).then((value) {
+      widget.changeLoadStatus(false);
+    });
   }
 
   @override

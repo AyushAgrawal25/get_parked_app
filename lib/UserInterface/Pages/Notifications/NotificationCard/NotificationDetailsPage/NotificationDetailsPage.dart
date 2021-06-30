@@ -11,7 +11,7 @@ import 'package:getparked/StateManagement/Models/UserData.dart';
 import 'package:getparked/UserInterface/Widgets/ParkingDetailsPage/ParkingDetailsPage.dart';
 import 'package:getparked/UserInterface/Widgets/ParkingCard/ParkingCard.dart';
 import 'package:getparked/UserInterface/Widgets/TransactionDetailsPage/TransactionDetailsPage.dart';
-import 'package:getparked/UserInterface/Widgets/TransactionRequestPage/TransactionRequestPage/TransactionRequestPage.dart';
+import 'package:getparked/UserInterface/Widgets/TransactionRequestPage/TransactionRequestPage.dart';
 import 'package:provider/provider.dart';
 
 class NotificationDetailsPage extends StatefulWidget {

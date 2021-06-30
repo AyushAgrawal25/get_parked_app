@@ -21,8 +21,8 @@ import 'package:getparked/UserInterface/Widgets/TransactionDetailsPage/Transacti
 import 'package:getparked/UserInterface/Widgets/TransactionDetailsPage/TransactionDetailsWidgets/TransactionRefAndDateWidget.dart';
 
 class TransactionRequestPage extends StatefulWidget {
-  TransactionRequestData transactionRequestData;
-  TransactionRequestCardType cardType;
+  final TransactionRequestData transactionRequestData;
+  final TransactionRequestCardType cardType;
   TransactionRequestPage(
       {@required this.transactionRequestData,
       this.cardType: TransactionRequestCardType.consumer});

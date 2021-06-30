@@ -1,7 +1,9 @@
+import 'package:getparked/BussinessLogic/TransactionServices.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/TransactionRequestData.dart';
 import 'package:getparked/UserInterface/Pages/Wallet/RequestMoney/SelectContact/SelectContact.dart';
 import 'package:getparked/UserInterface/Pages/Wallet/AddMoney/AddMoneyPage.dart';
+import 'package:getparked/UserInterface/Widgets/SuccessAndFailure/SuccessAndFailurePage.dart';
 import 'package:getparked/UserInterface/Widgets/qbFAB.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';
 import 'package:getparked/UserInterface/Widgets/LowBalancePopUp.dart';
@@ -35,35 +37,32 @@ class _PayNowButtonState extends State<PayNowButton> {
 
   initTransaction() async {
     // TODO: Uncomment it when its ready.
-    // widget.changeLoadStatus(true);
-    // Map<String, dynamic> transactionRequestResponse = {
-    //   "transactionRequestId": widget.transactionRequestData.id,
-    //   "userId": gpAppState.userData.id,
-    //   "userAccountType": 0,
-    //   "transactionRequestResponse": 1
-    // };
-    // Map transactionResp = await TransactionUtils().moneyRequestResponse(
-    //     transactionRequestResponse, gpAppState.userData.accessToken);
-    // print(transactionResp);
+    widget.changeLoadStatus(true);
+    
+    TransactionRequestRespondStatus respondStatus = await TransactionServices()
+        .respondMoneyRequest(
+            authToken: gpAppState.authToken,
+            requestId: widget.transactionRequestData.id,
+            respone: 1);
 
-    // Navigator.of(context).push(MaterialPageRoute(
-    //   builder: (context) {
-    //     return SuccessAndFailurePage(
-    //       buttonText: "Continue",
-    //       onButtonPressed: () {
-    //         Navigator.of(context).pop();
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return SuccessAndFailurePage(
+          buttonText: "Continue",
+          onButtonPressed: () {
+            Navigator.of(context).pop();
 
-    //         widget.changeLoadStatus(false);
-    //       },
-    //       status: (transactionResp["status"] == 1)
-    //           ? SuccessAndFailureStatus.success
-    //           : SuccessAndFailureStatus.failure,
-    //       statusText: "Request Acception",
-    //     );
-    //   },
-    // )).then((value) {
-    //   widget.changeLoadStatus(false);
-    // });
+            widget.changeLoadStatus(false);
+          },
+          status: (respondStatus==TransactionRequestRespondStatus.successful)
+              ? SuccessAndFailureStatus.success
+              : SuccessAndFailureStatus.failure,
+          statusText: "Request Acception",
+        );
+      },
+    )).then((value) {
+      widget.changeLoadStatus(false);
+    });
   }
 
   onAddMoney() {
