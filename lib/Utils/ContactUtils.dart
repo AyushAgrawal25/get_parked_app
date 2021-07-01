@@ -1,5 +1,9 @@
+import 'package:flutter/cupertino.dart';
+import 'package:getparked/BussinessLogic/UserServices.dart';
 import 'package:getparked/StateManagement/Models/ContactData.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:contacts_service/contacts_service.dart';
 
 class ContactUtils {
   Future makeCall(String phNum) async {
@@ -13,34 +17,6 @@ class ContactUtils {
     } catch (excep) {
       print("Exception Found While Calling $phNum");
     }
-  }
-
-  List<ContactData> distinctPhoneNumbers(List<ContactData> contacts) {
-    List<ContactData> gpContacts = [];
-    contacts.forEach((contact) {
-      int index = 0;
-      int targetIndex;
-      bool isContactAlreadyPresent = false;
-
-      // Checking Is This Phone Number Already Present
-      gpContacts.forEach((gpContact) {
-        if (gpContact.phoneNumber == contact.phoneNumber) {
-          isContactAlreadyPresent = true;
-          targetIndex = index;
-        }
-        index++;
-      });
-
-      if (!isContactAlreadyPresent) {
-        gpContacts.add(contact);
-      } else {
-        if (!gpContacts[targetIndex].isAppUser) {
-          gpContacts[targetIndex] = contact;
-        }
-      }
-    });
-
-    return gpContacts;
   }
 
   List<ContactData> sort(List<ContactData> contacts) {
@@ -62,140 +38,94 @@ class ContactUtils {
     return enPhNum;
   }
 
-  List<ContactData> distinctDisplayName(List<ContactData> contacts) {
-    List<ContactData> gpContacts = [];
-    contacts.forEach((contact) {
-      int index = 0;
-      int targetIndex;
-      bool isContactAlreadyPresent = false;
-      // Checking Is This Phone Number Already Present
-      gpContacts.forEach((gpContact) {
-        if (gpContact.displayName == contact.displayName) {
-          isContactAlreadyPresent = true;
-          targetIndex = index;
-        }
-        index++;
-      });
-
-      if (!isContactAlreadyPresent) {
-        gpContacts.add(contact);
-      } else {
-        if (!gpContacts[targetIndex].isAppUser) {
-          gpContacts[targetIndex] = contact;
-        }
-      }
-    });
-
-    return gpContacts;
-  }
-
   List<ContactData> search(List<ContactData> contacts, String gpSearchText) {
-    List<ContactData> gpContacts = contacts;
-    for (int i = 0; i < gpSearchText.length; i++) {
-      gpContacts = this.findInContacts(gpContacts, gpSearchText[i], i);
-    }
+    Iterable<ContactData> contaccts = contacts.where((contactData) {
+      return contactData
+          .getSearchDetails()
+          .toLowerCase()
+          .contains(gpSearchText.toLowerCase());
+    });
 
-    return gpContacts;
+    return contaccts.toList();
   }
 
-  List<ContactData> findInContacts(
-      List<ContactData> contacts, String letterOrNumber, int position) {
-    List<ContactData> gpContactsSearched = [];
-    List<ContactData> gpContactsSearchedByLetter =
-        this.findInContactsByLetter(contacts, letterOrNumber, position);
-    List<ContactData> gpContactsSearchedByNumber =
-        this.findInContactsByNumber(contacts, letterOrNumber, position);
+  Future<List<ContactData>> init({@required String authToken}) async {
+    if (await Permission.contacts.request().isGranted) {
+      Map<String, ContactData> contactsStore = {};
 
-    gpContactsSearchedByLetter.forEach((gpContactSearchedByLetter) {
-      bool isContactAlreadyPresent = false;
-      gpContactsSearched.forEach((gpContactSearched) {
-        if (gpContactSearched.phoneNumber ==
-            gpContactSearchedByLetter.phoneNumber) {
-          isContactAlreadyPresent = true;
-        }
-      });
-      if (!isContactAlreadyPresent) {
-        gpContactsSearched.add(gpContactSearchedByLetter);
-      }
-    });
+      Iterable<Contact> fetchedContacts =
+          await ContactsService.getContacts(withThumbnails: false);
 
-    gpContactsSearchedByNumber.forEach((gpContactSearchedByNumber) {
-      bool isContactAlreadyPresent = false;
-      gpContactsSearched.forEach((gpContactSearched) {
-        if (gpContactSearched.phoneNumber ==
-            gpContactSearchedByNumber.phoneNumber) {
-          isContactAlreadyPresent = true;
-        }
-      });
-      if (!isContactAlreadyPresent) {
-        gpContactsSearched.add(gpContactSearchedByNumber);
-      }
-    });
-
-    return gpContactsSearched;
-  }
-
-  List<ContactData> findInContactsByLetter(
-      List<ContactData> contacts, String letter, int position) {
-    List<ContactData> gpContactsByLetter = [];
-    int maxLength = 0;
-    contacts.forEach((contact) {
-      if (maxLength < contact.displayName.length) {
-        maxLength = contact.displayName.length;
-      }
-    });
-
-    for (int i = position; i < maxLength; i++) {
-      contacts.forEach((contact) {
-        if (contact.displayName.length > i) {
-          if (contact.displayName[i].toLowerCase() == letter.toLowerCase()) {
-            // Checking Whether the contact is Already Present
-            bool isContactAlreadyPresent = false;
-            gpContactsByLetter.forEach((gpContact) {
-              if (gpContact.phoneNumber == contact.phoneNumber) {
-                isContactAlreadyPresent = true;
+      // Getting fetchedContacts from phone
+      fetchedContacts.forEach((contact) {
+        contact.phones.forEach((num) {
+          if (num.value.length >= 10) {
+            String phoneNumber = num.value.substring(num.value.length - 10);
+            String dialCode;
+            if (num.value.length > 10) {
+              dialCode = num.value.substring(0, num.value.length - 10);
+              if (dialCode == "0") {
+                dialCode = null;
               }
-            });
-            if (!isContactAlreadyPresent) {
-              gpContactsByLetter.add(contact);
+            }
+
+            ContactData contactData = ContactData(
+              dialCode: dialCode,
+              displayName: contact.displayName,
+              gender: "male",
+              isAppUser: false,
+              phoneNumber: phoneNumber,
+            );
+
+            if (contactsStore[phoneNumber] != null) {
+              if (contactData.dialCode == null) {
+                contactsStore[phoneNumber].dialCode = contactData.dialCode;
+              }
+            } else {
+              contactsStore[phoneNumber] = contactData;
             }
           }
-        }
+        });
       });
+
+      List<Map<String, dynamic>> parsedContacts = parseForAPI(contactsStore);
+      List<ContactData> registeredContacts = await UserServices()
+          .getContacts(authToken: authToken, contactsList: parsedContacts);
+      registeredContacts.forEach((element) {
+        contactsStore[element.phoneNumber] = element;
+      });
+
+      List<ContactData> contacts = [];
+      contactsStore.forEach((key, value) {
+        contacts.add(value);
+      });
+
+      return contacts;
     }
 
-    return gpContactsByLetter;
+    return null;
   }
 
-  List<ContactData> findInContactsByNumber(
-      List<ContactData> contacts, String number, int position) {
-    List<ContactData> gpContactsByNumber = [];
-    int maxLength = 0;
-    contacts.forEach((contact) {
-      if (maxLength < contact.phoneNumber.length) {
-        maxLength = contact.phoneNumber.length;
+  List<Map<String, dynamic>> parseForAPI(
+      Map<String, ContactData> contactsStore) {
+    List<Map<String, dynamic>> parsedContacts = [];
+    contactsStore.forEach((key, value) {
+      if (value.dialCode == null) {
+        parsedContacts.add({
+          "userDetails": {"phoneNumber": value.phoneNumber}
+        });
+      } else {
+        parsedContacts.add({
+          "userDetails": {
+            "AND": [
+              {"phoneNumber": value.phoneNumber},
+              {"dialCode": value.dialCode}
+            ]
+          }
+        });
       }
     });
 
-    for (int i = position; i < maxLength; i++) {
-      contacts.forEach((contact) {
-        if (contact.phoneNumber.length > i) {
-          if (contact.phoneNumber[i].toLowerCase() == number.toLowerCase()) {
-            // Checking Whether the contact is Already Present
-            bool isContactAlreadyPresent = false;
-            gpContactsByNumber.forEach((gpContact) {
-              if (gpContact.phoneNumber == contact.phoneNumber) {
-                isContactAlreadyPresent = true;
-              }
-            });
-            if (!isContactAlreadyPresent) {
-              gpContactsByNumber.add(contact);
-            }
-          }
-        }
-      });
-    }
-
-    return gpContactsByNumber;
+    return parsedContacts;
   }
 }

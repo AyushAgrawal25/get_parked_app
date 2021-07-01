@@ -119,10 +119,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   initializeContacts() async {
-    // TODO: create this function.
-    // List<ContactData> gpContacts = await ContactUtils()
-    //     .init(gpAppState.userData.id, gpAppState.userData.accessToken);
-    // gpAppState.setContacts(gpContacts);
+    List<ContactData> contacts =
+        await ContactUtils().init(authToken: gpAppState.authToken);
+    gpAppState.setContacts(contacts);
   }
 
   initializeMapPlacesForCity() async {
@@ -513,6 +512,8 @@ class _HomePageState extends State<HomePage> {
                         //     return IconTestPage();
                         //   },
                         // ));
+
+                        ContactUtils().init(authToken: gpAppState.authToken);
 
                         // Navigator.of(context).push(MaterialPageRoute(
                         //   builder: (context) {

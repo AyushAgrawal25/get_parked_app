@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 class ContactData {
   int id;
   int userId;
@@ -46,5 +48,9 @@ class ContactData {
         isAppUser = false;
       }
     }
+  }
+
+  String getSearchDetails() {
+    return this.displayName + " " + this.phoneNumber;
   }
 }

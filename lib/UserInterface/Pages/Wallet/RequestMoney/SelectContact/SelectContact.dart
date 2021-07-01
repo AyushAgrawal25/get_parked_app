@@ -37,6 +37,7 @@ class _SelectContactState extends State<SelectContact> {
   @override
   Widget build(BuildContext context) {
     List<ContactData> searchedContacts = [];
+    print(searchedContacts.length);
     if ((gpContactSearch != "") && (gpContactSearch != null)) {
       searchedContacts =
           ContactUtils().search(gpAppState.contacts, gpContactSearch);
@@ -183,15 +184,15 @@ class _SelectContactState extends State<SelectContact> {
 
                     Expanded(
                       child: Container(
-                        padding: EdgeInsets.only(top: 10),
-                        child: ListView(
-                          children: searchedContacts.map((searchedContact) {
-                            return ContactCard(
-                                contactData: searchedContact,
-                                amount: widget.amount);
-                          }).toList(),
-                        ),
-                      ),
+                          padding: EdgeInsets.only(top: 10),
+                          child: ListView.builder(
+                            itemCount: searchedContacts.length,
+                            itemBuilder: (context, index) {
+                              return ContactCard(
+                                  contactData: searchedContacts[index],
+                                  amount: widget.amount);
+                            },
+                          )),
                     )
                   ],
                 ),

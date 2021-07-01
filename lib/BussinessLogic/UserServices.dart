@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:getparked/StateManagement/Models/AppState.dart';
+import 'package:getparked/StateManagement/Models/ContactData.dart';
 import 'package:getparked/StateManagement/Models/UserData.dart';
 import 'package:getparked/StateManagement/Models/UserDetails.dart';
 import 'package:getparked/Utils/JSONUtils.dart';
@@ -271,6 +272,55 @@ class UserServices {
     } catch (excp) {
       print(excp);
       return UploadProfilePicStatus.failed;
+    }
+  }
+
+  Future<List<ContactData>> getContacts(
+      {@required String authToken,
+      @required List<Map<String, dynamic>> contactsList}) async {
+    try {
+      Map<String, dynamic> reqBody = {
+        "phoneNumbers": json.encode(contactsList)
+      };
+      Uri url = Uri.parse(domainName + USER_ROUTE + "/contacts");
+      http.Response resp = await http.post(
+        url,
+        body: JSONUtils().postBody(reqBody),
+        headers: {
+          AUTH_TOKEN: authToken,
+          CONTENT_TYPE_KEY: JSON_CONTENT_VALUE,
+        },
+      );
+
+      if (resp.statusCode == 200) {
+        Map respBody = json.decode(resp.body);
+        List users = respBody["users"];
+        List<ContactData> registerContacts = [];
+        users.forEach((userMap) {
+          UserDetails userDetails = UserDetails.fromMap(userMap["userDetails"]);
+          registerContacts.add(ContactData(
+              dialCode: userDetails.dialCode,
+              displayName: userDetails.firstName + " " + userDetails.lastName,
+              gender: userDetails.gender,
+              id: userDetails.id,
+              userId: userMap["id"],
+              isAppUser: true,
+              phoneNumber: userDetails.phoneNumber,
+              profilePicUrl: userDetails.profilePicUrl,
+              thumbnailUrl: userDetails.profilePicThumbnailUrl));
+        });
+
+        return registerContacts;
+      } else if (resp.statusCode == 403) {
+        return [];
+      } else if (resp.statusCode == 500) {
+        return [];
+      }
+
+      return [];
+    } catch (excp) {
+      print(excp);
+      return [];
     }
   }
 }

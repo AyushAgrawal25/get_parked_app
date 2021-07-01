@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ContactCard extends StatefulWidget {
-  ContactData contactData;
-  double amount;
+  final ContactData contactData;
+  final double amount;
 
   ContactCard({@required this.contactData, this.amount});
 

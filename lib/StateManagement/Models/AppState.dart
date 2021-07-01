@@ -193,9 +193,10 @@ class AppState extends ChangeNotifier {
   //Contacts Data
   List<ContactData> contacts = [];
   void setContacts(List<ContactData> gpContacts) {
-    this.contacts = ContactUtils().distinctPhoneNumbers(gpContacts);
-    this.contacts = ContactUtils().sort(this.contacts);
-
+    contacts = gpContacts;
+    contacts.sort((ContactData a, ContactData b) {
+      return a.displayName.compareTo(b.displayName);
+    });
     notifyListeners();
   }
 

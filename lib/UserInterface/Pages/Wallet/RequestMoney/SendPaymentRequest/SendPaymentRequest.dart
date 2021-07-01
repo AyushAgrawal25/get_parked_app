@@ -1,6 +1,8 @@
+import 'package:getparked/BussinessLogic/TransactionServices.dart';
 import 'package:getparked/StateManagement/Models/AppOverlayStyleData.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/ContactData.dart';
+import 'package:getparked/StateManagement/Models/TransactionRequestData.dart';
 import 'package:getparked/UserInterface/Widgets/DisplayPicture.dart';
 import 'package:getparked/UserInterface/Widgets/EdgeLessButton.dart';
 import 'package:getparked/UserInterface/Widgets/ErrorPopUp.dart';
@@ -317,10 +319,10 @@ class _RequestPaymentState extends State<RequestPayment> {
 
   onRequestFun() async {
     // TODO: uncomment..
-    // setState(() {
-    //   isLoading = true;
-    // });
-    // Navigator.pop(context);
+    setState(() {
+      isLoading = true;
+    });
+    Navigator.pop(context);
 
     // Map<String, dynamic> transactionRequest = {
     //   "fromUserId": gpAppState.userData.id,
@@ -342,10 +344,22 @@ class _RequestPaymentState extends State<RequestPayment> {
     //   isRequestSendSuccess = false;
     // }
 
-    // setState(() {
-    //   isLoading = false;
-    //   onRequestSent = true;
-    // });
+    TransactionRequestSendStatus requestStatus = await TransactionServices()
+        .moneyRequest(
+            authToken: gpAppState.authToken,
+            requestedFromUserId: widget.contactData.userId,
+            amount: double.parse(amount),
+            note: note);
+    if (requestStatus == TransactionRequestSendStatus.successful) {
+      isRequestSendSuccess = true;
+    } else {
+      isRequestSendSuccess = false;
+    }
+
+    setState(() {
+      isLoading = false;
+      onRequestSent = true;
+    });
   }
 
   showErrorDialog() {

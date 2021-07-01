@@ -41,7 +41,7 @@ dependencies:
 # Fonts
   google_fonts: ^2.1.0
 
-# PinCodeInput
+# Input
   pin_code_text_field: ^1.8.0
   pinput: ^1.2.0
 
@@ -51,6 +51,11 @@ dependencies:
   flutter_secure_storage: ^4.2.0
   folder_file_saver: ^1.0.0+2
 
+# Permissions
+  permission_handler: ^8.1.2
+
+# Contacts
+  contacts_service: ^0.6.1
 
 # Image
   flutter_svg: ^0.22.0
