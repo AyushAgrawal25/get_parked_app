@@ -43,9 +43,9 @@ List<NavigationModel> navigationSecondaryItems = [
   NavigationModel(
       title: "Settings", icon: FontAwesomeIcons.slidersH, route: "/Settings"),
   NavigationModel(
-      title: "Help And Feedback",
+      title: "Help And Support",
       icon: FontAwesomeIcons.comment,
-      route: "/HelpAndFeedback"),
+      route: "/HelpAndSupport"),
   NavigationModel(
       title: "About", icon: FontAwesomeIcons.infoCircle, route: "/About"),
 ];

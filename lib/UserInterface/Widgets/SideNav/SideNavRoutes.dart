@@ -1,14 +1,4 @@
-// import 'package:getparked/UserInterface/Pages/Vault/VaultPage.dart';
-// import 'package:getparked/UserInterface/Pages/Profile/ProfilePage.dart';
-// import 'package:getparked/UserInterface/Pages/Notifications/NotificationsPage.dart';
-// import 'package:getparked/UserInterface/Pages/RentOutSpace/RentOutSpaceFormsPage.dart';
-// import 'package:getparked/UserInterface/Pages/Wallet/WalletPage.dart';
-// import 'package:getparked/UserInterface/Pages/ParkingLord/ParkingLordPage.dart';
-// import 'package:getparked/UserInterface/Pages/ParkingLordSettings/ParkingLordSettingsPage.dart';
-// import 'package:getparked/UserInterface/Pages/LiveSlot/LiveSlotPage.dart';
-// import 'package:getparked/UserInterface/Pages/About/AboutPage.dart';
-// import 'package:getparked/UserInterface/Pages/Settings/SettingsPage.dart';
-// import 'package:getparked/UserInterface/Pages/HelpAndFeedback/HelpAndFeedbackPage.dart';
+import 'package:getparked/UserInterface/Pages/HelpAndSupport/HelpAndSupportPage.dart';
 import 'package:getparked/UserInterface/Pages/Notifications/NotificationsPage.dart';
 import 'package:getparked/UserInterface/Pages/ParkingLord/ParkingLordPage.dart';
 import 'package:getparked/UserInterface/Pages/Profile/ProfilePage.dart';
@@ -122,16 +112,16 @@ class SideNavRoutes {
       //       SailorTransition.fade_in
       //     ],
       //     defaultTransitionDuration: Duration(milliseconds: 250)),
-      // SailorRoute(
-      //     name: '/HelpAndFeedback',
-      //     builder: (context, args, paramMap) {
-      //       return HelpAndFeedbackPage();
-      //     },
-      //     defaultTransitions: [
-      //       SailorTransition.slide_from_left,
-      //       SailorTransition.fade_in
-      //     ],
-      //     defaultTransitionDuration: Duration(milliseconds: 250)),
+      SailorRoute(
+          name: '/HelpAndSupport',
+          builder: (context, args, paramMap) {
+            return HelpAndSupportPage();
+          },
+          defaultTransitions: [
+            SailorTransition.slide_from_left,
+            SailorTransition.fade_in
+          ],
+          defaultTransitionDuration: Duration(milliseconds: 250)),
       // SailorRoute(
       //     name: '/About',
       //     builder: (context, args, paramMap) {

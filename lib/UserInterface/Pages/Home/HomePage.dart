@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:getparked/BussinessLogic/FAQsServices.dart';
 import 'package:getparked/BussinessLogic/NotificationServices.dart';
 import 'package:getparked/BussinessLogic/SlotsServices.dart';
 import 'package:getparked/BussinessLogic/TransactionServices.dart';
@@ -512,8 +513,6 @@ class _HomePageState extends State<HomePage> {
                         //     return IconTestPage();
                         //   },
                         // ));
-
-                        ContactUtils().init(authToken: gpAppState.authToken);
 
                         // Navigator.of(context).push(MaterialPageRoute(
                         //   builder: (context) {
