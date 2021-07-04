@@ -20,12 +20,13 @@ class FAQData {
   }
 
   bool isUserUpvoted(int userId) {
+    bool isUpVoted = false;
     upvotes.forEach((element) {
       if (element["userId"] == userId) {
-        return true;
+        isUpVoted = true;
       }
     });
 
-    return false;
+    return isUpVoted;
   }
 }

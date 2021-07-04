@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
+import 'package:getparked/BussinessLogic/FAQsServices.dart';
+import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/FAQData.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';
 import 'package:getparked/UserInterface/Widgets/qbFAB.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class FAQWidget extends StatefulWidget {
   final FAQData faqData;
@@ -16,6 +19,18 @@ class FAQWidget extends StatefulWidget {
 class _FAQWidgetState extends State<FAQWidget> {
   bool isOpen = false;
   bool isDiscriptionOpen = false;
+
+  bool isLoading = false;
+  bool isUpVoted = false;
+
+  AppState appState;
+  @override
+  void initState() {
+    super.initState();
+
+    appState = Provider.of<AppState>(context, listen: false);
+    isUpVoted = widget.faqData.isUserUpvoted(appState.userData.id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,13 +180,15 @@ class _FAQWidgetState extends State<FAQWidget> {
             bottom: 0,
             right: MediaQuery.of(context).size.width * 0.125,
             child: QbFAB(
-              size: 42.5,
+              size: 37.5,
               color: qbAppPrimaryThemeColor,
               child: Container(
                 child: Icon(
-                  FontAwesome5.chevron_down,
+                  (isOpen)
+                      ? FontAwesome5.chevron_up
+                      : FontAwesome5.chevron_down,
                   color: qbWhiteBGColor,
-                  size: 17.5,
+                  size: 16,
                 ),
               ),
               onPressed: () {
@@ -182,8 +199,58 @@ class _FAQWidgetState extends State<FAQWidget> {
                   }
                 });
               },
-            ))
+            )),
+
+        (!isUpVoted)
+            ? Positioned(
+                bottom: 0,
+                left: 80,
+                child: QbFAB(
+                  size: 37.5,
+                  color: qbAppPrimaryThemeColor,
+                  child: Container(
+                    child: (isLoading)
+                        ? Container(
+                            height: 16,
+                            width: 16,
+                            child: CircularProgressIndicator(
+                              color: qbWhiteBGColor,
+                              strokeWidth: 2.5,
+                            ),
+                          )
+                        : Icon(
+                            FontAwesome.thumbs_up,
+                            color: qbWhiteBGColor,
+                            size: 16,
+                          ),
+                  ),
+                  onPressed: onFAQUpVote,
+                ))
+            : Container(
+                height: 0,
+                width: 0,
+              ),
       ],
     );
+  }
+
+  onFAQUpVote() async {
+    if (isLoading) {
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+    });
+    FAQUpVoteStatus upVoteStatus = await FAQsServices()
+        .upVote(authToken: appState.authToken, faqId: widget.faqData.id);
+
+    if (upVoteStatus == FAQUpVoteStatus.successful) {
+      isUpVoted = true;
+    }
+
+    setState(() {
+      isLoading = false;
+    });
   }
 }

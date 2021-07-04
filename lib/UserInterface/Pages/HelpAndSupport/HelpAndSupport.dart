@@ -3,10 +3,13 @@ import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:getparked/BussinessLogic/FAQsServices.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/FAQData.dart';
+import 'package:getparked/UserInterface/Pages/HelpAndSupport/ContactUs/ContactUsPage.dart';
 import 'package:getparked/UserInterface/Pages/HelpAndSupport/FAQWidgets/FAQWidget.dart';
 import 'package:getparked/UserInterface/Pages/HelpAndSupport/HelpAndSupportPage.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';
+import 'package:getparked/UserInterface/Widgets/EdgeLessButton.dart';
 import 'package:getparked/UserInterface/Widgets/Loaders/LoaderPage.dart';
+import 'package:getparked/UserInterface/Widgets/qbFAB.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -73,6 +76,29 @@ class _HelpAndSupportState extends State<HelpAndSupport> {
                 },
               ),
             ),
+            Positioned(
+                right: 25,
+                bottom: 25,
+                child: EdgeLessButton(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                    child: Text(
+                      "Contact Us",
+                      style: GoogleFonts.nunito(
+                          fontSize: 17.5,
+                          fontWeight: FontWeight.w600,
+                          color: qbWhiteBGColor),
+                      textScaleFactor: 1.0,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) {
+                        return ContactUsPage();
+                      },
+                    ));
+                  },
+                )),
             (isLoading)
                 ? LoaderPage()
                 : Container(
