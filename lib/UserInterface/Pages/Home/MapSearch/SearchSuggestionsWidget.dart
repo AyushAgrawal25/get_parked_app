@@ -58,12 +58,13 @@ class _SearchSuggestionsWidgetState extends State<SearchSuggestionsWidget> {
   }
 
   initializeMapPlacesForCity() async {
-    print(gpAppState.mapPlacesForSearch);
-    if (gpAppState.mapPlacesForSearch == null) {
-      MapPlacesSearchResult gpMapPlacesSearchResult =
-          await MapPlacesUtils().getPlacesOnCityBasis(gpAppState.authToken);
-      gpAppState.setMapPlacesForSearch(gpMapPlacesSearchResult);
-    }
+    // TODO: uncomment this if required.
+    // print(gpAppState.mapPlacesForSearch);
+    // if (gpAppState.mapPlacesForSearch == null) {
+    //   MapPlacesSearchResult gpMapPlacesSearchResult =
+    //       await MapPlacesUtils().getPlacesOnCityBasis(gpAppState.authToken);
+    //   gpAppState.setMapPlacesForSearch(gpMapPlacesSearchResult);
+    // }
   }
 
   MapPlacesSearchResult gpMapPlacesSearchResult;
@@ -71,23 +72,24 @@ class _SearchSuggestionsWidgetState extends State<SearchSuggestionsWidget> {
   List<SearchSuggestionCard> gpSearchSuggestionCards = [];
 
   searchFromDB() {
-    print("API Called For $gpSearchText");
-    if ((gpSearchText != null) &&
-        (gpSearchText != "") &&
-        (gpAppState.isInternetConnected)) {
-      pendingAPICalls++;
-      MapPlacesUtils()
-          .searchFasterFromDB(gpAppState.authToken, gpSearchText)
-          .then((MapPlacesSearchResult gpNewMapPlacesSearchResult) {
-        if (gpNewMapPlacesSearchResult != null) {
-          gpMapPlacesSearchResult = gpNewMapPlacesSearchResult;
-        }
+    // TODO: uncomment this if required.
+    // print("API Called For $gpSearchText");
+    // if ((gpSearchText != null) &&
+    //     (gpSearchText != "") &&
+    //     (gpAppState.isInternetConnected)) {
+    //   pendingAPICalls++;
+    //   MapPlacesUtils()
+    //       .searchFasterFromDB(gpAppState.authToken, gpSearchText)
+    //       .then((MapPlacesSearchResult gpNewMapPlacesSearchResult) {
+    //     if (gpNewMapPlacesSearchResult != null) {
+    //       gpMapPlacesSearchResult = gpNewMapPlacesSearchResult;
+    //     }
 
-        pendingAPICalls--;
-      }).catchError((err) {
-        print("From Search From DB Function API Call " + err.toString());
-      });
-    }
+    //     pendingAPICalls--;
+    //   }).catchError((err) {
+    //     print("From Search From DB Function API Call " + err.toString());
+    //   });
+    // }
   }
 
   onSearch(CameraPosition gpCamPos) {

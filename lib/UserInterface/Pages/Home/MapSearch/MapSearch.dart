@@ -77,66 +77,68 @@ class _MapSearchPageState extends State<MapSearchPage> {
   }
 
   searchFromDB() {
-    pendingAPICalls++;
-    print("API Called For $gpSearchText");
-    if ((gpSearchText != null) &&
-        (gpSearchText != "") &&
-        (gpAppState.isInternetConnected)) {
-      MapPlacesUtils()
-          .searchFasterFromDB(gpAppState.authToken, gpSearchText)
-          .then((MapPlacesSearchResult gpNewMapPlacesSearchResult) {
-        if (gpFinalMapPlacesSearchResult != null) {
-          if (gpNewMapPlacesSearchResult != null) {
-            gpFinalMapPlacesSearchResult = MapPlacesUtils()
-                .mergeTwoMapPlacesSearchResult(
-                    gpFinalMapPlacesSearchResult, gpNewMapPlacesSearchResult);
-          }
-        } else {
-          if (gpNewMapPlacesSearchResult != null) {
-            gpFinalMapPlacesSearchResult = MapPlacesUtils()
-                .mergeTwoMapPlacesSearchResult(
-                    gpAppState.mapPlacesForSearch, gpNewMapPlacesSearchResult);
-          } else {
-            gpFinalMapPlacesSearchResult = gpAppState.mapPlacesForSearch;
-          }
-        }
+    // TODO: uncomment this is required.
+    // pendingAPICalls++;
+    // print("API Called For $gpSearchText");
+    // if ((gpSearchText != null) &&
+    //     (gpSearchText != "") &&
+    //     (gpAppState.isInternetConnected)) {
+    //   MapPlacesUtils()
+    //       .searchFasterFromDB(gpAppState.authToken, gpSearchText)
+    //       .then((MapPlacesSearchResult gpNewMapPlacesSearchResult) {
+    //     if (gpFinalMapPlacesSearchResult != null) {
+    //       if (gpNewMapPlacesSearchResult != null) {
+    //         gpFinalMapPlacesSearchResult = MapPlacesUtils()
+    //             .mergeTwoMapPlacesSearchResult(
+    //                 gpFinalMapPlacesSearchResult, gpNewMapPlacesSearchResult);
+    //       }
+    //     } else {
+    //       if (gpNewMapPlacesSearchResult != null) {
+    //         gpFinalMapPlacesSearchResult = MapPlacesUtils()
+    //             .mergeTwoMapPlacesSearchResult(
+    //                 gpAppState.mapPlacesForSearch, gpNewMapPlacesSearchResult);
+    //       } else {
+    //         gpFinalMapPlacesSearchResult = gpAppState.mapPlacesForSearch;
+    //       }
+    //     }
 
-        pendingAPICalls--;
-        gpAppState.setMapPlacesForSearch(gpFinalMapPlacesSearchResult);
-      });
-    }
+    //     pendingAPICalls--;
+    //     gpAppState.setMapPlacesForSearch(gpFinalMapPlacesSearchResult);
+    //   });
+    // }
   }
 
   setSearchSuggestionCards(mapPlacesSearchResult) {
-    gpSearchSuggestionCards = [];
-    if ((gpSearchText != null) &&
-        (gpSearchText != "") &&
-        (mapPlacesSearchResult != null)) {
-      // Search On Search Text
-      MapPlacesSearchResult gpMapPlacesSearchResultAfterWordSearched =
-          MapPlacesUtils().search(mapPlacesSearchResult, gpSearchText);
+    // TODO: uncomment this if required.
+    // gpSearchSuggestionCards = [];
+    // if ((gpSearchText != null) &&
+    //     (gpSearchText != "") &&
+    //     (mapPlacesSearchResult != null)) {
+    //   // Search On Search Text
+    //   MapPlacesSearchResult gpMapPlacesSearchResultAfterWordSearched =
+    //       MapPlacesUtils().search(mapPlacesSearchResult, gpSearchText);
 
-      // Sorting On The Basis Of Name
-      gpMapPlacesSearchResultAfterWordSearched.sortingOnBasisOfName();
+    //   // Sorting On The Basis Of Name
+    //   gpMapPlacesSearchResultAfterWordSearched.sortingOnBasisOfName();
 
-      // Searching And Sorting Both at a time
-      gpMapPlacesList = MapPlacesUtils().getSearchAndSortedList(
-          gpMapPlacesSearchResultAfterWordSearched, gpSearchText);
+    //   // Searching And Sorting Both at a time
+    //   gpMapPlacesList = MapPlacesUtils().getSearchAndSortedList(
+    //       gpMapPlacesSearchResultAfterWordSearched, gpSearchText);
 
-      int iterationNumber =
-          (gpMapPlacesList.length > 50) ? 50 : gpMapPlacesList.length;
-      // Creating Cards
-      for (int i = 0; i < iterationNumber; i++) {
-        gpSearchSuggestionCards.add(SearchSuggestionCard(
-          searchSuggestionData: gpMapPlacesList[i].createSearchSuggestionData(),
-          searchText: gpSearchText,
-          onPressed: (CameraPosition gpCamPos) {
-            Navigator.of(context).pop();
-            onSearch(gpCamPos);
-          },
-        ));
-      }
-    }
+    //   int iterationNumber =
+    //       (gpMapPlacesList.length > 50) ? 50 : gpMapPlacesList.length;
+    //   // Creating Cards
+    //   for (int i = 0; i < iterationNumber; i++) {
+    //     gpSearchSuggestionCards.add(SearchSuggestionCard(
+    //       searchSuggestionData: gpMapPlacesList[i].createSearchSuggestionData(),
+    //       searchText: gpSearchText,
+    //       onPressed: (CameraPosition gpCamPos) {
+    //         Navigator.of(context).pop();
+    //         onSearch(gpCamPos);
+    //       },
+    //     ));
+    //   }
+    // }
   }
 
   onSearch(CameraPosition gpCamPos) {
@@ -155,13 +157,14 @@ class _MapSearchPageState extends State<MapSearchPage> {
             LatLng(placemark.position.latitude, placemark.position.longitude),
         zoom: 15));
 
-    if (placemarks != null) {
-      placemarks.forEach((placeMark) {
-        print(placeMark.name);
-        PlacesApiUtils().postingPlaceDataWithDifferentName(
-            placeMark, StringUtils.toFirstLetterUpperCase(gpSearchText));
-      });
-    }
+    // TODO: uncomment this if required.
+    // if (placemarks != null) {
+    //   placemarks.forEach((placeMark) {
+    //     print(placeMark.name);
+    //     PlacesApiUtils().postingPlaceDataWithDifferentName(
+    //         placeMark, StringUtils.toFirstLetterUpperCase(gpSearchText));
+    //   });
+    // }
   }
 
   @override

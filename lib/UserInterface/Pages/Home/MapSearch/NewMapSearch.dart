@@ -181,15 +181,16 @@ class _NewMapSearchPageState extends State<NewMapSearchPage> {
             LatLng(placemark.position.latitude, placemark.position.longitude),
         zoom: 15));
 
-    if (placemarks != null) {
-      placemarks.forEach((placeMark) {
-        print(placeMark.name);
-        PlacesDataCollection().postingPlacemarkForDiifName(
-          placeMark,
-          StringUtils.toFirstLetterUpperCase(gpSearchText),
-        );
-      });
-    }
+    // TODO: uncomment this if required.
+    // if (placemarks != null) {
+    //   placemarks.forEach((placeMark) {
+    //     print(placeMark.name);
+    //     PlacesDataCollection().postingPlacemarkForDiifName(
+    //       placeMark,
+    //       StringUtils.toFirstLetterUpperCase(gpSearchText),
+    //     );
+    //   });
+    // }
   }
 
   onSearch(CameraPosition gpCamPos) {

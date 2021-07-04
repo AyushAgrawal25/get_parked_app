@@ -52,7 +52,6 @@ class FAQsServices {
             CONTENT_TYPE_KEY: JSON_CONTENT_VALUE
           });
 
-      print(resp.body);
       if (resp.statusCode == 200) {
         return FAQUpVoteStatus.successful;
       } else if (resp.statusCode == 403) {

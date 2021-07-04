@@ -3,6 +3,7 @@ import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/SlotData.dart';
 import 'package:getparked/UserInterface/Icons/g_p_icons_icons.dart';
 import 'package:getparked/UserInterface/Widgets/ErrorPopUp.dart';
+import 'package:getparked/UserInterface/Widgets/FormFieldHeader.dart';
 import 'package:provider/provider.dart';
 import '../../../Theme/AppOverlayStyle.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';
@@ -340,13 +341,18 @@ class _ParkingSlotSpecsState extends State<ParkingSlotSpecs> {
           Container(
             margin: EdgeInsets.symmetric(horizontal: 15),
             alignment: Alignment.centerLeft,
-            child: Text(
-              "Parking Dimensions",
-              style: GoogleFonts.nunito(
-                  fontSize: 17.5,
-                  fontWeight: FontWeight.w700,
-                  color: qbAppTextColor),
-              textScaleFactor: 1,
+            child: FormFieldHeader(
+              headerText: "Parking Dimensions",
+              fontSize: 17.5,
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 15),
+            alignment: Alignment.centerLeft,
+            child: FormFieldHeader(
+              headerText: "Fill Length, Breadth and Height of your space.",
+              fontSize: 12.5,
+              color: qbDetailLightColor,
             ),
           ),
 

@@ -200,12 +200,11 @@ class _FAQWidgetState extends State<FAQWidget> {
                 });
               },
             )),
-
-        (!isUpVoted)
-            ? Positioned(
-                bottom: 0,
-                left: 80,
-                child: QbFAB(
+        Positioned(
+          bottom: 0,
+          left: 80,
+          child: (!isUpVoted)
+              ? QbFAB(
                   size: 37.5,
                   color: qbAppPrimaryThemeColor,
                   child: Container(
@@ -225,11 +224,28 @@ class _FAQWidgetState extends State<FAQWidget> {
                           ),
                   ),
                   onPressed: onFAQUpVote,
-                ))
-            : Container(
-                height: 0,
-                width: 0,
-              ),
+                )
+              : Container(
+                  height: 37.5,
+                  alignment: Alignment.center,
+                  child: Container(
+                    height: 25,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(360),
+                        color: qbAppPrimaryThemeColor),
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: Text(
+                      "Up voted",
+                      style: GoogleFonts.roboto(
+                          fontSize: 13.5,
+                          fontWeight: FontWeight.w400,
+                          color: qbWhiteBGColor),
+                      textScaleFactor: 1.0,
+                    ),
+                  ),
+                ),
+        )
       ],
     );
   }
