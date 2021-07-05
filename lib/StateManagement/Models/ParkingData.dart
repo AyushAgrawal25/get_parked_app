@@ -1,4 +1,5 @@
 import 'package:getparked/StateManagement/Models/BookingData.dart';
+import 'package:getparked/StateManagement/Models/ParkingRatingReviewData.dart';
 import 'package:getparked/StateManagement/Models/SlotData.dart';
 import 'package:getparked/StateManagement/Models/UserDetails.dart';
 import 'package:getparked/StateManagement/Models/VehicleData.dart';
@@ -25,6 +26,8 @@ class ParkingData {
   String withdrawOTP;
   SlotSpaceType spaceType;
   int parkingHours;
+
+  ParkingRatingReviewData ratingReviewData;
 
   // Complete Data
   Map data;
@@ -81,6 +84,11 @@ class ParkingData {
     withdrawOTP = parkingMap["withdrawOTP"];
     parkingHours = parkingMap["parkingHours"];
     spaceType = SlotDataUtils.getSpaceTypeFromString(parkingMap["spaceType"]);
+
+    if (parkingMap["slotRatingReview"] != null) {
+      ratingReviewData =
+          ParkingRatingReviewData.fromMap(parkingMap["slotRatingReview"]);
+    }
 
     data = parkingMap;
 

@@ -285,6 +285,7 @@ class _GPMapState extends State<GPMap> {
             zoomControlsEnabled: false,
             compassEnabled: false,
             liteModeEnabled: false,
+            // There occurs an error due to marker data null solve it.
             markers:
                 (mapMarkers != null) ? Set.from(mapMarkers) : Set<Marker>()));
   }

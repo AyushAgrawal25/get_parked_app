@@ -3,6 +3,7 @@ import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/BookingData.dart';
 import 'package:getparked/StateManagement/Models/NotificationData.dart';
 import 'package:getparked/StateManagement/Models/ParkingData.dart';
+import 'package:getparked/StateManagement/Models/ParkingRatingReviewData.dart';
 import 'package:getparked/StateManagement/Models/ParkingRequestData.dart';
 import 'package:getparked/StateManagement/Models/VehicleData.dart';
 import 'package:getparked/UserInterface/Widgets/ParkingDetailsPage/ParkingActionButtons/CancelBookingButton.dart';
@@ -19,6 +20,7 @@ import 'package:getparked/UserInterface/Widgets/ParkingDetailsPage/ParkingDetail
 import 'package:getparked/UserInterface/Widgets/ParkingDetailsPage/ParkingDetailsWidgets/ParkingDurationWidget.dart';
 import 'package:getparked/UserInterface/Widgets/ParkingDetailsPage/ParkingDetailsWidgets/ParkingExtraDetailsWidget.dart';
 import 'package:getparked/UserInterface/Widgets/ParkingDetailsPage/ParkingDetailsWidgets/VehicleDetailWidget.dart';
+import 'package:getparked/UserInterface/Widgets/ParkingDetailsPage/RatingReviewWidgets/RatingReviewWidget.dart';
 import 'package:getparked/UserInterface/Widgets/SlotInfoWidget.dart';
 import 'package:getparked/UserInterface/Widgets/UserInfoWidget.dart';
 import 'package:flutter/material.dart';
@@ -878,6 +880,46 @@ class _ParkingDetailsPageState extends State<ParkingDetailsPage> {
     }
   }
 
+  Widget ratingReviewWidget = Container();
+  setRatingReviewWidget() {
+    int parkingId;
+    SlotData slotData;
+    VehicleType vehicleType;
+
+    ParkingRatingReviewData ratingReviewData;
+    if (widget.notificationType == null) {
+      if (this.gpParkingRequestData.getParkingRequestDataType() ==
+          ParkingRequestDataType.booked_ParkedAndWithdrawn) {
+        ratingReviewData =
+            this.gpParkingRequestData.bookingData.parkingData.ratingReviewData;
+        parkingId = this.gpParkingRequestData.bookingData.parkingData.id;
+        slotData = gpSlotData;
+        vehicleType = parkingVehicleData.type;
+      }
+    } else {
+      if ((widget.notificationType == NotificationDataType.parking_ForSlot) ||
+          (widget.notificationType == NotificationDataType.parking_ForUser) ||
+          (widget.notificationType ==
+              NotificationDataType.parkingWithdraw_ForSlot) ||
+          (widget.notificationType ==
+              NotificationDataType.parkingWithdraw_ForUser)) {
+        if (widget.parking.getParkingDataType() == ParkingDataType.completed) {
+          ratingReviewData = widget.booking.parkingData.ratingReviewData;
+          parkingId = widget.booking.parkingData.id;
+          slotData = gpSlotData;
+          vehicleType = parkingVehicleData.type;
+        }
+      }
+    }
+    ratingReviewWidget = RatingReviewWidget(
+      ratingReviewData: ratingReviewData,
+      parkingId: parkingId,
+      slotData: slotData,
+      accType: widget.accType,
+      vehicleType: vehicleType,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     setUpNewUIOnUpdate();
@@ -891,6 +933,7 @@ class _ParkingDetailsPageState extends State<ParkingDetailsPage> {
     setParkingDetailsWidget();
     setParkingChargesWidget();
     setBookingDurationWidget();
+    setRatingReviewWidget();
     AppState gpAppStateListen = Provider.of<AppState>(context);
     return Container(
       color: qbWhiteBGColor,
@@ -946,6 +989,9 @@ class _ParkingDetailsPageState extends State<ParkingDetailsPage> {
                           Container(
                               padding: EdgeInsets.symmetric(vertical: 25),
                               child: statusOrActionButton),
+
+                          // Rating Review Widget
+                          ratingReviewWidget,
 
                           // Parking Extra Details
                           Divider(

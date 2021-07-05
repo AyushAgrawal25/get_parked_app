@@ -6,10 +6,10 @@ import '../../Theme/AppTheme.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RatingWidget extends StatefulWidget {
-  double ratingValue;
-  double fontSize;
-  double iconSize;
-  bool toShowRatingText;
+  final double ratingValue;
+  final double fontSize;
+  final double iconSize;
+  final bool toShowRatingText;
 
   RatingWidget(
       {@required this.ratingValue,
@@ -72,7 +72,7 @@ class _RatingWidgetState extends State<RatingWidget> {
       }
 
       ratingWidget = Container(
-        child: Row(children: qbRatingWidget),
+        child: Row(mainAxisSize: MainAxisSize.min, children: qbRatingWidget),
       );
     }
 
