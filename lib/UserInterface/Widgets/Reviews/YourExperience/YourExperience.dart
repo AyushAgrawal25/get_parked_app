@@ -198,7 +198,6 @@ class _YourExperienceState extends State<YourExperience> {
   bool isLoading = false;
 
   onContinuePressed() async {
-    // TODO: Uncomment when ready.
     if (gpRatingValue == 0) {
       FlushBarUtils.showTextResponsive(
           context, "Rate please..", "Your rating is helpful.");
