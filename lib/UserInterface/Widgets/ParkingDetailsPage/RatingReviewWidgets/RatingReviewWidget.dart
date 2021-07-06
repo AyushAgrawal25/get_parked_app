@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:getparked/StateManagement/Models/ParkingRatingReviewData.dart';
+import 'package:getparked/StateManagement/Models/RatingReviewData.dart';
 import 'package:getparked/StateManagement/Models/SlotData.dart';
 import 'package:getparked/StateManagement/Models/VehicleData.dart';
+import 'package:getparked/StateManagement/Models/VehicleTypeData.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';
 import 'package:getparked/UserInterface/Widgets/EdgeLessButton.dart';
 import 'package:getparked/UserInterface/Widgets/ParkingCard/ParkingCard.dart';
@@ -10,7 +12,7 @@ import 'package:getparked/UserInterface/Widgets/Reviews/YourExperience/YourExper
 import 'package:google_fonts/google_fonts.dart';
 
 class RatingReviewWidget extends StatefulWidget {
-  final ParkingRatingReviewData ratingReviewData;
+  final RatingReviewData ratingReviewData;
   final SlotData slotData;
   final VehicleType vehicleType;
   final int parkingId;

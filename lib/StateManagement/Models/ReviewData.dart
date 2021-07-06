@@ -1,4 +1,5 @@
 import 'package:getparked/StateManagement/Models/VehicleData.dart';
+import 'package:getparked/StateManagement/Models/VehicleTypeData.dart';
 import 'package:getparked/Utils/VehiclesUtils.dart';
 import 'package:getparked/StateManagement/Models/UserDetails.dart';
 

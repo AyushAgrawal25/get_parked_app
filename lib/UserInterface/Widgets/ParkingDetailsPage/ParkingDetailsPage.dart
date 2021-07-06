@@ -5,7 +5,9 @@ import 'package:getparked/StateManagement/Models/NotificationData.dart';
 import 'package:getparked/StateManagement/Models/ParkingData.dart';
 import 'package:getparked/StateManagement/Models/ParkingRatingReviewData.dart';
 import 'package:getparked/StateManagement/Models/ParkingRequestData.dart';
+import 'package:getparked/StateManagement/Models/RatingReviewData.dart';
 import 'package:getparked/StateManagement/Models/VehicleData.dart';
+import 'package:getparked/StateManagement/Models/VehicleTypeData.dart';
 import 'package:getparked/UserInterface/Widgets/ParkingDetailsPage/ParkingActionButtons/CancelBookingButton.dart';
 import 'package:getparked/UserInterface/Widgets/ParkingDetailsPage/ParkingActionButtons/BookNowButton.dart';
 import 'package:getparked/UserInterface/Widgets/ParkingDetailsPage/ParkingActionButtons/EnterOTPButton.dart';
@@ -886,7 +888,7 @@ class _ParkingDetailsPageState extends State<ParkingDetailsPage> {
     SlotData slotData;
     VehicleType vehicleType;
 
-    ParkingRatingReviewData ratingReviewData;
+    RatingReviewData ratingReviewData;
     if (widget.notificationType == null) {
       if (this.gpParkingRequestData.getParkingRequestDataType() ==
           ParkingRequestDataType.booked_ParkedAndWithdrawn) {

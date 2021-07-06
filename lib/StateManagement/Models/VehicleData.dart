@@ -36,45 +36,11 @@ class VehicleData {
   }
 
   String getTypeValue() {
-    String tmId = "BIKE";
-    switch (type) {
-      case VehicleType.bike:
-        tmId = "BIKE";
-        break;
-      case VehicleType.mini:
-        tmId = "MINI";
-        break;
-      case VehicleType.sedan:
-        tmId = "SEDAN";
-        break;
-      case VehicleType.van:
-        tmId = "VAN";
-        break;
-      case VehicleType.suv:
-        tmId = "SUV";
-        break;
-    }
-    return tmId;
+    return VehicleTypeUtils.getTypeAsString(type);
   }
 
   setType(String typeValue) {
-    switch (typeValue) {
-      case "BIKE":
-        type = VehicleType.bike;
-        break;
-      case "MINI":
-        type = VehicleType.mini;
-        break;
-      case "SEDAN":
-        type = VehicleType.sedan;
-        break;
-      case "VAN":
-        type = VehicleType.van;
-        break;
-      case "SUV":
-        type = VehicleType.suv;
-        break;
-    }
+    type = VehicleTypeUtils.getTypeFromString(typeValue);
   }
 
   VehicleData(
@@ -105,5 +71,3 @@ class VehicleData {
 }
 
 class VehicleDataUtils {}
-
-enum VehicleType { bike, mini, sedan, van, suv }

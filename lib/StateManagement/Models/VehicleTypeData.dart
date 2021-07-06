@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:getparked/StateManagement/Models/VehicleData.dart';
 
 class VehicleTypeData {
@@ -59,3 +60,52 @@ class VehicleTypeData {
     status = vehicleTypeData["status"];
   }
 }
+
+class VehicleTypeUtils {
+  static VehicleType getTypeFromString(String typeValue) {
+    VehicleType type;
+    switch (typeValue) {
+      case "BIKE":
+        type = VehicleType.bike;
+        break;
+      case "MINI":
+        type = VehicleType.mini;
+        break;
+      case "SEDAN":
+        type = VehicleType.sedan;
+        break;
+      case "VAN":
+        type = VehicleType.van;
+        break;
+      case "SUV":
+        type = VehicleType.suv;
+        break;
+    }
+
+    return type;
+  }
+
+  static String getTypeAsString(VehicleType type) {
+    String typeValue = "BIKE";
+    switch (type) {
+      case VehicleType.bike:
+        typeValue = "BIKE";
+        break;
+      case VehicleType.mini:
+        typeValue = "MINI";
+        break;
+      case VehicleType.sedan:
+        typeValue = "SEDAN";
+        break;
+      case VehicleType.van:
+        typeValue = "VAN";
+        break;
+      case VehicleType.suv:
+        typeValue = "SUV";
+        break;
+    }
+    return typeValue;
+  }
+}
+
+enum VehicleType { bike, mini, sedan, van, suv }

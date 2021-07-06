@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:getparked/BussinessLogic/UserServices.dart';
 import 'package:getparked/StateManagement/Models/ParkingRatingReviewData.dart';
 import 'package:getparked/StateManagement/Models/RatingReviewData.dart';
+import 'package:getparked/StateManagement/Models/VehicleRatingReviewData.dart';
 import 'package:getparked/Utils/DomainUtils.dart';
 import 'package:getparked/Utils/JSONUtils.dart';
 import 'package:getparked/Utils/SecureStorageUtils.dart';
@@ -12,7 +13,7 @@ import 'package:http/http.dart' as http;
 const String SLOTS_RATING_REVIEWS_ROUTE = "/app/slots/ratingsReviews";
 
 class RatingsReviewsServices {
-  Future<ParkingRatingReviewData> rateSlot(
+  Future<RatingReviewData> rateSlot(
       {@required int parkingId,
       @required int ratingValue,
       @required String authToken,
@@ -34,12 +35,39 @@ class RatingsReviewsServices {
       print(resp.body);
       if (resp.statusCode == 200) {
         Map ratingReview = json.decode(resp.body)["data"];
-        return ParkingRatingReviewData.fromMap(ratingReview);
+        return RatingReviewData.fromMap(ratingReview);
       }
       return null;
     } catch (excp) {
       print(excp);
       return null;
+    }
+  }
+
+  Future<List<VehicleRatingReviewData>> getRatingReviews(
+      {@required int slotId, @required String authToken}) async {
+    try {
+      Uri url = Uri.parse(domainName + SLOTS_RATING_REVIEWS_ROUTE + "/$slotId");
+      http.Response resp =
+          await http.get(url, headers: {AUTH_TOKEN: authToken});
+      if (resp.statusCode == 200) {
+        List vehicleMaps = json.decode(resp.body)["data"];
+        List<VehicleRatingReviewData> vehicleReviewsData = [];
+        vehicleMaps.forEach((vehicleRatingReviewMap) {
+          print(vehicleRatingReviewMap);
+          vehicleReviewsData
+              .add(VehicleRatingReviewData.fromMap(vehicleRatingReviewMap));
+        });
+
+        return vehicleReviewsData;
+      } else if (resp.statusCode == 403) {
+        return [];
+      } else if (resp.statusCode == 500) {
+        return [];
+      }
+    } catch (excp) {
+      print(excp);
+      return [];
     }
   }
 }

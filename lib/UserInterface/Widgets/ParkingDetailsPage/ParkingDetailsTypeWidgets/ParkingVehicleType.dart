@@ -1,4 +1,5 @@
 import 'package:getparked/StateManagement/Models/VehicleData.dart';
+import 'package:getparked/StateManagement/Models/VehicleTypeData.dart';
 import 'package:getparked/UserInterface/Icons/g_p_icons_icons.dart';
 import 'package:getparked/UserInterface/Widgets/CustomIcon.dart';
 import 'package:flutter/material.dart';

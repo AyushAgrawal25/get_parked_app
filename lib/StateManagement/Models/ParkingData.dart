@@ -1,5 +1,6 @@
 import 'package:getparked/StateManagement/Models/BookingData.dart';
 import 'package:getparked/StateManagement/Models/ParkingRatingReviewData.dart';
+import 'package:getparked/StateManagement/Models/RatingReviewData.dart';
 import 'package:getparked/StateManagement/Models/SlotData.dart';
 import 'package:getparked/StateManagement/Models/UserDetails.dart';
 import 'package:getparked/StateManagement/Models/VehicleData.dart';
@@ -27,7 +28,7 @@ class ParkingData {
   SlotSpaceType spaceType;
   int parkingHours;
 
-  ParkingRatingReviewData ratingReviewData;
+  RatingReviewData ratingReviewData;
 
   // Complete Data
   Map data;
@@ -87,7 +88,7 @@ class ParkingData {
 
     if (parkingMap["slotRatingReview"] != null) {
       ratingReviewData =
-          ParkingRatingReviewData.fromMap(parkingMap["slotRatingReview"]);
+          RatingReviewData.fromMap(parkingMap["slotRatingReview"]);
     }
 
     data = parkingMap;

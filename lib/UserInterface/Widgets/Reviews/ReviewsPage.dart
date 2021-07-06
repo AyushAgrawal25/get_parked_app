@@ -1,15 +1,18 @@
 // TODO: create this page.
 // import 'package:getparked/BussinessLogic/RatingsAndReviewsUtils.dart';
+import 'package:getparked/BussinessLogic/RatingsReviewsServices.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/RatingReviewData.dart';
 import 'package:getparked/StateManagement/Models/ReviewData.dart';
-import 'package:getparked/UserInterface/Widgets/Reviews/Reviews.dart';
+import 'package:getparked/StateManagement/Models/VehicleRatingReviewData.dart';
+import 'package:getparked/UserInterface/Widgets/Loaders/LoaderPage.dart';
 import 'package:getparked/UserInterface/Widgets/Reviews/OldReviews.dart';
 import 'package:flutter/material.dart';
+import 'package:getparked/UserInterface/Widgets/Reviews/ReviewsNew.dart';
 import 'package:provider/provider.dart';
 
 class ReviewsPage extends StatefulWidget {
-  int slotId;
+  final int slotId;
   ReviewsPage({@required this.slotId});
   @override
   @override
@@ -25,7 +28,7 @@ class _ReviewsPageState extends State<ReviewsPage> {
     initializeReviews();
   }
 
-  List<RatingReviewData> gpRatingReviews;
+  List<VehicleRatingReviewData> vehicleRatingReviews;
   bool isLoading = false;
 
   initializeReviews() async {
@@ -33,10 +36,8 @@ class _ReviewsPageState extends State<ReviewsPage> {
       setState(() {
         isLoading = true;
       });
-      gpRatingReviews = [];
-      // TODO: Create this Utils And Solve this.
-      // gpRatingReviews = await RatingsAndReviewsUtils().getRatingReviewsForSlot(
-      //     widget.slotId, gpAppState.userData.accessToken);
+      vehicleRatingReviews = await RatingsReviewsServices().getRatingReviews(
+          slotId: widget.slotId, authToken: gpAppState.authToken);
       setState(() {
         isLoading = false;
       });
@@ -45,15 +46,23 @@ class _ReviewsPageState extends State<ReviewsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      //     child: Reviews(
-      //   reviews: (gpReviews != null) ? gpReviews : [],
-      //   isLoading: isLoading,
-      // )
-      child: Reviews(
-        isLoading: isLoading,
-        ratingReviews: (gpRatingReviews != null) ? gpRatingReviews : [],
-      ),
+    // return Container(
+    //   //     child: Reviews(
+    //   //   reviews: (gpReviews != null) ? gpReviews : [],
+    //   //   isLoading: isLoading,
+    //   // )
+    //   child: Reviews(
+    //     isLoading: isLoading,
+    //     ratingReviews: (gpRatingReviews != null) ? gpRatingReviews : [],
+    //   ),
+    // );
+
+    if (isLoading) {
+      return LoaderPage();
+    }
+
+    return ReviewsNew(
+      vehicleRatingReviews: vehicleRatingReviews,
     );
   }
 }

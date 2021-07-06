@@ -4,6 +4,7 @@ import 'package:getparked/StateManagement/Models/ParkingRatingReviewData.dart';
 import 'package:getparked/StateManagement/Models/ParkingRequestData.dart';
 import 'package:getparked/StateManagement/Models/RatingReviewData.dart';
 import 'package:getparked/StateManagement/Models/VehicleData.dart';
+import 'package:getparked/StateManagement/Models/VehicleTypeData.dart';
 import 'package:getparked/UserInterface/Widgets/Loaders/LoaderPage.dart';
 import 'package:getparked/UserInterface/Widgets/SuccessAndFailure/SuccessAndFailurePage.dart';
 import 'package:getparked/Utils/FlushBarUtils.dart';
@@ -205,7 +206,7 @@ class _YourExperienceState extends State<YourExperience> {
       setState(() {
         isLoading = true;
       });
-      ParkingRatingReviewData ratingReviewData = await RatingsReviewsServices()
+      RatingReviewData ratingReviewData = await RatingsReviewsServices()
           .rateSlot(
               parkingId: widget.parkingId,
               ratingValue: gpRatingValue,

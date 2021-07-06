@@ -1,3 +1,5 @@
+import 'package:getparked/StateManagement/Models/ParkingRatingReviewData.dart';
+import 'package:getparked/StateManagement/Models/RatingReviewData.dart';
 import 'package:getparked/Utils/DateTimeUtils.dart';
 import 'package:getparked/Utils/DomainUtils.dart';
 import 'package:getparked/StateManagement/Models/ReviewData.dart';
@@ -9,7 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:getparked/StateManagement/Models/UserDetails.dart';
 
 class ReviewCard extends StatelessWidget {
-  final ReviewData reviewData;
+  final RatingReviewData reviewData;
   ReviewCard({@required this.reviewData});
   @override
   Widget build(BuildContext context) {
@@ -89,7 +91,8 @@ class ReviewCard extends StatelessWidget {
                             Container(
                               height: profSize,
                               child: RatingWidget(
-                                ratingValue: this.reviewData.rating.toDouble(),
+                                ratingValue:
+                                    this.reviewData.ratingValue.toDouble(),
                                 toShowRatingText: false,
                                 iconSize: 15,
                               ),
@@ -106,7 +109,7 @@ class ReviewCard extends StatelessWidget {
                       Container(
                         padding: EdgeInsets.only(right: 20),
                         child: Text(
-                          this.reviewData.text,
+                          this.reviewData.review,
                           style: GoogleFonts.roboto(
                             fontSize: 13.5,
                             color: qbAppTextColor,

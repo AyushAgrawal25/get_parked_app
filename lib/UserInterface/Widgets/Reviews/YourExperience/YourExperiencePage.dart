@@ -1,5 +1,6 @@
 import 'package:getparked/StateManagement/Models/SlotData.dart';
 import 'package:getparked/StateManagement/Models/VehicleData.dart';
+import 'package:getparked/StateManagement/Models/VehicleTypeData.dart';
 import 'package:getparked/UserInterface/Widgets/FormFieldHeader.dart';
 import 'package:flutter/material.dart';
 import 'package:getparked/UserInterface/Widgets/Loaders/LoaderPage.dart';
