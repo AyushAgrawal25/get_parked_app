@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/UserInterface/Pages/LiveSlot/AvailableVehiclesWidget/VehicleTile.dart';
@@ -17,7 +19,12 @@ class _AvailableVehiclesWidgetState extends State<AvailableVehiclesWidget> {
     AppState gpAppState = Provider.of<AppState>(context);
     List<Widget> vehicleTiles = [];
     gpAppState.parkingLordData.vehicles.forEach((vehicle) {
-      vehicleTiles.add(VehicleTile(vehicleData: vehicle));
+      double tileSize = min((MediaQuery.of(context).size.width / 5) - 20, 55);
+      vehicleTiles.add(VehicleTile(
+        vehicleData: vehicle,
+        tileSize: tileSize,
+        iconSize: tileSize * 0.8,
+      ));
     });
 
     return Container(

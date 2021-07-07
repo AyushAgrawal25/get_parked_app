@@ -21,14 +21,32 @@ class _LiveSlotState extends State<LiveSlot> {
   AppState gpAppState;
 
   setBookingsCards() {
+    List<Widget> bookingCards = [];
     gpAppState.slotParkings.forEach((parkingReq) {
       if ((parkingReq.getParkingRequestDataType() ==
               ParkingRequestDataType.booked_BookingGoingON) ||
           (parkingReq.getParkingRequestDataType() ==
               ParkingRequestDataType.booked_ParkingGoingON)) {
-        mainWidgets.add(BookingCard(parkingRequestData: parkingReq));
+        bookingCards.add(BookingCard(parkingRequestData: parkingReq));
       }
     });
+
+    if (bookingCards.length == 0) {
+      mainWidgets.add(Container(
+        alignment: Alignment.center,
+        padding: EdgeInsets.symmetric(vertical: 25),
+        child: Text(
+          "No Bookings or Parkings",
+          style: GoogleFonts.roboto(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+              color: qbDetailLightColor),
+          textScaleFactor: 1.0,
+        ),
+      ));
+    } else {
+      mainWidgets = [...mainWidgets, ...bookingCards];
+    }
   }
 
   @override

@@ -888,6 +888,7 @@ class _ParkingDetailsPageState extends State<ParkingDetailsPage> {
     SlotData slotData;
     VehicleType vehicleType;
 
+    ratingReviewWidget = Container();
     RatingReviewData ratingReviewData;
     if (widget.notificationType == null) {
       if (this.gpParkingRequestData.getParkingRequestDataType() ==
@@ -897,6 +898,14 @@ class _ParkingDetailsPageState extends State<ParkingDetailsPage> {
         parkingId = this.gpParkingRequestData.bookingData.parkingData.id;
         slotData = gpSlotData;
         vehicleType = parkingVehicleData.type;
+
+        ratingReviewWidget = RatingReviewWidget(
+          ratingReviewData: ratingReviewData,
+          parkingId: parkingId,
+          slotData: slotData,
+          accType: widget.accType,
+          vehicleType: vehicleType,
+        );
       }
     } else {
       if ((widget.notificationType == NotificationDataType.parking_ForSlot) ||
@@ -910,16 +919,17 @@ class _ParkingDetailsPageState extends State<ParkingDetailsPage> {
           parkingId = widget.booking.parkingData.id;
           slotData = gpSlotData;
           vehicleType = parkingVehicleData.type;
+
+          ratingReviewWidget = RatingReviewWidget(
+            ratingReviewData: ratingReviewData,
+            parkingId: parkingId,
+            slotData: slotData,
+            accType: widget.accType,
+            vehicleType: vehicleType,
+          );
         }
       }
     }
-    ratingReviewWidget = RatingReviewWidget(
-      ratingReviewData: ratingReviewData,
-      parkingId: parkingId,
-      slotData: slotData,
-      accType: widget.accType,
-      vehicleType: vehicleType,
-    );
   }
 
   @override

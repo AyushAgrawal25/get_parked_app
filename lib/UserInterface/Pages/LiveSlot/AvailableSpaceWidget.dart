@@ -16,6 +16,8 @@ class _AvailableSpaceWidgetState extends State<AvailableSpaceWidget> {
   double totalSpace = 0.0;
 
   calcFunc() {
+    totalSpace = 0.0;
+    allottedSpace = 0.0;
     gpAppState.slotParkings.forEach((parkingReq) {
       if ((parkingReq.getParkingRequestDataType() ==
               ParkingRequestDataType.booked_BookingGoingON) ||
@@ -57,7 +59,7 @@ class _AvailableSpaceWidgetState extends State<AvailableSpaceWidget> {
                 children: [
                   LinearProgressIndicator(
                     value: allottedSpace / totalSpace,
-                    minHeight: 50,
+                    minHeight: 45,
                     backgroundColor: qbDividerLightColor,
                     color: qbAppPrimaryThemeColor,
                   ),

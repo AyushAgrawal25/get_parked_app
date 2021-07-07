@@ -10,7 +10,12 @@ import 'package:getparked/UserInterface/Widgets/FormFieldHeader.dart';
 
 class VehicleTile extends StatelessWidget {
   final VehicleData vehicleData;
-  VehicleTile({@required this.vehicleData});
+  final double tileSize;
+  final double iconSize;
+  VehicleTile(
+      {@required this.vehicleData,
+      @required this.tileSize,
+      @required this.iconSize});
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +43,10 @@ class VehicleTile extends StatelessWidget {
         vehicleName = "SUV";
         break;
     }
-
-    double tileSize = min((MediaQuery.of(context).size.width / 5) - 10, 55);
     return Container(
       child: Container(
-        height: tileSize,
-        width: tileSize,
+        height: this.tileSize,
+        width: this.tileSize,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(3.5),
             boxShadow: [
@@ -63,7 +66,7 @@ class VehicleTile extends StatelessWidget {
             Container(
               child: CustomIcon(
                 icon: vehicleIcon,
-                size: 30,
+                size: this.iconSize,
                 color: qbAppTextColor,
               ),
             ),
