@@ -3,15 +3,17 @@ import 'package:getparked/UserInterface/Theme/AppTheme.dart';
 import 'package:flutter/material.dart';
 
 class CustomIcon extends StatelessWidget {
-  IconData icon;
-  double size;
-  Color color;
-  CustomIconType type;
+  final IconData icon;
+  final double size;
+  final Color color;
+  final CustomIconType type;
+  final Alignment alignment;
 
   CustomIcon(
       {@required this.icon,
       this.color,
       this.size: 25,
+      this.alignment: Alignment.centerLeft,
       this.type: CustomIconType.square});
 
   double heightFactor = 1;
@@ -71,6 +73,7 @@ class CustomIcon extends StatelessWidget {
       return Container(
         height: this.size,
         width: this.size,
+        alignment: this.alignment,
         child:
             Icon(this.icon, size: this.size / widthFactor, color: this.color),
       );

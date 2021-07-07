@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';
 
 class ParkingVehicleType extends StatefulWidget {
-  VehicleType type;
+  final VehicleType type;
   ParkingVehicleType({@required this.type});
   @override
   _ParkingVehicleTypeState createState() => _ParkingVehicleTypeState();

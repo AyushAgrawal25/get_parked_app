@@ -1,14 +1,11 @@
-// TODO: create this page.
-// import 'package:getparked/BussinessLogic/RatingsAndReviewsUtils.dart';
 import 'package:getparked/BussinessLogic/RatingsReviewsServices.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/RatingReviewData.dart';
 import 'package:getparked/StateManagement/Models/ReviewData.dart';
 import 'package:getparked/StateManagement/Models/VehicleRatingReviewData.dart';
 import 'package:getparked/UserInterface/Widgets/Loaders/LoaderPage.dart';
-import 'package:getparked/UserInterface/Widgets/Reviews/OldReviews.dart';
 import 'package:flutter/material.dart';
-import 'package:getparked/UserInterface/Widgets/Reviews/ReviewsNew.dart';
+import 'package:getparked/UserInterface/Widgets/Reviews/Reviews.dart';
 import 'package:provider/provider.dart';
 
 class ReviewsPage extends StatefulWidget {
@@ -61,7 +58,7 @@ class _ReviewsPageState extends State<ReviewsPage> {
       return LoaderPage();
     }
 
-    return ReviewsNew(
+    return Reviews(
       vehicleRatingReviews: vehicleRatingReviews,
     );
   }

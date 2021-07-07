@@ -1,4 +1,5 @@
 import 'package:getparked/UserInterface/Pages/HelpAndSupport/HelpAndSupportPage.dart';
+import 'package:getparked/UserInterface/Pages/LiveSlot/LiveSlotPage.dart';
 import 'package:getparked/UserInterface/Pages/Notifications/NotificationsPage.dart';
 import 'package:getparked/UserInterface/Pages/ParkingLord/ParkingLordPage.dart';
 import 'package:getparked/UserInterface/Pages/Profile/ProfilePage.dart';
@@ -82,16 +83,16 @@ class SideNavRoutes {
             SailorTransition.fade_in
           ],
           defaultTransitionDuration: Duration(milliseconds: 250)),
-      // SailorRoute(
-      //     name: '/LiveSlot',
-      //     builder: (context, args, paramMap) {
-      //       return LiveSlotPage();
-      //     },
-      //     defaultTransitions: [
-      //       SailorTransition.slide_from_left,
-      //       SailorTransition.fade_in
-      //     ],
-      //     defaultTransitionDuration: Duration(milliseconds: 250)),
+      SailorRoute(
+          name: '/LiveSlot',
+          builder: (context, args, paramMap) {
+            return LiveSlotPage();
+          },
+          defaultTransitions: [
+            SailorTransition.slide_from_left,
+            SailorTransition.fade_in
+          ],
+          defaultTransitionDuration: Duration(milliseconds: 250)),
       // SailorRoute(
       //     name: '/SlotSettings',
       //     builder: (context, args, paramMap) {

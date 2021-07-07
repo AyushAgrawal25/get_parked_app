@@ -5,15 +5,15 @@ import 'package:getparked/UserInterface/Widgets/Reviews/UIComponets/TabContent.d
 import 'package:getparked/UserInterface/Widgets/Reviews/UIComponets/TabHeader.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ReviewsNew extends StatefulWidget {
+class Reviews extends StatefulWidget {
   final List<VehicleRatingReviewData> vehicleRatingReviews;
-  ReviewsNew({@required this.vehicleRatingReviews});
+  Reviews({@required this.vehicleRatingReviews});
 
   @override
-  _ReviewsNewState createState() => _ReviewsNewState();
+  _ReviewsState createState() => _ReviewsState();
 }
 
-class _ReviewsNewState extends State<ReviewsNew> {
+class _ReviewsState extends State<Reviews> {
   @override
   Widget build(BuildContext context) {
     List<Widget> headers = [];

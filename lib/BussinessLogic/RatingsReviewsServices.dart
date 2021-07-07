@@ -54,7 +54,7 @@ class RatingsReviewsServices {
         List vehicleMaps = json.decode(resp.body)["data"];
         List<VehicleRatingReviewData> vehicleReviewsData = [];
         vehicleMaps.forEach((vehicleRatingReviewMap) {
-          print(vehicleRatingReviewMap);
+          // print(vehicleRatingReviewMap);
           vehicleReviewsData
               .add(VehicleRatingReviewData.fromMap(vehicleRatingReviewMap));
         });
@@ -65,6 +65,7 @@ class RatingsReviewsServices {
       } else if (resp.statusCode == 500) {
         return [];
       }
+      return [];
     } catch (excp) {
       print(excp);
       return [];
