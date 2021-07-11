@@ -59,15 +59,17 @@ class TransactionServices {
 
   Future<AddMoneyToWallStatus> addMoneyToWallet(
       {@required String authToken,
-      @required String ref,
+      @required String signature,
+      @required String paymentId,
       @required String txnCode,
       @required int status,
       @required double amount}) async {
     try {
       Map<String, dynamic> txnData =
           TransactionUtils().getEncryptedData(txnCode);
-      txnData["ref"] = ref;
+      txnData["signature"] = signature;
       txnData["status"] = status;
+      txnData["paymentId"] = paymentId;
 
       String encryptedCode = TransactionUtils().encryptData(txnData);
 
@@ -86,8 +88,8 @@ class TransactionServices {
             CONTENT_TYPE_KEY: JSON_CONTENT_VALUE
           });
 
+      // print(resp.body);
       if (resp.statusCode == 200) {
-        print(resp.body);
         return AddMoneyToWallStatus.successful;
       } else if (resp.statusCode == 403) {
         return AddMoneyToWallStatus.invalidToken;
@@ -103,11 +105,19 @@ class TransactionServices {
     }
   }
 
-  Future<String> getTransactionCode({@required String authToken}) async {
+  Future<String> getTransactionCode(
+      {@required String authToken, @required double amount}) async {
     try {
-      http.Response resp = await http.get(
+      Map<String, dynamic> reqBody = {
+        "amount": (amount * 100).toInt().toString()
+      };
+      http.Response resp = await http.post(
           Uri.parse(domainName + TRANSACTIONS_ROUTE + "/realTransactionCode"),
-          headers: {AUTH_TOKEN: authToken});
+          body: JSONUtils().postBody(reqBody),
+          headers: {
+            AUTH_TOKEN: authToken,
+            CONTENT_TYPE_KEY: JSON_CONTENT_VALUE
+          });
 
       if (resp.statusCode == 200) {
         String encryptedCode = json.decode(resp.body)["code"];

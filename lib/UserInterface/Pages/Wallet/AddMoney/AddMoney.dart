@@ -5,16 +5,21 @@ import 'package:getparked/StateManagement/Models/AppOverlayStyleData.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';
 import 'package:getparked/UserInterface/Theme/AppOverlayStyle.dart';
+import 'package:getparked/UserInterface/Widgets/SuccessAndFailure/SuccessAndFailurePage.dart';
 import 'package:getparked/UserInterface/Widgets/UPIRoundIcon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
+import 'package:getparked/UserInterface/Widgets/qbFAB.dart';
+import 'package:getparked/Utils/DomainUtils.dart';
 import 'package:getparked/Utils/TransactionUtils.dart';
+import 'package:getparked/encryptionConfig.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:getparked/UserInterface/Icons/g_p_icons_icons.dart';
 import 'package:getparked/UserInterface/Widgets/CustomIcon.dart';
 import 'package:getparked/UserInterface/Pages/Wallet/AddMoney/AddMoneyPage.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:upi_pay/upi_pay.dart';
 
 class AddMoneyForm extends StatefulWidget {
@@ -32,24 +37,6 @@ class AddMoneyForm extends StatefulWidget {
 class _AddMoneyFormWithAmountState extends State<AddMoneyForm> {
   AppState gpAppState;
 
-  List<UPIAppRoundWidget> upiAppList = [];
-
-  initiateUPI() async {
-    var appList = await UpiPay.getInstalledUpiApplications(
-        statusType: UpiApplicationDiscoveryAppStatusType.all);
-    print(appList);
-    appList.forEach((app) {
-      upiAppList.add(UPIAppRoundWidget(
-        payFun: (UpiApplication upiApplication) {
-          initiateUPIPayment(upiApplication, widget);
-        },
-        upiApplication: app.upiApplication,
-      ));
-    });
-
-    setState(() {});
-  }
-
   initiateUPIPayment(UpiApplication upiApplication, widget) async {
     print(gpAmount);
 
@@ -57,8 +44,8 @@ class _AddMoneyFormWithAmountState extends State<AddMoneyForm> {
       widget.changeLoadStatus(true, 0);
 
       //Transaction Reference
-      String txnCode = await TransactionServices()
-          .getTransactionCode(authToken: gpAppState.authToken);
+      String txnCode = await TransactionServices().getTransactionCode(
+          authToken: gpAppState.authToken, amount: double.parse(gpAmount));
       print(txnCode);
 
       // UpiTransactionResponse upiTransactionResponse =
@@ -95,13 +82,13 @@ class _AddMoneyFormWithAmountState extends State<AddMoneyForm> {
       }
       print(upiTransactionResponse.status);
 
-      AddMoneyToWallStatus addMoneyToWallStatus = await TransactionServices()
-          .addMoneyToWallet(
-              authToken: gpAppState.authToken,
-              ref: upiTransactionResponse.txnId,
-              txnCode: txnCode,
-              status: transactionStatus,
-              amount: double.parse(gpAmount));
+      // AddMoneyToWallStatus addMoneyToWallStatus = await TransactionServices()
+      //     .addMoneyToWallet(
+      //         authToken: gpAppState.authToken,
+      //         ref: upiTransactionResponse.txnId,
+      //         txnCode: txnCode,
+      //         status: transactionStatus,
+      //         amount: double.parse(gpAmount));
 
       widget.changeLoadStatus(true, transactionStatus);
     }
@@ -127,7 +114,15 @@ class _AddMoneyFormWithAmountState extends State<AddMoneyForm> {
       gpAmount = "";
     }
 
-    initiateUPI();
+    initRazorpay();
+  }
+
+  Razorpay razorpay;
+  initRazorpay() {
+    razorpay = Razorpay();
+
+    razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, onTransactionSuccess);
+    razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, onTransactionError);
   }
 
   @override
@@ -347,63 +342,124 @@ class _AddMoneyFormWithAmountState extends State<AddMoneyForm> {
 
                   SizedBox(
                     height: 15,
-                  ),
-
-                  //UPI Apps
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            child: Divider(
-                              color: qbDetailLightColor,
-                              thickness: 1,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 7.5),
-                          child: Text(
-                            "Select UPI Apps",
-                            style: GoogleFonts.roboto(
-                                fontSize: 13.5,
-                                fontWeight: FontWeight.w500,
-                                color: qbAppTextColor),
-                            textScaleFactor: 1.0,
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            child: Divider(
-                              color: qbDetailLightColor,
-                              thickness: 1,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  //Upi Apps
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: Wrap(
-                      alignment: WrapAlignment.spaceBetween,
-                      children: upiAppList,
-                    ),
                   )
                 ],
               ),
             ),
+          ),
+          floatingActionButton: QbFAB(
+            color: qbAppPrimaryThemeColor,
+            child: Container(
+                child: CustomIcon(
+              icon: GPIcons.pay_now2,
+              size: 27.5,
+              color: qbWhiteBGColor,
+            )),
+            onPressed: initiateTransaction,
           ),
         ),
       ),
     );
   }
 
+  String txnCode;
+
+  initiateTransaction() async {
+    if ((gpAmount != null) && (gpAmount != "")) {
+      widget.changeLoadStatus(true, 0);
+      txnCode = await TransactionServices().getTransactionCode(
+          authToken: gpAppState.authToken, amount: double.parse(gpAmount));
+
+      Map<String, dynamic> txnInitData =
+          TransactionUtils().getEncryptedData(txnCode);
+      Map<String, dynamic> razorpayOptions = {
+        'key': RAZORPAY_API_ID,
+        'amount': txnInitData["amount"],
+        'name': appName,
+        'description': 'Add Money to Wallet',
+        'order_id': txnInitData["orderId"],
+        'timeout': 300,
+        'prefill': {
+          'contact': gpAppState.userDetails.phoneNumber,
+          'email': gpAppState.userData.email
+        }
+      };
+
+      razorpay.open(razorpayOptions);
+    }
+  }
+
+  onTransactionSuccess(PaymentSuccessResponse response) async {
+    AddMoneyToWallStatus addMoneyToWallStatus = await TransactionServices()
+        .addMoneyToWallet(
+            authToken: gpAppState.authToken,
+            paymentId: response.paymentId,
+            signature: response.signature,
+            txnCode: txnCode,
+            status: 1,
+            amount: double.parse(gpAmount));
+
+    if (addMoneyToWallStatus == AddMoneyToWallStatus.successful) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) {
+          return SuccessAndFailurePage(
+            statusText: "Transaction",
+            buttonText: "Continue",
+            status: SuccessAndFailureStatus.success,
+            onButtonPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+          );
+        },
+      ));
+    } else {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) {
+          return SuccessAndFailurePage(
+            statusText: "Transaction",
+            buttonText: "Continue",
+            status: SuccessAndFailureStatus.failure,
+            onButtonPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+          );
+        },
+      ));
+    }
+  }
+
+  onTransactionError(PaymentFailureResponse response) async {
+    print(response.code);
+    AddMoneyToWallStatus addMoneyToWallStatus = await TransactionServices()
+        .addMoneyToWallet(
+            authToken: gpAppState.authToken,
+            paymentId: null,
+            signature: null,
+            txnCode: txnCode,
+            status: 2,
+            amount: double.parse(gpAmount));
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return SuccessAndFailurePage(
+          statusText: "Transaction",
+          buttonText: "Continue",
+          status: SuccessAndFailureStatus.failure,
+          onButtonPressed: () {
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+          },
+        );
+      },
+    ));
+  }
+
   @override
   void dispose() {
+    if (razorpay != null) {
+      razorpay.clear();
+    }
     super.dispose();
   }
 }

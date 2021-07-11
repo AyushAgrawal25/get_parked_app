@@ -23,7 +23,7 @@ class NonRealTransactionData {
 
   double amount;
   MoneyTransferType transferType;
-  String refCode;
+  String txnCode;
 
   String time;
   int status;
@@ -71,7 +71,7 @@ class NonRealTransactionData {
       transferType = TransactionDataUtils.getTransferTypeFromString(
           txnMap["transferType"]);
       amount = (txnMap["amount"] != null) ? txnMap["amount"].toDouble() : 0.0;
-      refCode = txnMap["refCode"];
+      txnCode = txnMap["txnCode"];
       time = txnMap["time"];
       status = txnMap["status"];
     }
