@@ -80,7 +80,8 @@ class TransactionServices {
         "code": encryptedCode
       };
 
-      Uri url = Uri.parse(domainName + TRANSACTIONS_ROUTE + "/realTransaction");
+      Uri url =
+          Uri.parse(domainName + TRANSACTIONS_ROUTE + "/addMoneyToWallet");
       http.Response resp = await http.post(url,
           body: JSONUtils().postBody(reqBody),
           headers: {
@@ -88,7 +89,6 @@ class TransactionServices {
             CONTENT_TYPE_KEY: JSON_CONTENT_VALUE
           });
 
-      // print(resp.body);
       if (resp.statusCode == 200) {
         return AddMoneyToWallStatus.successful;
       } else if (resp.statusCode == 403) {
@@ -105,14 +105,14 @@ class TransactionServices {
     }
   }
 
-  Future<String> getTransactionCode(
+  Future<String> getAddMoneyToWalletCode(
       {@required String authToken, @required double amount}) async {
     try {
       Map<String, dynamic> reqBody = {
         "amount": (amount * 100).toInt().toString()
       };
       http.Response resp = await http.post(
-          Uri.parse(domainName + TRANSACTIONS_ROUTE + "/realTransactionCode"),
+          Uri.parse(domainName + TRANSACTIONS_ROUTE + "/addMoneyToWalletCode"),
           body: JSONUtils().postBody(reqBody),
           headers: {
             AUTH_TOKEN: authToken,
@@ -205,6 +205,34 @@ class TransactionServices {
       return TransactionRequestRespondStatus.failed;
     }
   }
+
+  Future<VaultMoneyToWalletTransferStatus> transferVaultMoneyToWallet(
+      {@required String authToken, @required double amount}) async {
+    try {
+      Map<String, dynamic> reqBody = {"amount": amount};
+
+      Uri url =
+          Uri.parse(domainName + TRANSACTIONS_ROUTE + "/vaultTransferToWallet");
+      http.Response resp = await http.post(url,
+          body: JSONUtils().postBody(reqBody),
+          headers: {
+            AUTH_TOKEN: authToken,
+            CONTENT_TYPE_KEY: JSON_CONTENT_VALUE
+          });
+      if (resp.statusCode == 200) {
+        return VaultMoneyToWalletTransferStatus.successful;
+      } else if (resp.statusCode == 403) {
+        return VaultMoneyToWalletTransferStatus.invalidToken;
+      } else if (resp.statusCode == 500) {
+        return VaultMoneyToWalletTransferStatus.internalServerError;
+      }
+
+      return VaultMoneyToWalletTransferStatus.failed;
+    } catch (excp) {
+      print(excp);
+      return VaultMoneyToWalletTransferStatus.failed;
+    }
+  }
 }
 
 enum TransactionGetStatus {
@@ -235,5 +263,12 @@ enum TransactionRequestRespondStatus {
   invalidToken,
   lowBalance,
   cannotBeProceed,
+  internalServerError
+}
+
+enum VaultMoneyToWalletTransferStatus {
+  successful,
+  failed,
+  invalidToken,
   internalServerError
 }

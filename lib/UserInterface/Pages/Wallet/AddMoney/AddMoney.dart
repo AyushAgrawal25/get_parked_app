@@ -44,7 +44,7 @@ class _AddMoneyFormWithAmountState extends State<AddMoneyForm> {
       widget.changeLoadStatus(true, 0);
 
       //Transaction Reference
-      String txnCode = await TransactionServices().getTransactionCode(
+      String txnCode = await TransactionServices().getAddMoneyToWalletCode(
           authToken: gpAppState.authToken, amount: double.parse(gpAmount));
       print(txnCode);
 
@@ -367,7 +367,7 @@ class _AddMoneyFormWithAmountState extends State<AddMoneyForm> {
   initiateTransaction() async {
     if ((gpAmount != null) && (gpAmount != "")) {
       widget.changeLoadStatus(true, 0);
-      txnCode = await TransactionServices().getTransactionCode(
+      txnCode = await TransactionServices().getAddMoneyToWalletCode(
           authToken: gpAppState.authToken, amount: double.parse(gpAmount));
 
       Map<String, dynamic> txnInitData =
