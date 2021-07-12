@@ -36,7 +36,7 @@ class TransactionData {
   // Complete Data
   Map data;
 
-  String refCode;
+  String txnCode;
 
   String time;
   int status;
@@ -48,7 +48,7 @@ class TransactionData {
     this.transferType,
     this.withUserId,
     this.withAccountType,
-    this.refCode,
+    this.txnCode,
     this.time,
     this.type,
     this.transactionWithUserData,
@@ -77,7 +77,7 @@ class TransactionData {
             RealTransactionData.fromMap(transactionMap["transactionReal"]);
         if (realTransaction != null) {
           withAccountType = realTransaction.accountType;
-          refCode = realTransaction.refCode;
+          txnCode = realTransaction.txnCode;
           withUserId = realTransaction.userId;
           withUserDetails = realTransaction.userDetails;
           withSlotData = realTransaction.slotData;
@@ -88,7 +88,7 @@ class TransactionData {
             transactionMap["transactionNonReal"]);
         if (nonRealTransaction != null) {
           withAccountType = nonRealTransaction.withUserAccountType;
-          refCode = nonRealTransaction.refCode;
+          txnCode = nonRealTransaction.txnCode;
           withUserId = nonRealTransaction.withUserId;
           withUserDetails = nonRealTransaction.withUserDetails;
           withSlotData = nonRealTransaction.withSlotData;

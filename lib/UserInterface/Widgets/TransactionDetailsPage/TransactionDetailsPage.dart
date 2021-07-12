@@ -193,7 +193,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
     refAndDateWidget = Container(
       padding: EdgeInsets.symmetric(vertical: 12.5, horizontal: 20),
       child: TransactionRefAndDateWidget(
-        refCodeORId: widget.transactionData.refCode,
+        refCodeORId: widget.transactionData.txnCode,
         time: widget.transactionData.time,
       ),
     );

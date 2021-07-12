@@ -19,7 +19,7 @@ class RealTransactionData {
   MoneyTransferType transferType;
 
   String ref;
-  String refCode;
+  String txnCode;
 
   String time;
   int status;
@@ -51,7 +51,7 @@ class RealTransactionData {
 
       amount = (txnMap["amount"] != null) ? txnMap["amount"].toDouble() : 0.0;
       ref = txnMap["ref"];
-      refCode = txnMap["refCode"];
+      txnCode = txnMap["txnCode"];
       time = txnMap["time"];
       status = txnMap["status"];
     }

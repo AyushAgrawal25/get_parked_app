@@ -190,11 +190,11 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
 
   Widget refAndDateWidget = Container();
   setRefAndDateWidget() {
-    print(widget.transactionData.refCode);
+    print(widget.transactionData.txnCode);
     refAndDateWidget = Container(
       padding: EdgeInsets.symmetric(vertical: 12.5, horizontal: 20),
       child: TransactionRefAndDateWidget(
-        refCodeORId: widget.transactionData.refCode,
+        refCodeORId: widget.transactionData.txnCode,
         time: widget.transactionData.time,
       ),
     );
