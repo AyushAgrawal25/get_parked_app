@@ -4,7 +4,8 @@ import 'package:getparked/UserInterface/Pages/Notifications/NotificationsPage.da
 import 'package:getparked/UserInterface/Pages/ParkingLord/ParkingLordPage.dart';
 import 'package:getparked/UserInterface/Pages/Profile/ProfilePage.dart';
 import 'package:getparked/UserInterface/Pages/RentOutSpace/RentOutSpaceFormsPage.dart';
-import 'package:getparked/UserInterface/Pages/Settings/SeetingsPage.dart';
+import 'package:getparked/UserInterface/Pages/Settings/SettingsPage.dart';
+import 'package:getparked/UserInterface/Pages/SlotSettings/SlotSettingsPage.dart';
 import 'package:getparked/UserInterface/Pages/Vault/VaultPage.dart';
 import 'package:getparked/UserInterface/Pages/Wallet/WalletPage.dart';
 import 'package:sailor/sailor.dart';
@@ -94,16 +95,16 @@ class SideNavRoutes {
             SailorTransition.fade_in
           ],
           defaultTransitionDuration: Duration(milliseconds: 250)),
-      // SailorRoute(
-      //     name: '/SlotSettings',
-      //     builder: (context, args, paramMap) {
-      //       return ParkingLordSettingsPage();
-      //     },
-      //     defaultTransitions: [
-      //       SailorTransition.slide_from_left,
-      //       SailorTransition.fade_in
-      //     ],
-      //     defaultTransitionDuration: Duration(milliseconds: 250)),
+      SailorRoute(
+          name: '/SlotSettings',
+          builder: (context, args, paramMap) {
+            return SlotSettingsPage();
+          },
+          defaultTransitions: [
+            SailorTransition.slide_from_left,
+            SailorTransition.fade_in
+          ],
+          defaultTransitionDuration: Duration(milliseconds: 250)),
       SailorRoute(
           name: '/Settings',
           builder: (context, args, paramMap) {

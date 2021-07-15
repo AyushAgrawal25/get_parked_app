@@ -250,6 +250,59 @@ class ParkingLordServices {
       return SlotImageDeleteStatus.failed;
     }
   }
+
+  Future<SlotActivateStatus> activateSlot({@required String authToken}) async {
+    try {
+      Uri url = Uri.parse(domainName + PARKING_LORD_ROUTE + "/activate");
+      http.Response resp = await http.post(url, headers: {
+        AUTH_TOKEN: authToken,
+        CONTENT_TYPE_KEY: JSON_CONTENT_VALUE
+      });
+
+      if (resp.statusCode == 200) {
+        return SlotActivateStatus.success;
+      } else if (resp.statusCode == 404) {
+        return SlotActivateStatus.notFound;
+      } else if (resp.statusCode == 421) {
+        return SlotActivateStatus.alreadyActive;
+      } else if (resp.statusCode == 500) {
+        return SlotActivateStatus.internalServerError;
+      }
+
+      return SlotActivateStatus.failed;
+    } catch (excp) {
+      print(excp);
+      return SlotActivateStatus.failed;
+    }
+  }
+
+  Future<SlotDeactivateStatus> deactivateSlot(
+      {@required String authToken}) async {
+    try {
+      Uri url = Uri.parse(domainName + PARKING_LORD_ROUTE + "/deactivate");
+      http.Response resp = await http.post(url, headers: {
+        AUTH_TOKEN: authToken,
+        CONTENT_TYPE_KEY: JSON_CONTENT_VALUE
+      });
+
+      if (resp.statusCode == 200) {
+        return SlotDeactivateStatus.success;
+      } else if (resp.statusCode == 404) {
+        return SlotDeactivateStatus.notFound;
+      } else if (resp.statusCode == 421) {
+        return SlotDeactivateStatus.alreadyDeactive;
+      } else if (resp.statusCode == 422) {
+        return SlotDeactivateStatus.cannotBeDeactivated;
+      } else if (resp.statusCode == 500) {
+        return SlotDeactivateStatus.internalServerError;
+      }
+
+      return SlotDeactivateStatus.failed;
+    } catch (excp) {
+      print(excp);
+      return SlotDeactivateStatus.failed;
+    }
+  }
 }
 
 enum ParkingLordGetStatus {
@@ -298,4 +351,21 @@ enum SlotImageDeleteStatus {
   invalidToken,
   internalServerError,
   failed
+}
+
+enum SlotActivateStatus {
+  success,
+  notFound,
+  alreadyActive,
+  failed,
+  internalServerError
+}
+
+enum SlotDeactivateStatus {
+  success,
+  notFound,
+  alreadyDeactive,
+  failed,
+  cannotBeDeactivated,
+  internalServerError
 }
