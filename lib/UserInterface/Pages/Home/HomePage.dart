@@ -687,11 +687,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   onMapSearch(CameraPosition gpCamPos) {
-    gpMapController.setCameraPosition(gpCamPos);
+    if (gpMapController != null) {
+      gpMapController.setCameraPosition(gpCamPos);
+    }
   }
 
   onLocationPressed() {
-    gpMapController.setLocation(16);
+    if (gpMapController != null) {
+      gpMapController.setLocation(16);
+    }
   }
 
   pushNewPlacemark(CameraPosition gpCamPos) async {
@@ -784,6 +788,8 @@ class _HomePageState extends State<HomePage> {
       }
     });
 
-    gpMapController.setGPMapSlotMarkers(gpMapSlotMarkers);
+    if (gpMapController != null) {
+      gpMapController.setGPMapSlotMarkers(gpMapSlotMarkers);
+    }
   }
 }

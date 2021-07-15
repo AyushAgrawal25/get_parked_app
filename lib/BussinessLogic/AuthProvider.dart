@@ -118,7 +118,6 @@ class AuthProvider {
 
   Future<bool> firebaseLogout() async {
     try {
-      googleSignOut();
       fbAuth.FirebaseAuth.instance.signOut();
       return true;
     } catch (e) {
@@ -136,6 +135,16 @@ class AuthProvider {
       return true;
     } catch (e) {
       return false;
+    }
+  }
+
+  Future<void> signOut() async {
+    try {
+      await googleSignOut();
+      await SecureStorageUtils().deleteAuthToken();
+      await fbAuth.FirebaseAuth.instance.signOut();
+    } catch (excp) {
+      print(excp);
     }
   }
 

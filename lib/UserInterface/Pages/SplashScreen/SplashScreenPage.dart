@@ -32,7 +32,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
     switch (initAppStatus) {
       case InitAppStatus.loggedIn:
         print("Sending to Home Page...");
-        Navigator.of(context).push(MaterialPageRoute(
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) {
             return HomePage();
           },

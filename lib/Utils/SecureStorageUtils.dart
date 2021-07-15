@@ -20,7 +20,7 @@ class SecureStorageUtils {
     }
   }
 
-  Future<void> deleteAuthToken(String authToken) async {
+  Future<void> deleteAuthToken() async {
     try {
       await FlutterSecureStorage().delete(key: AUTH_TOKEN);
     } catch (excp) {
