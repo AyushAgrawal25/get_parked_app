@@ -5,6 +5,7 @@ import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/TransactionData.dart';
 import 'package:getparked/StateManagement/Models/UserData.dart';
 import 'package:getparked/UserInterface/Icons/g_p_icons_icons.dart';
+import 'package:getparked/UserInterface/Pages/Vault/BeneficiaryDetails/BeneficiaryDetailsPage.dart';
 import 'package:getparked/UserInterface/Pages/Wallet/Wallet.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';
 import 'package:getparked/UserInterface/Widgets/CustomIcon.dart';
@@ -315,6 +316,13 @@ class _VaultState extends State<Vault> {
 
   onWithdraw() {
     SystemSound.play(SystemSoundType.click);
+
+    // Tmp code
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return BeneficiaryDetailsPage();
+      },
+    ));
   }
 }
 

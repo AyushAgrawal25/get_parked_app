@@ -27,9 +27,7 @@ List<NavigationModel> navigationPrimaryItems = [
 
 List<NavigationModel> navigationParkingLordItems = [
   NavigationModel(
-      title: "Parking Lord",
-      icon: FontAwesomeIcons.crown,
-      route: "/ParkingLord"),
+      title: "Parking Lord", icon: GPIcons.parkinglord, route: "/ParkingLord"),
   NavigationModel(
       title: "Vault", icon: GPIcons.vault_circular_gear, route: "/Vault"),
   NavigationModel(title: "Live Slot", icon: Elusive.video, route: "/LiveSlot"),

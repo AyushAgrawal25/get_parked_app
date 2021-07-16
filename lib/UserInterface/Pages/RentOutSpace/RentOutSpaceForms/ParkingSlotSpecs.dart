@@ -532,7 +532,7 @@ class _ParkingSlotSpecsState extends State<ParkingSlotSpecs> {
     return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
-      color: Color.fromRGBO(250, 250, 250, 1),
+      color: qbWhiteBGColor,
       child: SafeArea(
         top: false,
         maintainBottomViewPadding: true,

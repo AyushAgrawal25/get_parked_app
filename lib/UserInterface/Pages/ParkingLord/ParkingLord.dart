@@ -262,7 +262,10 @@ class _ParkingLordState extends State<ParkingLord> {
                   appBar: AppBar(
                     title: Row(
                       children: [
-                        Icon(FontAwesome5.crown, size: 20),
+                        CustomIcon(
+                          icon: GPIcons.parkinglord_outline,
+                          size: 20,
+                        ),
                         SizedBox(
                           width: 12.5,
                         ),
