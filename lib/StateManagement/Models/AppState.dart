@@ -1,5 +1,6 @@
 // import 'package:getparked/BussinessLogic/ContactUtils.dart';
 import 'package:getparked/StateManagement/Models/SlotData.dart';
+import 'package:getparked/StateManagement/Models/UserBeneficiaryData.dart';
 import 'package:getparked/StateManagement/Models/VehicleTypeData.dart';
 import 'package:getparked/Utils/ContactUtils.dart';
 import 'package:getparked/Utils/InternetConnection.dart';
@@ -71,6 +72,12 @@ class AppState extends ChangeNotifier {
   void setUserDetails(UserDetails gpUserDetails) {
     this.userDetails = gpUserDetails;
     notifyListeners();
+  }
+
+  // Beneficiary Data
+  UserBeneficiaryData beneficiaryData;
+  void setBeneficiaryData(UserBeneficiaryData userBeneficiaryData) {
+    this.beneficiaryData = userBeneficiaryData;
   }
 
   //Slots

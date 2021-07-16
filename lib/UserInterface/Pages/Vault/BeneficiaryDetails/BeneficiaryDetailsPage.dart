@@ -2,33 +2,117 @@ import 'package:flutter/material.dart';
 import 'package:fluttericon/elusive_icons.dart';
 import 'package:fluttericon/entypo_icons.dart';
 import 'package:fluttericon/typicons_icons.dart';
+import 'package:getparked/BussinessLogic/UserBeneficiaryServices.dart';
+import 'package:getparked/StateManagement/Models/AppState.dart';
+import 'package:getparked/StateManagement/Models/UserBeneficiaryData.dart';
 import 'package:getparked/UserInterface/Icons/g_p_icons_icons.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';
 import 'package:getparked/UserInterface/Widgets/CustomIcon.dart';
+import 'package:getparked/UserInterface/Widgets/EdgeLessButton.dart';
 import 'package:getparked/UserInterface/Widgets/FormFieldHeader.dart';
 import 'package:getparked/UserInterface/Widgets/Loaders/LoaderPage.dart';
+import 'package:getparked/UserInterface/Widgets/SuccessAndFailure/SuccessAndFailurePage.dart';
 import 'package:getparked/UserInterface/Widgets/UnderLineTextFormField.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class BeneficiaryDetailsPage extends StatefulWidget {
+  final UserBeneficiaryData beneficiaryData;
+
+  BeneficiaryDetailsPage({@required this.beneficiaryData});
   @override
   _BeneficiaryDetailsPageState createState() => _BeneficiaryDetailsPageState();
 }
 
 class _BeneficiaryDetailsPageState extends State<BeneficiaryDetailsPage> {
   bool isLoading = false;
+  AppState appState;
+
+  @override
+  void initState() {
+    super.initState();
+
+    appState = Provider.of<AppState>(context, listen: false);
+    if (widget.beneficiaryData != null) {
+      setInitialValues();
+    }
+  }
+
+  setInitialValues() {
+    beneficiaryName = widget.beneficiaryData.name;
+    beneficiaryNameController.text = widget.beneficiaryData.name;
+
+    accountNumber = widget.beneficiaryData.accountNumber;
+    accountNumberController.text = widget.beneficiaryData.accountNumber;
+
+    reEnterAccountNumber = widget.beneficiaryData.accountNumber;
+    reEnterAccountNumberController.text = widget.beneficiaryData.accountNumber;
+
+    ifscCode = widget.beneficiaryData.ifscCode;
+    ifscCodeController.text = widget.beneficiaryData.ifscCode;
+
+    upiId = widget.beneficiaryData.upiId;
+    upiIdController.text = widget.beneficiaryData.upiId;
+
+    bankName = widget.beneficiaryData.bankName;
+    if (bankName == SBI_BANK) {
+      isSBI = true;
+    }
+    bankNameController.text = widget.beneficiaryData.bankName;
+  }
 
   String beneficiaryName = "";
-  String accountNumber = "";
-  String reEnterAccountNumber = "";
-  String ifscCode = "";
-  String upiId = "";
+  TextEditingController beneficiaryNameController = TextEditingController();
 
-  String bankName = "";
+  String accountNumber = "";
+  TextEditingController accountNumberController = TextEditingController();
+
+  String reEnterAccountNumber = "";
+  TextEditingController reEnterAccountNumberController =
+      TextEditingController();
+
+  String ifscCode = "";
+  TextEditingController ifscCodeController = TextEditingController();
+
+  String upiId;
+  TextEditingController upiIdController = TextEditingController();
+
   bool isSBI = true;
+  String bankName = "";
+  TextEditingController bankNameController = TextEditingController();
+
+  bool isFormValid = true;
+
+  checkFormValidity() {
+    isFormValid = true;
+    if ((beneficiaryName == "") || (beneficiaryName == null)) {
+      isFormValid = false;
+    }
+    if ((accountNumber == "") || (accountNumber == null)) {
+      isFormValid = false;
+    }
+    if ((reEnterAccountNumber == "") || (reEnterAccountNumber == null)) {
+      isFormValid = false;
+    }
+    if (accountNumber != reEnterAccountNumber) {
+      isFormValid = false;
+    }
+    if ((ifscCode == "") || (ifscCode == null)) {
+      isFormValid = false;
+    }
+
+    if (isSBI) {
+      bankName = SBI_BANK;
+    } else {
+      if ((bankName == "") || (bankName == null)) {
+        isFormValid = false;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    checkFormValidity();
     return Container(
       child: Stack(
         children: [
@@ -96,6 +180,7 @@ class _BeneficiaryDetailsPageState extends State<BeneficiaryDetailsPage> {
                                         right: 10,
                                         top: 10,
                                         bottom: 10),
+                                    value: beneficiaryName,
                                     onChange: (value) {
                                       setState(() {
                                         if ((value != null) && (value != "")) {
@@ -126,6 +211,7 @@ class _BeneficiaryDetailsPageState extends State<BeneficiaryDetailsPage> {
                                   child: TextFormField(
                                     minLines: 1,
                                     maxLines: 1,
+                                    controller: accountNumberController,
                                     keyboardType: TextInputType.number,
                                     onChanged: (value) {
                                       setState(() {
@@ -183,6 +269,7 @@ class _BeneficiaryDetailsPageState extends State<BeneficiaryDetailsPage> {
                                   child: TextFormField(
                                     minLines: 1,
                                     maxLines: 1,
+                                    controller: reEnterAccountNumberController,
                                     keyboardType: TextInputType.number,
                                     onChanged: (value) {
                                       setState(() {
@@ -232,6 +319,7 @@ class _BeneficiaryDetailsPageState extends State<BeneficiaryDetailsPage> {
                                         right: 10,
                                         top: 10,
                                         bottom: 10),
+                                    value: ifscCode,
                                     onChange: (value) {
                                       setState(() {
                                         if ((value != null) && (value != "")) {
@@ -287,12 +375,82 @@ class _BeneficiaryDetailsPageState extends State<BeneficiaryDetailsPage> {
                                     ? Container(
                                         height: 0,
                                       )
-                                    : Container(),
-                                // TODO: complete this.
+                                    : Container(
+                                        child: UnderLineTextFormField(
+                                          labelText: "Bank Name",
+                                          contentPadding: EdgeInsets.only(
+                                              left: 10,
+                                              right: 10,
+                                              top: 10,
+                                              bottom: 10),
+                                          value: bankName,
+                                          onChange: (value) {
+                                            setState(() {
+                                              if ((value != null) &&
+                                                  (value != "")) {
+                                                bankName = value;
+                                              }
+                                            });
+                                          },
+                                        ),
+                                      ),
 
                                 // UPI Id
+                                Container(
+                                  child: UnderLineTextFormField(
+                                    labelText: "UPI Id",
+                                    contentPadding: EdgeInsets.only(
+                                        left: 10,
+                                        right: 10,
+                                        top: 10,
+                                        bottom: 10),
+                                    value: upiId,
+                                    onChange: (value) {
+                                      setState(() {
+                                        upiId = value;
+                                      });
+                                    },
+                                  ),
+                                ),
+
+                                Container(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    alignment: Alignment.centerRight,
+                                    child: FormFieldHeader(
+                                      headerText: "Optional",
+                                      fontSize: 13.5,
+                                      color: qbDetailLightColor,
+                                    )),
+
+                                SizedBox(
+                                  height: 10,
+                                ),
 
                                 // Continue Button
+                                Container(
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 2.5),
+                                    alignment: Alignment.center,
+                                    child: EdgeLessButton(
+                                      child: Text(
+                                        "Continue",
+                                        style: GoogleFonts.nunito(
+                                            fontSize: 16.5,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.white),
+                                        textAlign: TextAlign.center,
+                                        textScaleFactor: 1.0,
+                                      ),
+                                      color: (isFormValid)
+                                          ? qbAppPrimaryBlueColor
+                                          : qbDividerDarkColor,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.6,
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 8.5),
+                                      onPressed: onSubmitPressed,
+                                    )),
                               ],
                             ),
                           ),
@@ -304,5 +462,81 @@ class _BeneficiaryDetailsPageState extends State<BeneficiaryDetailsPage> {
         ],
       ),
     );
+  }
+
+  onSubmitPressed() async {
+    setState(() {
+      isLoading = true;
+    });
+    if (widget.beneficiaryData != null) {
+      UserBeneficiaryData beneficiaryData = await UserBeneficiaryServices()
+          .update(
+              beneficiaryId: widget.beneficiaryData.id,
+              authToken: appState.authToken,
+              name: beneficiaryName,
+              accountNumber: accountNumber,
+              ifscCode: ifscCode,
+              bankName: bankName,
+              upiId: upiId);
+
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) {
+          return SuccessAndFailurePage(
+            statusText: "Updation",
+            buttonText: "Continue",
+            status: (beneficiaryData != null)
+                ? SuccessAndFailureStatus.success
+                : SuccessAndFailureStatus.failure,
+            onButtonPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+          );
+        },
+      )).then((value) {
+        setState(() {
+          isLoading = false;
+        });
+      });
+      if (beneficiaryData != null) {
+        appState.setBeneficiaryData(beneficiaryData);
+      }
+    } else {
+      UserBeneficiaryData beneficiaryData = await UserBeneficiaryServices()
+          .create(
+              authToken: appState.authToken,
+              name: beneficiaryName,
+              accountNumber: accountNumber,
+              ifscCode: ifscCode,
+              bankName: bankName,
+              upiId: upiId);
+
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) {
+          return SuccessAndFailurePage(
+            statusText: "Registration",
+            buttonText: "Continue",
+            status: (beneficiaryData != null)
+                ? SuccessAndFailureStatus.success
+                : SuccessAndFailureStatus.failure,
+            onButtonPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+          );
+        },
+      )).then((value) {
+        setState(() {
+          isLoading = false;
+        });
+      });
+      if (beneficiaryData != null) {
+        appState.setBeneficiaryData(beneficiaryData);
+      }
+    }
+
+    setState(() {
+      isLoading = false;
+    });
   }
 }

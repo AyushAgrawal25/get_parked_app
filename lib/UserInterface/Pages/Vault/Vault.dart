@@ -320,7 +320,9 @@ class _VaultState extends State<Vault> {
     // Tmp code
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) {
-        return BeneficiaryDetailsPage();
+        return BeneficiaryDetailsPage(
+          beneficiaryData: gpAppState.beneficiaryData,
+        );
       },
     ));
   }

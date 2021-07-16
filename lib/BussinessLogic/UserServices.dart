@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/ContactData.dart';
+import 'package:getparked/StateManagement/Models/UserBeneficiaryData.dart';
 import 'package:getparked/StateManagement/Models/UserData.dart';
 import 'package:getparked/StateManagement/Models/UserDetails.dart';
 import 'package:getparked/Utils/JSONUtils.dart';
@@ -19,7 +20,7 @@ const String USER_ROUTE = "/app/users";
 const String PROFILE_PICS_ROUTE = "/images/profilePics";
 
 class UserServices {
-  Future getUser(
+  Future<UserGetStatus> getUser(
       {@required String authToken, @required BuildContext context}) async {
     try {
       AppState appState = Provider.of<AppState>(context, listen: false);
@@ -41,10 +42,16 @@ class UserServices {
         UserDetails userDetails =
             UserDetails.fromMap(respMap["user"]["userDetails"]);
 
+        UserBeneficiaryData userBeneficiaryData =
+            (respMap["user"]["beneficiary"] != null)
+                ? UserBeneficiaryData.fromMap(respMap["user"]["beneficiary"])
+                : null;
+
         if (userData != null) {
           SecureStorageUtils().setAuthToken(authToken);
           appState.setUserDetails(userDetails);
           appState.setUserData(userData);
+          appState.setBeneficiaryData(userBeneficiaryData);
           return UserGetStatus.successful;
         }
         return UserGetStatus.failed;
