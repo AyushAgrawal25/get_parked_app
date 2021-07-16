@@ -84,6 +84,7 @@ class _BeneficiaryDetailsPageState extends State<BeneficiaryDetailsPage> {
   bool isFormValid = true;
 
   checkFormValidity() {
+    // TODO: Add VPA Validation and all for account number validation.
     isFormValid = true;
     if ((beneficiaryName == "") || (beneficiaryName == null)) {
       isFormValid = false;
@@ -465,6 +466,9 @@ class _BeneficiaryDetailsPageState extends State<BeneficiaryDetailsPage> {
   }
 
   onSubmitPressed() async {
+    if (!isFormValid) {
+      return;
+    }
     setState(() {
       isLoading = true;
     });
