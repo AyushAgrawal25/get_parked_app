@@ -129,7 +129,7 @@ class _BeneficiaryDetailsPageState extends State<BeneficiaryDetailsPage> {
                       title: Row(
                         children: [
                           CustomIcon(
-                            icon: Typicons.user,
+                            icon: GPIcons.withdraw_or_bank,
                             size: 25,
                             color: qbAppTextColor,
                           ),

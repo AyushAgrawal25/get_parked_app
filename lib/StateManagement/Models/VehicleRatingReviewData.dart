@@ -1,4 +1,3 @@
-import 'package:getparked/StateManagement/Models/ParkingRatingReviewData.dart';
 import 'package:getparked/StateManagement/Models/RatingReviewData.dart';
 import 'package:getparked/StateManagement/Models/VehicleData.dart';
 import 'package:getparked/StateManagement/Models/VehicleTypeData.dart';

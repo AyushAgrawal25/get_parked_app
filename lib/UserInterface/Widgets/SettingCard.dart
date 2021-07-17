@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';
 import 'package:flutter/material.dart';
+import 'package:getparked/UserInterface/Widgets/CustomIcon.dart';
 
 class SettingCard extends StatelessWidget {
   final IconData icon;
@@ -27,8 +28,9 @@ class SettingCard extends StatelessWidget {
                   // Icon
                   Container(
                     width: 50,
-                    child: Icon(
-                      this.icon,
+                    alignment: Alignment.center,
+                    child: CustomIcon(
+                      icon: this.icon,
                       color: qbAppPrimaryThemeColor,
                       size: 25,
                     ),

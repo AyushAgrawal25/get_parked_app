@@ -10,7 +10,6 @@ import 'package:getparked/StateManagement/Models/AppOverlayStyleData.dart';
 import 'package:getparked/StateManagement/Models/ContactData.dart';
 import 'package:getparked/StateManagement/Models/GooglePlaceData.dart';
 import 'package:getparked/StateManagement/Models/NotificationData.dart';
-import 'package:getparked/StateManagement/Models/OldNotificationData.dart';
 import 'package:getparked/StateManagement/Models/ParkingLordData.dart';
 import 'package:getparked/StateManagement/Models/ParkingRequestData.dart';
 import 'package:getparked/StateManagement/Models/TransactionData.dart';

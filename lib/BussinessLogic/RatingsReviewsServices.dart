@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:getparked/BussinessLogic/UserServices.dart';
-import 'package:getparked/StateManagement/Models/ParkingRatingReviewData.dart';
 import 'package:getparked/StateManagement/Models/RatingReviewData.dart';
 import 'package:getparked/StateManagement/Models/VehicleRatingReviewData.dart';
 import 'package:getparked/Utils/DomainUtils.dart';

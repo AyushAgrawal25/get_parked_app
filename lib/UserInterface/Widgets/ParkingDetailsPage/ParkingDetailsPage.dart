@@ -3,7 +3,6 @@ import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/BookingData.dart';
 import 'package:getparked/StateManagement/Models/NotificationData.dart';
 import 'package:getparked/StateManagement/Models/ParkingData.dart';
-import 'package:getparked/StateManagement/Models/ParkingRatingReviewData.dart';
 import 'package:getparked/StateManagement/Models/ParkingRequestData.dart';
 import 'package:getparked/StateManagement/Models/RatingReviewData.dart';
 import 'package:getparked/StateManagement/Models/VehicleData.dart';

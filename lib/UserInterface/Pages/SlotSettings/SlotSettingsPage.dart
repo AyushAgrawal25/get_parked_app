@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getparked/BussinessLogic/AuthProvider.dart';
 import 'package:getparked/BussinessLogic/ParkingLordServices.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/ParkingLordData.dart';
+import 'package:getparked/UserInterface/Icons/g_p_icons_icons.dart';
+import 'package:getparked/UserInterface/Pages/SlotSettings/VehicleSettings/VehiclesListPage.dart';
 import 'package:getparked/UserInterface/Pages/SplashScreen/SplashScreenPage.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';
 import 'package:getparked/UserInterface/Widgets/Loaders/LoaderPage.dart';
@@ -77,6 +80,18 @@ class _SlotSettingsPageState extends State<SlotSettingsPage> {
                           ),
                           icon: FontAwesomeIcons.powerOff,
                           onPressed: onChangeActivation,
+                        ),
+                        SettingCard(
+                          child: Text(
+                            "Vehicle Settings",
+                            style: GoogleFonts.roboto(
+                                color: qbAppTextColor,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 17.5),
+                            textScaleFactor: 1.0,
+                          ),
+                          icon: FontAwesome5.car,
+                          onPressed: onVehicleSettingsPressed,
                         )
                       ],
                     ),
@@ -158,5 +173,13 @@ class _SlotSettingsPageState extends State<SlotSettingsPage> {
         ToastUtils.showMessage("Failed");
         break;
     }
+  }
+
+  onVehicleSettingsPressed() {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return VehiclesListPage();
+      },
+    ));
   }
 }

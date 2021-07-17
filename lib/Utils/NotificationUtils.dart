@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:getparked/Utils/DomainUtils.dart';
-import 'package:getparked/StateManagement/Models/OldNotificationData.dart';
 import 'package:getparked/UserInterface/Widgets/SideNav/SideNavRoutes.dart';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';

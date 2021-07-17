@@ -1,5 +1,4 @@
 import 'package:getparked/StateManagement/Models/BookingData.dart';
-import 'package:getparked/StateManagement/Models/ParkingRatingReviewData.dart';
 import 'package:getparked/StateManagement/Models/RatingReviewData.dart';
 import 'package:getparked/StateManagement/Models/SlotData.dart';
 import 'package:getparked/StateManagement/Models/UserDetails.dart';
