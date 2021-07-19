@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
+import 'package:getparked/BussinessLogic/SlotsServices.dart';
 import 'package:getparked/StateManagement/Models/VehicleData.dart';
 import 'package:getparked/StateManagement/Models/VehicleTypeData.dart';
 import 'package:getparked/UserInterface/Icons/g_p_icons_icons.dart';
@@ -7,6 +8,7 @@ import 'package:getparked/UserInterface/Theme/AppTheme.dart';
 import 'package:getparked/UserInterface/Widgets/CustomIcon.dart';
 import 'package:getparked/UserInterface/Widgets/EdgeLessButton.dart';
 import 'package:getparked/UserInterface/Widgets/FormFieldHeader.dart';
+import 'package:getparked/UserInterface/Widgets/Loaders/LoaderPage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class VehicleSettingPage extends StatefulWidget {
@@ -18,9 +20,40 @@ class VehicleSettingPage extends StatefulWidget {
 }
 
 class _VehicleSettingPageState extends State<VehicleSettingPage> {
+  TextEditingController vehicleFairController = TextEditingController();
   String vehicleFair;
   bool isVehicleSelected = true;
   bool isFormValid = true;
+
+  @override
+  void initState() {
+    super.initState();
+    setInitialValues();
+  }
+
+  setInitialValues() {
+    vehicleFair = widget.vehicleData.fair.toString();
+    vehicleFairController.text = vehicleFair;
+    isVehicleSelected = true;
+  }
+
+  checkFormValidity() {
+    isFormValid = true;
+    double fair;
+    try {
+      fair = double.parse(vehicleFair);
+    } catch (excp) {
+      print(excp);
+    }
+
+    print(fair);
+    if (fair == null) {
+      isFormValid = false;
+    }
+  }
+
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     String vehicleName = "Bike";
@@ -47,6 +80,8 @@ class _VehicleSettingPageState extends State<VehicleSettingPage> {
         vehicleName = "SUV";
         break;
     }
+
+    checkFormValidity();
     return Container(
       child: Stack(
         children: [
@@ -156,19 +191,11 @@ class _VehicleSettingPageState extends State<VehicleSettingPage> {
                                 Container(
                                   width: 75,
                                   child: TextField(
+                                      controller: vehicleFairController,
                                       onChanged: (value) {
-                                        String validChars = "0123456789.";
-                                        if (value != null) {
-                                          String fairVal = "";
-                                          for (int i = 0;
-                                              i < value.length;
-                                              i++) {
-                                            if (validChars.contains(value[i])) {
-                                              fairVal += value[i];
-                                            }
-                                          }
-                                          vehicleFair = fairVal;
-                                        }
+                                        setState(() {
+                                          vehicleFair = value;
+                                        });
                                       },
                                       style: GoogleFonts.roboto(
                                           fontSize: 15 /
@@ -241,7 +268,7 @@ class _VehicleSettingPageState extends State<VehicleSettingPage> {
                               alignment: Alignment.center,
                               child: EdgeLessButton(
                                 child: Text(
-                                  "Continue",
+                                  "Submit",
                                   style: GoogleFonts.nunito(
                                       fontSize: 16.5,
                                       fontWeight: FontWeight.w500,
@@ -264,10 +291,72 @@ class _VehicleSettingPageState extends State<VehicleSettingPage> {
               ),
             ),
           ),
+          (isLoading) ? LoaderPage() : Container()
         ],
       ),
     );
   }
 
-  onSubmitPressed() {}
+  onSubmitPressed() async {
+    if (!isFormValid) {
+      return;
+    }
+
+    // TODO: Add Motion Toasts
+    setState(() {
+      isLoading = true;
+    });
+    if (isVehicleSelected) {
+      double fair = double.parse(vehicleFair);
+      if (fair != widget.vehicleData.fair) {
+        SlotVehicleUpdateStatus updateStatus = await SlotsServices()
+            .updateVehicle(
+                context: context,
+                vehicleType: widget.vehicleData.type,
+                fair: double.parse(vehicleFair));
+
+        switch (updateStatus) {
+          case SlotVehicleUpdateStatus.success:
+            break;
+          case SlotVehicleUpdateStatus.cannotBeUpdated:
+            break;
+          case SlotVehicleUpdateStatus.internalServerError:
+            break;
+          case SlotVehicleUpdateStatus.failed:
+            break;
+          case SlotVehicleUpdateStatus.slotNotFound:
+            break;
+          case SlotVehicleUpdateStatus.vehicleNotFound:
+            break;
+        }
+
+        Navigator.of(context).pop();
+      }
+    } else {
+      SlotVehicleUnchecktatus uncheckStatus = await SlotsServices()
+          .uncheckVehicle(
+              context: context, vehicleType: widget.vehicleData.type);
+
+      switch (uncheckStatus) {
+        case SlotVehicleUnchecktatus.success:
+          break;
+        case SlotVehicleUnchecktatus.cannotBeUpdated:
+          break;
+        case SlotVehicleUnchecktatus.internalServerError:
+          break;
+        case SlotVehicleUnchecktatus.failed:
+          break;
+        case SlotVehicleUnchecktatus.slotNotFound:
+          break;
+        case SlotVehicleUnchecktatus.vehicleNotFound:
+          break;
+      }
+
+      Navigator.of(context).pop();
+    }
+
+    setState(() {
+      isLoading = false;
+    });
+  }
 }

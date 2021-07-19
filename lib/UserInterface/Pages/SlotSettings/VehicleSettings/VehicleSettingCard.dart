@@ -129,10 +129,11 @@ class _VehicleSettingCardState extends State<VehicleSettingCard> {
 
         QbFAB(
             size: 40,
+            color: qbAppPrimaryThemeColor,
             child: Container(
               child: Icon(
                 FontAwesome5.pencil_alt,
-                size: 17.5,
+                size: 16,
                 color: qbWhiteBGColor,
               ),
             ),

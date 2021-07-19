@@ -6,6 +6,8 @@ import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/ParkingLordData.dart';
 import 'package:getparked/StateManagement/Models/ParkingRequestData.dart';
 import 'package:getparked/StateManagement/Models/SlotData.dart';
+import 'package:getparked/StateManagement/Models/VehicleData.dart';
+import 'package:getparked/StateManagement/Models/VehicleTypeData.dart';
 import 'package:getparked/Utils/DomainUtils.dart';
 import 'package:getparked/Utils/JSONUtils.dart';
 import 'package:getparked/Utils/SecureStorageUtils.dart';
@@ -17,6 +19,7 @@ const String SLOT_PARKING_REQUESTS_ROUTE = "/app/slots/parkingRequests";
 const String SLOT_BOOKINGS_ROUTE = "/app/slots/bookings";
 const String SLOT_PARKINGS_ROUTE = "/app/slots/parkings";
 const String SLOT_IMAGES_ROUTE = "/images/slotImages";
+const String SLOTS_VEHICLES_ROUTE = "/app/slots/slotVehicles";
 
 class SlotsServices {
   Future<List<ParkingRequestData>> getParkingRequestsForUser(
@@ -284,6 +287,100 @@ class SlotsServices {
       return ParkingWithdrawStatus.failed;
     }
   }
+
+  Future<SlotVehicleUpdateStatus> updateVehicle(
+      {@required BuildContext context,
+      @required VehicleType vehicleType,
+      @required double fair}) async {
+    try {
+      AppState appState = Provider.of<AppState>(context, listen: false);
+      Uri url = Uri.parse(domainName + SLOTS_VEHICLES_ROUTE + "/update");
+      Map<String, dynamic> reqBody = {
+        "type": VehicleTypeUtils.getTypeAsString(vehicleType),
+        "fair": fair.toString()
+      };
+
+      http.Response resp = await http.put(url,
+          body: JSONUtils().postBody(reqBody),
+          headers: {
+            CONTENT_TYPE_KEY: JSON_CONTENT_VALUE,
+            AUTH_TOKEN: appState.authToken
+          });
+
+      print(resp.body);
+      if (resp.statusCode == 200) {
+        ParkingLordData parkingLordData = appState.parkingLordData;
+        List<VehicleData> vehicles = [];
+        Map respBody = json.decode(resp.body);
+        respBody["vehicles"].forEach((vehicleMap) {
+          vehicles.add(VehicleData.fromMap(vehicleMap));
+        });
+
+        parkingLordData.vehicles = vehicles;
+        appState.setParkingLordData(parkingLordData);
+        return SlotVehicleUpdateStatus.success;
+      } else if (resp.statusCode == 404) {
+        return SlotVehicleUpdateStatus.slotNotFound;
+      } else if (resp.statusCode == 422) {
+        return SlotVehicleUpdateStatus.vehicleNotFound;
+      } else if (resp.statusCode == 421) {
+        return SlotVehicleUpdateStatus.cannotBeUpdated;
+      } else if (resp.statusCode == 500) {
+        return SlotVehicleUpdateStatus.internalServerError;
+      }
+
+      return SlotVehicleUpdateStatus.failed;
+    } catch (excp) {
+      print(excp);
+      return SlotVehicleUpdateStatus.failed;
+    }
+  }
+
+  Future<SlotVehicleUnchecktatus> uncheckVehicle(
+      {@required BuildContext context,
+      @required VehicleType vehicleType}) async {
+    try {
+      AppState appState = Provider.of<AppState>(context, listen: false);
+      Uri url = Uri.parse(domainName + SLOTS_VEHICLES_ROUTE + "/uncheck");
+      Map<String, dynamic> reqBody = {
+        "type": VehicleTypeUtils.getTypeAsString(vehicleType)
+      };
+
+      http.Response resp = await http.put(url,
+          body: JSONUtils().postBody(reqBody),
+          headers: {
+            CONTENT_TYPE_KEY: JSON_CONTENT_VALUE,
+            AUTH_TOKEN: appState.authToken
+          });
+
+      print(resp.body);
+      if (resp.statusCode == 200) {
+        ParkingLordData parkingLordData = appState.parkingLordData;
+        List<VehicleData> vehicles = [];
+        Map respBody = json.decode(resp.body);
+        respBody["vehicles"].forEach((vehicleMap) {
+          vehicles.add(VehicleData.fromMap(vehicleMap));
+        });
+
+        parkingLordData.vehicles = vehicles;
+        appState.setParkingLordData(parkingLordData);
+        return SlotVehicleUnchecktatus.success;
+      } else if (resp.statusCode == 404) {
+        return SlotVehicleUnchecktatus.slotNotFound;
+      } else if (resp.statusCode == 422) {
+        return SlotVehicleUnchecktatus.vehicleNotFound;
+      } else if (resp.statusCode == 421) {
+        return SlotVehicleUnchecktatus.cannotBeUpdated;
+      } else if (resp.statusCode == 500) {
+        return SlotVehicleUnchecktatus.internalServerError;
+      }
+
+      return SlotVehicleUnchecktatus.failed;
+    } catch (excp) {
+      print(excp);
+      return SlotVehicleUnchecktatus.failed;
+    }
+  }
 }
 
 enum ParkingRequestStatus { success, invalidToken, failed, internalServerError }
@@ -328,4 +425,21 @@ enum ParkingWithdrawStatus {
   invalidToken,
   failed,
   internalServerError,
+}
+
+enum SlotVehicleUpdateStatus {
+  success,
+  slotNotFound,
+  vehicleNotFound,
+  cannotBeUpdated,
+  internalServerError,
+  failed
+}
+enum SlotVehicleUnchecktatus {
+  success,
+  slotNotFound,
+  vehicleNotFound,
+  cannotBeUpdated,
+  internalServerError,
+  failed
 }
