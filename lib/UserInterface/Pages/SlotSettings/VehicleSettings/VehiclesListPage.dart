@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/VehicleData.dart';
+import 'package:getparked/StateManagement/Models/VehicleTypeData.dart';
 import 'package:getparked/UserInterface/Icons/g_p_icons_icons.dart';
 import 'package:getparked/UserInterface/Pages/SlotSettings/VehicleSettings/VehicleSettingCard.dart';
+import 'package:getparked/UserInterface/Pages/SlotSettings/VehicleSettings/VehicleSettingPage.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';
 import 'package:getparked/UserInterface/Widgets/CustomIcon.dart';
+import 'package:getparked/UserInterface/Widgets/qbFAB.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -27,9 +30,29 @@ class _VehiclesListPageState extends State<VehiclesListPage> {
   Widget build(BuildContext context) {
     AppState appStateListen = Provider.of<AppState>(context, listen: true);
 
+    Map<VehicleType, bool> isVehiclePres = {};
+
     List<Widget> vehicleCards = [];
     appStateListen.parkingLordData.vehicles.forEach((VehicleData vehicleData) {
       vehicleCards.add(VehicleSettingCard(vehicleData: vehicleData));
+      isVehiclePres[vehicleData.type] = true;
+    });
+
+    List<VehicleData> nonPresVehicles = [];
+    appState.vehiclesTypeData.forEach((vehicleTypeData) {
+      if (isVehiclePres[vehicleTypeData.type] != true) {
+        double slotArea =
+            appState.parkingLordData.length * appState.parkingLordData.breadth;
+        if ((slotArea >= vehicleTypeData.area) &&
+            (vehicleTypeData.height <= appState.parkingLordData.height)) {
+          nonPresVehicles.add(VehicleData(
+              fair: 0.0,
+              slotId: appState.parkingLordData.id,
+              status: 1,
+              type: vehicleTypeData.type,
+              typeData: vehicleTypeData));
+        }
+      }
     });
 
     return Container(
@@ -70,11 +93,76 @@ class _VehiclesListPageState extends State<VehiclesListPage> {
                   elevation: 0.0,
                   iconTheme: IconThemeData(color: qbAppTextColor),
                 ),
-                body: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                  child: ListView(
-                    children: vehicleCards,
-                  ),
+                body: Stack(
+                  children: [
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                      child: ListView(
+                        children: vehicleCards,
+                      ),
+                    ),
+                    (nonPresVehicles.length > 0)
+                        ? Positioned(
+                            bottom: 25,
+                            right: 20,
+                            child: Container(
+                              child: PopupMenuButton<VehicleType>(
+                                child: Container(
+                                  height: 55,
+                                  width: 55,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(360),
+                                      color: qbAppPrimaryThemeColor,
+                                      boxShadow: [
+                                        BoxShadow(
+                                            blurRadius: 8,
+                                            spreadRadius: 0.3,
+                                            offset: Offset(0, 5),
+                                            color:
+                                                Color.fromRGBO(0, 0, 0, 0.20)),
+                                      ]),
+                                  child: Icon(
+                                    FontAwesome5.plus,
+                                    size: 20,
+                                    color: qbWhiteBGColor,
+                                  ),
+                                ),
+                                itemBuilder: (context) {
+                                  List<PopupMenuItem<VehicleType>> items = [];
+                                  nonPresVehicles
+                                      .forEach((VehicleData vehicleData) {
+                                    items.add(PopupMenuItem(
+                                      value: vehicleData.type,
+                                      child: Container(
+                                        child: Text(
+                                          vehicleData.typeData.name,
+                                          style: GoogleFonts.roboto(
+                                              color: qbDetailDarkColor),
+                                          textScaleFactor: 1.0,
+                                        ),
+                                      ),
+                                    ));
+                                  });
+                                  return items;
+                                },
+                                onSelected: (value) {
+                                  VehicleData vehicleData;
+                                  nonPresVehicles.forEach((element) {
+                                    if (element.type == value) {
+                                      vehicleData = element;
+                                    }
+                                  });
+
+                                  if (vehicleData != null) {
+                                    onAddVehiclePressed(vehicleData);
+                                  }
+                                },
+                              ),
+                            ),
+                          )
+                        : Container()
+                  ],
                 ),
               ),
             ),
@@ -82,5 +170,13 @@ class _VehiclesListPageState extends State<VehiclesListPage> {
         ],
       ),
     );
+  }
+
+  onAddVehiclePressed(VehicleData vehicleData) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return VehicleSettingPage(vehicleData: vehicleData);
+      },
+    ));
   }
 }

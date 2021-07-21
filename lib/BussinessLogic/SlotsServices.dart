@@ -288,6 +288,52 @@ class SlotsServices {
     }
   }
 
+  Future<SlotVehicleAddStatus> addVehicle(
+      {@required BuildContext context,
+      @required VehicleType vehicleType,
+      @required double fair}) async {
+    try {
+      AppState appState = Provider.of<AppState>(context, listen: false);
+      Uri url = Uri.parse(domainName + SLOTS_VEHICLES_ROUTE + "/add");
+      Map<String, dynamic> reqBody = {
+        "type": VehicleTypeUtils.getTypeAsString(vehicleType),
+        "fair": fair.toString()
+      };
+
+      http.Response resp = await http.post(url,
+          body: JSONUtils().postBody(reqBody),
+          headers: {
+            CONTENT_TYPE_KEY: JSON_CONTENT_VALUE,
+            AUTH_TOKEN: appState.authToken
+          });
+
+      print(resp.body);
+      if (resp.statusCode == 200) {
+        ParkingLordData parkingLordData = appState.parkingLordData;
+        List<VehicleData> vehicles = [];
+        Map respBody = json.decode(resp.body);
+        respBody["vehicles"].forEach((vehicleMap) {
+          vehicles.add(VehicleData.fromMap(vehicleMap));
+        });
+
+        parkingLordData.vehicles = vehicles;
+        appState.setParkingLordData(parkingLordData);
+        return SlotVehicleAddStatus.success;
+      } else if (resp.statusCode == 404) {
+        return SlotVehicleAddStatus.slotNotFound;
+      } else if (resp.statusCode == 422) {
+        return SlotVehicleAddStatus.vehicleAlreadyPresent;
+      } else if (resp.statusCode == 500) {
+        return SlotVehicleAddStatus.internalServerError;
+      }
+
+      return SlotVehicleAddStatus.failed;
+    } catch (excp) {
+      print(excp);
+      return SlotVehicleAddStatus.failed;
+    }
+  }
+
   Future<SlotVehicleUpdateStatus> updateVehicle(
       {@required BuildContext context,
       @required VehicleType vehicleType,
@@ -425,6 +471,14 @@ enum ParkingWithdrawStatus {
   invalidToken,
   failed,
   internalServerError,
+}
+
+enum SlotVehicleAddStatus {
+  success,
+  slotNotFound,
+  vehicleAlreadyPresent,
+  internalServerError,
+  failed
 }
 
 enum SlotVehicleUpdateStatus {

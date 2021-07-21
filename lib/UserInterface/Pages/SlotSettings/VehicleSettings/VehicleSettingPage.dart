@@ -10,6 +10,7 @@ import 'package:getparked/UserInterface/Widgets/EdgeLessButton.dart';
 import 'package:getparked/UserInterface/Widgets/FormFieldHeader.dart';
 import 'package:getparked/UserInterface/Widgets/Loaders/LoaderPage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:motion_toast/motion_toast.dart';
 
 class VehicleSettingPage extends StatefulWidget {
   final VehicleData vehicleData;
@@ -281,7 +282,9 @@ class _VehicleSettingPageState extends State<VehicleSettingPage> {
                                     : qbDividerDarkColor,
                                 width: MediaQuery.of(context).size.width * 0.6,
                                 padding: EdgeInsets.symmetric(vertical: 8.5),
-                                onPressed: onSubmitPressed,
+                                onPressed: () {
+                                  onSubmitPressed(context);
+                                },
                               )),
                         ],
                       ),
@@ -297,7 +300,7 @@ class _VehicleSettingPageState extends State<VehicleSettingPage> {
     );
   }
 
-  onSubmitPressed() async {
+  onSubmitPressed(BuildContext buildContext) async {
     if (!isFormValid) {
       return;
     }
@@ -308,51 +311,76 @@ class _VehicleSettingPageState extends State<VehicleSettingPage> {
     });
     if (isVehicleSelected) {
       double fair = double.parse(vehicleFair);
-      if (fair != widget.vehicleData.fair) {
-        SlotVehicleUpdateStatus updateStatus = await SlotsServices()
-            .updateVehicle(
-                context: context,
-                vehicleType: widget.vehicleData.type,
-                fair: double.parse(vehicleFair));
+      if (widget.vehicleData.id == null) {
+        if (fair > 0) {
+          SlotVehicleAddStatus addStatus = await SlotsServices().addVehicle(
+              context: context,
+              vehicleType: widget.vehicleData.type,
+              fair: fair);
+          switch (addStatus) {
+            case SlotVehicleAddStatus.success:
+              break;
+            case SlotVehicleAddStatus.internalServerError:
+              break;
+            case SlotVehicleAddStatus.failed:
+              break;
+            case SlotVehicleAddStatus.slotNotFound:
+              break;
+            case SlotVehicleAddStatus.vehicleAlreadyPresent:
+              break;
+          }
 
-        switch (updateStatus) {
-          case SlotVehicleUpdateStatus.success:
-            break;
-          case SlotVehicleUpdateStatus.cannotBeUpdated:
-            break;
-          case SlotVehicleUpdateStatus.internalServerError:
-            break;
-          case SlotVehicleUpdateStatus.failed:
-            break;
-          case SlotVehicleUpdateStatus.slotNotFound:
-            break;
-          case SlotVehicleUpdateStatus.vehicleNotFound:
-            break;
+          // Navigator.of(context).pop();
+        }
+      } else {
+        if (fair != widget.vehicleData.fair) {
+          SlotVehicleUpdateStatus updateStatus = await SlotsServices()
+              .updateVehicle(
+                  context: context,
+                  vehicleType: widget.vehicleData.type,
+                  fair: double.parse(vehicleFair));
+
+          switch (updateStatus) {
+            case SlotVehicleUpdateStatus.success:
+              break;
+            case SlotVehicleUpdateStatus.cannotBeUpdated:
+              break;
+            case SlotVehicleUpdateStatus.internalServerError:
+              break;
+            case SlotVehicleUpdateStatus.failed:
+              break;
+            case SlotVehicleUpdateStatus.slotNotFound:
+              break;
+            case SlotVehicleUpdateStatus.vehicleNotFound:
+              break;
+          }
         }
 
         Navigator.of(context).pop();
       }
     } else {
-      SlotVehicleUnchecktatus uncheckStatus = await SlotsServices()
-          .uncheckVehicle(
-              context: context, vehicleType: widget.vehicleData.type);
+      if (widget.vehicleData.id != null) {
+        SlotVehicleUnchecktatus uncheckStatus = await SlotsServices()
+            .uncheckVehicle(
+                context: context, vehicleType: widget.vehicleData.type);
 
-      switch (uncheckStatus) {
-        case SlotVehicleUnchecktatus.success:
-          break;
-        case SlotVehicleUnchecktatus.cannotBeUpdated:
-          break;
-        case SlotVehicleUnchecktatus.internalServerError:
-          break;
-        case SlotVehicleUnchecktatus.failed:
-          break;
-        case SlotVehicleUnchecktatus.slotNotFound:
-          break;
-        case SlotVehicleUnchecktatus.vehicleNotFound:
-          break;
+        switch (uncheckStatus) {
+          case SlotVehicleUnchecktatus.success:
+            break;
+          case SlotVehicleUnchecktatus.cannotBeUpdated:
+            break;
+          case SlotVehicleUnchecktatus.internalServerError:
+            break;
+          case SlotVehicleUnchecktatus.failed:
+            break;
+          case SlotVehicleUnchecktatus.slotNotFound:
+            break;
+          case SlotVehicleUnchecktatus.vehicleNotFound:
+            break;
+        }
+
+        Navigator.of(context).pop();
       }
-
-      Navigator.of(context).pop();
     }
 
     setState(() {
