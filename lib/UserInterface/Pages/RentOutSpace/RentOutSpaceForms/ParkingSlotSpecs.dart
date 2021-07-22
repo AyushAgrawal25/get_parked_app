@@ -342,7 +342,7 @@ class _ParkingSlotSpecsState extends State<ParkingSlotSpecs> {
             margin: EdgeInsets.symmetric(horizontal: 15),
             alignment: Alignment.centerLeft,
             child: FormFieldHeader(
-              headerText: "Parking Dimensions",
+              headerText: "Parking Area Dimensions",
               fontSize: 17.5,
             ),
           ),

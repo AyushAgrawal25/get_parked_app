@@ -7,6 +7,7 @@ import 'package:getparked/BussinessLogic/ParkingLordServices.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/ParkingLordData.dart';
 import 'package:getparked/UserInterface/Icons/g_p_icons_icons.dart';
+import 'package:getparked/UserInterface/Pages/SlotSettings/ChangeDimensions/ChangeDimensions.dart';
 import 'package:getparked/UserInterface/Pages/SlotSettings/VehicleSettings/VehiclesListPage.dart';
 import 'package:getparked/UserInterface/Pages/SplashScreen/SplashScreenPage.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';
@@ -92,6 +93,18 @@ class _SlotSettingsPageState extends State<SlotSettingsPage> {
                           ),
                           icon: FontAwesome5.car,
                           onPressed: onVehicleSettingsPressed,
+                        ),
+                        SettingCard(
+                          child: Text(
+                            "Change Dimensios",
+                            style: GoogleFonts.roboto(
+                                color: qbAppTextColor,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 17.5),
+                            textScaleFactor: 1.0,
+                          ),
+                          icon: FontAwesome5.pencil_ruler,
+                          onPressed: onChangeDimensionsPressed,
                         )
                       ],
                     ),
@@ -179,6 +192,14 @@ class _SlotSettingsPageState extends State<SlotSettingsPage> {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) {
         return VehiclesListPage();
+      },
+    ));
+  }
+
+  onChangeDimensionsPressed() {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return ChangeDimensions();
       },
     ));
   }
