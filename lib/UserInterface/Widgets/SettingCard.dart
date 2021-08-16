@@ -6,7 +6,7 @@ import 'package:getparked/UserInterface/Widgets/CustomIcon.dart';
 class SettingCard extends StatelessWidget {
   final IconData icon;
   final Widget child;
-  final Function onPressed;
+  final Function(BuildContext) onPressed;
   SettingCard({@required this.child, @required this.icon, this.onPressed});
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class SettingCard extends StatelessWidget {
       onTap: () {
         if (this.onPressed != null) {
           SystemSound.play(SystemSoundType.click);
-          this.onPressed();
+          this.onPressed(context);
         }
       },
       child: Container(

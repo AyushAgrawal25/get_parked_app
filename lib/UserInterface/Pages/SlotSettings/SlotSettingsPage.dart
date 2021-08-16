@@ -15,6 +15,7 @@ import 'package:getparked/UserInterface/Widgets/Loaders/LoaderPage.dart';
 import 'package:getparked/UserInterface/Widgets/SettingCard.dart';
 import 'package:getparked/Utils/ToastUtils.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:provider/provider.dart';
 
 class SlotSettingsPage extends StatefulWidget {
@@ -119,76 +120,200 @@ class _SlotSettingsPageState extends State<SlotSettingsPage> {
     );
   }
 
-  onChangeActivation() async {
+  onChangeActivation(BuildContext context) async {
     setState(() {
       isLoading = true;
     });
     if (appState.parkingLordData.status == 1) {
-      await onSlotDeactivate();
+      await onSlotDeactivate(context);
     } else {
-      await onSlotActivate();
+      await onSlotActivate(context);
     }
     setState(() {
       isLoading = false;
     });
   }
 
-  onSlotActivate() async {
+  onSlotActivate(BuildContext context) async {
     SlotActivateStatus activateStatus =
         await ParkingLordServices().activateSlot(authToken: appState.authToken);
 
     switch (activateStatus) {
       case SlotActivateStatus.success:
-        ToastUtils.showMessage("Slot Activated...");
+        MotionToast.success(
+          description: "Activation Successful",
+          title: "Activated",
+          titleStyle: GoogleFonts.nunito(
+            fontSize: 13.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+          descriptionStyle: GoogleFonts.nunito(
+            fontSize: 11.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+        ).show(context);
+
         ParkingLordData parkingLordData = appState.parkingLordData;
         parkingLordData.status = 1;
         appState.setParkingLordData(parkingLordData);
         break;
       case SlotActivateStatus.notFound:
-        ToastUtils.showMessage("Slot Not Found");
+        MotionToast.error(
+          description: "Slot Not Found",
+          title: "Error",
+          titleStyle: GoogleFonts.nunito(
+            fontSize: 13.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+          descriptionStyle: GoogleFonts.nunito(
+            fontSize: 11.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+        ).show(context);
         break;
       case SlotActivateStatus.internalServerError:
-        ToastUtils.showMessage("Internal Server Error");
+        MotionToast.error(
+          description: "Internal Server Error",
+          title: "Error",
+          titleStyle: GoogleFonts.nunito(
+            fontSize: 13.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+          descriptionStyle: GoogleFonts.nunito(
+            fontSize: 11.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+        ).show(context);
         break;
       case SlotActivateStatus.alreadyActive:
-        ToastUtils.showMessage("Already Active");
+        MotionToast.error(
+          description: "Already Active.",
+          title: "Error",
+          titleStyle: GoogleFonts.nunito(
+            fontSize: 13.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+          descriptionStyle: GoogleFonts.nunito(
+            fontSize: 11.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+        ).show(context);
         break;
       case SlotActivateStatus.failed:
-        ToastUtils.showMessage("Failed");
+        MotionToast.error(
+          description: "Activation Failed.",
+          title: "Failed",
+          titleStyle: GoogleFonts.nunito(
+            fontSize: 13.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+          descriptionStyle: GoogleFonts.nunito(
+            fontSize: 11.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+        ).show(context);
         break;
     }
   }
 
-  onSlotDeactivate() async {
+  onSlotDeactivate(BuildContext context) async {
     SlotDeactivateStatus deactivateStatus = await ParkingLordServices()
         .deactivateSlot(authToken: appState.authToken);
 
     switch (deactivateStatus) {
       case SlotDeactivateStatus.success:
-        ToastUtils.showMessage("Slot Deactivated...");
+        MotionToast.success(
+          description: "Deactivation Successful",
+          title: "Deactivated",
+          titleStyle: GoogleFonts.nunito(
+            fontSize: 13.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+          descriptionStyle: GoogleFonts.nunito(
+            fontSize: 11.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+        ).show(context);
+
         ParkingLordData parkingLordData = appState.parkingLordData;
         parkingLordData.status = 0;
         appState.setParkingLordData(parkingLordData);
         break;
       case SlotDeactivateStatus.notFound:
-        ToastUtils.showMessage("Slot Not Found");
+        MotionToast.error(
+          description: "Slot Not Found",
+          title: "Error",
+          titleStyle: GoogleFonts.nunito(
+            fontSize: 13.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+          descriptionStyle: GoogleFonts.nunito(
+            fontSize: 11.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+        ).show(context);
         break;
       case SlotDeactivateStatus.alreadyDeactive:
-        ToastUtils.showMessage("Already Deactive");
+        MotionToast.error(
+          description: "Already Deactive.",
+          title: "Error",
+          titleStyle: GoogleFonts.nunito(
+            fontSize: 13.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+          descriptionStyle: GoogleFonts.nunito(
+            fontSize: 11.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+        ).show(context);
         break;
       case SlotDeactivateStatus.cannotBeDeactivated:
-        ToastUtils.showMessage("Cannot be deactivated.");
+        MotionToast.error(
+          description: "Cannot be deactivated.",
+          title: "Failed",
+          titleStyle: GoogleFonts.nunito(
+            fontSize: 13.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+          descriptionStyle: GoogleFonts.nunito(
+            fontSize: 11.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+        ).show(context);
+        break;
         break;
       case SlotDeactivateStatus.internalServerError:
-        ToastUtils.showMessage("Internal Server Error");
+        MotionToast.error(
+          description: "Internal Server Error",
+          title: "Error",
+          titleStyle: GoogleFonts.nunito(
+            fontSize: 13.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+          descriptionStyle: GoogleFonts.nunito(
+            fontSize: 11.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+        ).show(context);
         break;
       case SlotDeactivateStatus.failed:
-        ToastUtils.showMessage("Failed");
+        MotionToast.error(
+          description: "Deactivation Failed.",
+          title: "Failed",
+          titleStyle: GoogleFonts.nunito(
+            fontSize: 13.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+          descriptionStyle: GoogleFonts.nunito(
+            fontSize: 11.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+        ).show(context);
         break;
     }
   }
 
-  onVehicleSettingsPressed() {
+  onVehicleSettingsPressed(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) {
         return VehiclesListPage();
@@ -196,7 +321,7 @@ class _SlotSettingsPageState extends State<SlotSettingsPage> {
     ));
   }
 
-  onChangeDimensionsPressed() {
+  onChangeDimensionsPressed(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) {
         return ChangeDimensions();

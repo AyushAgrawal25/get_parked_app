@@ -75,7 +75,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  onSignOutPressed() async {
+  onSignOutPressed(BuildContext context) async {
     setState(() {
       isLoading = true;
     });
