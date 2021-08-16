@@ -10,6 +10,7 @@ import 'package:getparked/UserInterface/Widgets/FormFieldHeader.dart';
 import 'package:getparked/UserInterface/Widgets/Loaders/LoaderPage.dart';
 import 'package:getparked/Utils/ToastUtils.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:provider/provider.dart';
 
 class ChangeDimensions extends StatefulWidget {
@@ -256,28 +257,36 @@ class _ChangeDimensionsState extends State<ChangeDimensions> {
                             height: 5,
                           )),
                           Container(
-                              margin: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 2.5),
-                              alignment: Alignment.center,
-                              child: EdgeLessButton(
-                                child: Text(
-                                  "Submit",
-                                  style: GoogleFonts.nunito(
-                                      fontSize: 16.5,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.white),
-                                  textAlign: TextAlign.center,
-                                  textScaleFactor: 1.0,
-                                ),
-                                color: (isFormValid)
-                                    ? qbAppPrimaryBlueColor
-                                    : qbDividerDarkColor,
-                                width: MediaQuery.of(context).size.width * 0.6,
-                                padding: EdgeInsets.symmetric(vertical: 8.5),
-                                onPressed: () {
-                                  onSubmitPressed(context);
-                                },
-                              )),
+                            child: Builder(
+                              builder: (context) {
+                                return Container(
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 2.5),
+                                    alignment: Alignment.center,
+                                    child: EdgeLessButton(
+                                      child: Text(
+                                        "Submit",
+                                        style: GoogleFonts.nunito(
+                                            fontSize: 16.5,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.white),
+                                        textAlign: TextAlign.center,
+                                        textScaleFactor: 1.0,
+                                      ),
+                                      color: (isFormValid)
+                                          ? qbAppPrimaryBlueColor
+                                          : qbDividerDarkColor,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.6,
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 8.5),
+                                      onPressed: () {
+                                        onSubmitPressed(context);
+                                      },
+                                    ));
+                              },
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -317,22 +326,88 @@ class _ChangeDimensionsState extends State<ChangeDimensions> {
 
     switch (updateStatus) {
       case SlotDimensionUpdateStatus.success:
-        ToastUtils.showMessage("Slot Dimensions Updated...");
+        MotionToast.success(
+          description: "Dimensions Updated.",
+          title: "Successful",
+          titleStyle: GoogleFonts.nunito(
+            fontSize: 13.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+          descriptionStyle: GoogleFonts.nunito(
+            fontSize: 11.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+        ).show(buildContext);
         break;
       case SlotDimensionUpdateStatus.slotNotFound:
-        ToastUtils.showMessage("Slot Not Found");
+        MotionToast.error(
+          description: "Slot Not Found",
+          title: "Error",
+          titleStyle: GoogleFonts.nunito(
+            fontSize: 13.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+          descriptionStyle: GoogleFonts.nunito(
+            fontSize: 11.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+        ).show(buildContext);
         break;
       case SlotDimensionUpdateStatus.internalServerError:
-        ToastUtils.showMessage("Internal Server Error");
+        MotionToast.error(
+          description: "Internal Server Error",
+          title: "Error",
+          titleStyle: GoogleFonts.nunito(
+            fontSize: 13.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+          descriptionStyle: GoogleFonts.nunito(
+            fontSize: 11.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+        ).show(buildContext);
         break;
       case SlotDimensionUpdateStatus.invalidToken:
-        ToastUtils.showMessage("Invalid Token");
+        MotionToast.error(
+          description: "Invalid Token",
+          title: "Error",
+          titleStyle: GoogleFonts.nunito(
+            fontSize: 13.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+          descriptionStyle: GoogleFonts.nunito(
+            fontSize: 11.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+        ).show(buildContext);
         break;
       case SlotDimensionUpdateStatus.failed:
-        ToastUtils.showMessage("Failed");
+        MotionToast.error(
+          description: "Updation Failed.",
+          title: "Failed",
+          titleStyle: GoogleFonts.nunito(
+            fontSize: 13.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+          descriptionStyle: GoogleFonts.nunito(
+            fontSize: 11.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+        ).show(buildContext);
         break;
       case SlotDimensionUpdateStatus.cannotBeUpdated:
-        ToastUtils.showMessage("Slot Dimensions cannot be updated..");
+        MotionToast.error(
+          description: "Cannot be Updated",
+          title: "Error",
+          titleStyle: GoogleFonts.nunito(
+            fontSize: 13.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+          descriptionStyle: GoogleFonts.nunito(
+            fontSize: 11.5 / MediaQuery.of(context).textScaleFactor,
+            fontWeight: FontWeight.w600,
+          ),
+        ).show(buildContext);
         break;
     }
 
