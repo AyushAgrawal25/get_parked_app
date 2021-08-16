@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
+import 'package:getparked/BussinessLogic/ParkingLordServices.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/UserInterface/Icons/g_p_icons_icons.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';
 import 'package:getparked/UserInterface/Widgets/CustomIcon.dart';
 import 'package:getparked/UserInterface/Widgets/EdgeLessButton.dart';
 import 'package:getparked/UserInterface/Widgets/FormFieldHeader.dart';
+import 'package:getparked/UserInterface/Widgets/Loaders/LoaderPage.dart';
+import 'package:getparked/Utils/ToastUtils.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -36,6 +39,8 @@ class _ChangeDimensionsState extends State<ChangeDimensions> {
     heightController.text = height;
   }
 
+  bool isLoading = false;
+
   String length;
   TextEditingController lengthController;
 
@@ -45,11 +50,44 @@ class _ChangeDimensionsState extends State<ChangeDimensions> {
   String height;
   TextEditingController heightController;
 
+  double lengthValue = 0.0;
+  double breadthValue = 0.0;
+  double heightValue = 0.0;
+
   bool isFormValid = true;
-  checkFormValidity() {}
+  checkFormValidity() {
+    isFormValid = true;
+    try {
+      lengthValue = double.parse(length);
+      if (lengthValue == 0) {
+        isFormValid = false;
+      }
+    } catch (excp) {
+      isFormValid = false;
+    }
+
+    try {
+      breadthValue = double.parse(breadth);
+      if (breadthValue == 0) {
+        isFormValid = false;
+      }
+    } catch (excp) {
+      isFormValid = false;
+    }
+
+    try {
+      heightValue = double.parse(height);
+      if (heightValue == 0) {
+        isFormValid = false;
+      }
+    } catch (excp) {
+      isFormValid = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    checkFormValidity();
     return Container(
       child: Stack(
         children: [
@@ -247,13 +285,59 @@ class _ChangeDimensionsState extends State<ChangeDimensions> {
                 ),
               ),
             ),
-          )
+          ),
 
           // Loader
+          (isLoading)
+              ? Container(
+                  child: LoaderPage(),
+                )
+              : Container()
         ],
       ),
     );
   }
 
-  onSubmitPressed(BuildContext buildContext) {}
+  onSubmitPressed(BuildContext buildContext) async {
+    if (!isFormValid) {
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+    });
+
+    // Add Some Toasts to it.
+    SlotDimensionUpdateStatus updateStatus = await ParkingLordServices()
+        .updateDimensions(
+            context: context,
+            length: lengthValue,
+            breadth: breadthValue,
+            height: heightValue);
+
+    switch (updateStatus) {
+      case SlotDimensionUpdateStatus.success:
+        ToastUtils.showMessage("Slot Dimensions Updated...");
+        break;
+      case SlotDimensionUpdateStatus.slotNotFound:
+        ToastUtils.showMessage("Slot Not Found");
+        break;
+      case SlotDimensionUpdateStatus.internalServerError:
+        ToastUtils.showMessage("Internal Server Error");
+        break;
+      case SlotDimensionUpdateStatus.invalidToken:
+        ToastUtils.showMessage("Invalid Token");
+        break;
+      case SlotDimensionUpdateStatus.failed:
+        ToastUtils.showMessage("Failed");
+        break;
+      case SlotDimensionUpdateStatus.cannotBeUpdated:
+        ToastUtils.showMessage("Slot Dimensions cannot be updated..");
+        break;
+    }
+
+    setState(() {
+      isLoading = false;
+    });
+  }
 }

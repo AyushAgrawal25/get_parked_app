@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:getparked/BussinessLogic/SlotsServices.dart';
 import 'package:getparked/BussinessLogic/UserServices.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
+import 'package:getparked/StateManagement/Models/ParkingData.dart';
 import 'package:getparked/StateManagement/Models/ParkingLordData.dart';
 import 'package:getparked/StateManagement/Models/SlotData.dart';
 import 'package:getparked/StateManagement/Models/SlotImageData.dart';
+import 'package:getparked/StateManagement/Models/VehicleData.dart';
 import 'package:getparked/Utils/DomainUtils.dart';
 import 'package:getparked/Utils/JSONUtils.dart';
 import 'package:getparked/Utils/SecureStorageUtils.dart';
@@ -280,6 +282,7 @@ class ParkingLordServices {
       {@required String authToken}) async {
     try {
       Uri url = Uri.parse(domainName + PARKING_LORD_ROUTE + "/deactivate");
+
       http.Response resp = await http.post(url, headers: {
         AUTH_TOKEN: authToken,
         CONTENT_TYPE_KEY: JSON_CONTENT_VALUE
@@ -301,6 +304,63 @@ class ParkingLordServices {
     } catch (excp) {
       print(excp);
       return SlotDeactivateStatus.failed;
+    }
+  }
+
+  Future<SlotDimensionUpdateStatus> updateDimensions({
+    @required BuildContext context,
+    @required double length,
+    @required double breadth,
+    @required double height,
+  }) async {
+    try {
+      AppState appState = Provider.of<AppState>(context, listen: false);
+      String authToken = appState.authToken;
+      Map<String, dynamic> reqBody = {
+        "length": length,
+        "breadth": breadth,
+        "height": height
+      };
+
+      Uri url =
+          Uri.parse(domainName + PARKING_LORD_ROUTE + "/changeDimensions");
+      http.Response resp = await http.post(url,
+          body: JSONUtils().postBody(reqBody),
+          headers: {
+            AUTH_TOKEN: authToken,
+            CONTENT_TYPE_KEY: JSON_CONTENT_VALUE
+          });
+
+      if (resp.statusCode == 200) {
+        Map data = json.decode(resp.body)["data"];
+        List vehicles = data["vehicles"];
+        List<VehicleData> vehicleDatas = [];
+        vehicles.forEach((vehicle) {
+          vehicleDatas.add(VehicleData.fromMap(vehicle));
+        });
+
+        ParkingLordData parkingLordData = appState.parkingLordData;
+        parkingLordData.length = length;
+        parkingLordData.breadth = breadth;
+        parkingLordData.height = height;
+        parkingLordData.vehicles = vehicleDatas;
+        appState.setParkingLordData(parkingLordData);
+
+        return SlotDimensionUpdateStatus.success;
+      } else if (resp.statusCode == 404) {
+        return SlotDimensionUpdateStatus.slotNotFound;
+      } else if (resp.statusCode == 422) {
+        return SlotDimensionUpdateStatus.cannotBeUpdated;
+      } else if (resp.statusCode == 500) {
+        return SlotDimensionUpdateStatus.internalServerError;
+      } else if (resp.statusCode == 403) {
+        return SlotDimensionUpdateStatus.invalidToken;
+      }
+
+      return SlotDimensionUpdateStatus.failed;
+    } catch (excp) {
+      print(excp);
+      return SlotDimensionUpdateStatus.failed;
     }
   }
 }
@@ -368,4 +428,13 @@ enum SlotDeactivateStatus {
   failed,
   cannotBeDeactivated,
   internalServerError
+}
+
+enum SlotDimensionUpdateStatus {
+  success,
+  slotNotFound,
+  cannotBeUpdated,
+  internalServerError,
+  invalidToken,
+  failed
 }
