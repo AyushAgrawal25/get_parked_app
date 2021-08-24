@@ -11,7 +11,8 @@ class SocketUtils {
       Function(IO.Socket) onSocketConnected,
       Function(IO.Socket) onSocketDisconnected}) {
     try {
-      String socketURL = 'ws://' + HOST_NAME + ':' + HOST_PORT + '/';
+      // String socketURL = 'ws://' + HOST_NAME + ':' + HOST_PORT + '/';
+      String socketURL = 'https://' + HOST_NAME + '/';
       print(socketURL);
       socketIO = IO.io(socketURL, <String, dynamic>{
         'transports': ['websocket'],

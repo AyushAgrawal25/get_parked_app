@@ -151,6 +151,7 @@ class _LoginPageState extends State<LoginPage> {
           await SecureStorageUtils().setAuthToken(authToken);
           navigateToSpashScreen();
         } else {
+          await AuthProvider().firebaseLogout();
           ToastUtils.showMessage("Login Again");
         }
       } else {
@@ -165,6 +166,7 @@ class _LoginPageState extends State<LoginPage> {
             navigateToSpashScreen();
           }
         } else {
+          await AuthProvider().firebaseLogout();
           ToastUtils.showMessage("Login Again");
         }
       }

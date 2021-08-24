@@ -70,7 +70,7 @@ class _BookNowButtonState extends State<BookNowButton> {
 
         if (double.parse((gpAppState.walletMoney -
                     (gpAppState.walletSecurityDeposit + totalSecurityDeposit))
-                .toStringAsFixed(2)) >
+                .toStringAsFixed(2)) >=
             0) {
           await bookSlot();
         } else {

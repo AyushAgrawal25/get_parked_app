@@ -118,7 +118,7 @@ class AuthProvider {
 
   Future<bool> firebaseLogout() async {
     try {
-      fbAuth.FirebaseAuth.instance.signOut();
+      await fbAuth.FirebaseAuth.instance.signOut();
       return true;
     } catch (e) {
       print(e);

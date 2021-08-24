@@ -55,6 +55,7 @@ class ParkingLordServices {
         },
         "vehicles": sVPostData
       };
+
       Uri url = Uri.parse(domainName + PARKING_LORD_ROUTE + "/create");
       http.Response resp = await http.post(url,
           body: JSONUtils().postBody(reqBody),
