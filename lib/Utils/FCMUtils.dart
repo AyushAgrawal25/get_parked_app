@@ -13,7 +13,7 @@ class FCMUtils {
   }
 
   Future<dynamic> onMessage(Map<String, dynamic> data) async {
-    print("Called On Resume..");
+    print("Called On Message..");
 
     gpNotificationUtils.showWithIconImage(data);
   }

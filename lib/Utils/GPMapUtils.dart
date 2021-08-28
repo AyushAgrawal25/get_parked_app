@@ -258,36 +258,41 @@ class _GPMapState extends State<GPMap> {
     }
     gpMapTextScaleFactor = MediaQuery.of(context).textScaleFactor;
 
-    return Container(
-        child: GoogleMap(
-            initialCameraPosition: CameraPosition(
-                target: centerLocation, zoom: widget.initialZoom),
-            onCameraMove: onCameraMoveFun,
-            myLocationButtonEnabled: true,
-            onMapCreated: onMapCreatedFun,
-            onTap: (latlng) {
-              if (widget.onTapOnMap != null) {
-                widget.onTapOnMap();
-              }
-            },
-            onCameraIdle: () {
-              if (widget.onCameraIdle != null) {
-                widget.onCameraIdle();
-              }
-            },
-            onCameraMoveStarted: () {
-              if (widget.onCameraMoveStarted != null) {
-                widget.onCameraMoveStarted();
-              }
-            },
-            tiltGesturesEnabled: false,
-            mapType: MapType.normal,
-            zoomControlsEnabled: false,
-            compassEnabled: false,
-            liteModeEnabled: false,
-            // There occurs an error due to marker data null solve it.
-            markers:
-                (mapMarkers != null) ? Set.from(mapMarkers) : Set<Marker>()));
+    try {
+      return Container(
+          child: GoogleMap(
+              initialCameraPosition: CameraPosition(
+                  target: centerLocation, zoom: widget.initialZoom),
+              onCameraMove: onCameraMoveFun,
+              myLocationButtonEnabled: true,
+              onMapCreated: onMapCreatedFun,
+              onTap: (latlng) {
+                if (widget.onTapOnMap != null) {
+                  widget.onTapOnMap();
+                }
+              },
+              onCameraIdle: () {
+                if (widget.onCameraIdle != null) {
+                  widget.onCameraIdle();
+                }
+              },
+              onCameraMoveStarted: () {
+                if (widget.onCameraMoveStarted != null) {
+                  widget.onCameraMoveStarted();
+                }
+              },
+              tiltGesturesEnabled: false,
+              mapType: MapType.normal,
+              zoomControlsEnabled: false,
+              compassEnabled: false,
+              liteModeEnabled: false,
+              // There occurs an error due to marker data null solve it.
+              markers:
+                  (mapMarkers != null) ? Set.from(mapMarkers) : Set<Marker>()));
+    } catch (excp) {
+      print(excp);
+      return Container(color: Colors.grey.shade100);
+    }
   }
 }
 

@@ -1,5 +1,4 @@
 import 'package:getparked/BussinessLogic/SlotsServices.dart';
-import 'package:getparked/BussinessLogic/SlotsUtils.dart';
 // import 'package:getparked/BussinessLogic/TransactionUtils.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/ParkingRequestData.dart';

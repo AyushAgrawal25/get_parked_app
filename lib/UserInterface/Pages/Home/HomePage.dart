@@ -14,7 +14,6 @@ import 'package:getparked/Utils/LocalDataUtils.dart';
 import 'package:getparked/Utils/MapPlacesUtils.dart';
 import 'package:getparked/BussinessLogic/PlacesApiUtils.dart';
 import 'package:getparked/BussinessLogic/PlacesDataCollection.dart';
-import 'package:getparked/BussinessLogic/SlotsUtils.dart';
 import 'package:getparked/Utils/SocketUtils.dart';
 import 'package:getparked/Utils/SecureStorageUtils.dart';
 import 'package:getparked/Utils/TransactionUtils.dart';
