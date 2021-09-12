@@ -41,12 +41,6 @@ class _QRCodeScreenShotPageState extends State<QRCodeScreenShotPage> {
     capturedImgFile.writeAsBytes(pngBytes);
 
     try {
-      // await FolderFileSaver.requestPermission().then((permissionStatus) async {
-      //   if (permissionStatus == 0) {
-      //     String newFilePath = await FolderFileSaver.saveImage(
-      //         pathImage: '$directory/screenshot.png');
-      //   }
-      // });
       Directory internalStorageDirectory =
           await FileUtils().getInternalStorageDirectoryForAndroid();
       // Directory internalStorageDirectory =
