@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:getparked/StateManagement/Models/AppState.dart';
+import 'package:getparked/Utils/FileUtils.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';
 import 'package:getparked/UserInterface/Widgets/EdgeLessButton.dart';
@@ -8,7 +10,7 @@ import 'package:getparked/UserInterface/Widgets/Loaders/LoaderPage.dart';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
 import 'package:path_provider/path_provider.dart' as PathProvider;
-import 'package:folder_file_saver/folder_file_saver.dart';
+import 'package:provider/provider.dart';
 
 class QRCodeScreenShotPage extends StatefulWidget {
   RenderRepaintBoundary boundary;
@@ -39,12 +41,23 @@ class _QRCodeScreenShotPageState extends State<QRCodeScreenShotPage> {
     capturedImgFile.writeAsBytes(pngBytes);
 
     try {
-      await FolderFileSaver.requestPermission().then((permissionStatus) async {
-        if (permissionStatus == 0) {
-          String newFilePath = await FolderFileSaver.saveImage(
-              pathImage: '$directory/screenshot.png');
-        }
-      });
+      // await FolderFileSaver.requestPermission().then((permissionStatus) async {
+      //   if (permissionStatus == 0) {
+      //     String newFilePath = await FolderFileSaver.saveImage(
+      //         pathImage: '$directory/screenshot.png');
+      //   }
+      // });
+      Directory internalStorageDirectory =
+          await FileUtils().getInternalStorageDirectoryForAndroid();
+      // Directory internalStorageDirectory =
+      //     await PathProvider.getExternalStorageDirectory();
+      String parkingLordName =
+          Provider.of<AppState>(context, listen: false).parkingLordData.name;
+      File scnImgFile = File(
+          '${internalStorageDirectory.path}/$parkingLordName' +
+              '_QR_Code_${DateTime.now().millisecondsSinceEpoch}.png');
+      await scnImgFile.writeAsBytes(pngBytes);
+      print(scnImgFile.path);
     } catch (exp) {
       print(exp);
     }

@@ -22,7 +22,6 @@ import 'dart:typed_data';
 import 'dart:io';
 import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart' as PathProvider;
-import 'package:folder_file_saver/folder_file_saver.dart';
 import 'package:getparked/UserInterface/Pages/ParkingLord/QRCodePage/QRCodeScreenshotPage.dart';
 
 class QRCodePage extends StatefulWidget {

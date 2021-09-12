@@ -20,7 +20,6 @@ import 'package:getparked/UserInterface/Icons/g_p_icons_icons.dart';
 import 'package:getparked/UserInterface/Widgets/CustomIcon.dart';
 import 'package:getparked/UserInterface/Pages/Wallet/AddMoney/AddMoneyPage.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
-import 'package:upi_pay/upi_pay.dart';
 
 class AddMoneyForm extends StatefulWidget {
   Function(bool, int) changeLoadStatus;
@@ -36,63 +35,6 @@ class AddMoneyForm extends StatefulWidget {
 
 class _AddMoneyFormWithAmountState extends State<AddMoneyForm> {
   AppState gpAppState;
-
-  initiateUPIPayment(UpiApplication upiApplication, widget) async {
-    print(gpAmount);
-
-    if ((gpAmount != null) && (gpAmount != "")) {
-      widget.changeLoadStatus(true, 0);
-
-      //Transaction Reference
-      String txnCode = await TransactionServices().getAddMoneyToWalletCode(
-          authToken: gpAppState.authToken, amount: double.parse(gpAmount));
-      print(txnCode);
-
-      // UpiTransactionResponse upiTransactionResponse =
-      //     await UpiPay.initiateTransaction(
-      //   app: upiApplication,
-      //   receiverUpiAddress: '9827174909@ybl',
-      //   receiverName: 'Jayesh Kumar Agrawal',
-      //   transactionRef: TransactionUtils().getEncryptedData(txnCode)["code"],
-      //   amount: double.parse(gpAmount).toStringAsFixed(2),
-      //   transactionNote: 'Transaction With Get Parked',
-      // );
-
-      UpiTransactionResponse upiTransactionResponse =
-          await UpiPay.initiateTransaction(
-        app: upiApplication,
-        receiverUpiAddress: '9329718444@okbizaxis',
-        receiverName: 'Qpd Web Solutions',
-        transactionRef: TransactionUtils().getEncryptedData(txnCode)["code"],
-        amount: gpAmount,
-        transactionNote: 'Transaction With Get Parked',
-      );
-
-      int transactionStatus = 0;
-      switch (upiTransactionResponse.status) {
-        case UpiTransactionStatus.success:
-          transactionStatus = 1;
-          break;
-
-        case UpiTransactionStatus.failure:
-          transactionStatus = 2;
-          break;
-
-        default:
-      }
-      print(upiTransactionResponse.status);
-
-      // AddMoneyToWallStatus addMoneyToWallStatus = await TransactionServices()
-      //     .addMoneyToWallet(
-      //         authToken: gpAppState.authToken,
-      //         ref: upiTransactionResponse.txnId,
-      //         txnCode: txnCode,
-      //         status: transactionStatus,
-      //         amount: double.parse(gpAmount));
-
-      widget.changeLoadStatus(true, transactionStatus);
-    }
-  }
 
   // Amount
   String gpAmount = "";
