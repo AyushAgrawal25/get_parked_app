@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:getparked/BussinessLogic/SlotsServices.dart';
 import 'package:getparked/Utils/EncryptionUtils.dart';
 import 'package:getparked/Utils/DomainUtils.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
@@ -163,12 +164,10 @@ class _QRCodePageState extends State<QRCodePage> {
     double posterWidth = MediaQuery.of(context).size.width * 0.8;
     double slotImgSize = posterWidth * 0.4;
     AppState gpAppStateListen = Provider.of<AppState>(context);
-    Map<String, dynamic> slotDataForEnc = {
-      "slotId": gpAppState.parkingLordData.id,
-      "slotUserId": gpAppState.parkingLordData.userId
-    };
-    String encryptedSlotToken =
-        EncryptionUtils.aesEncryption(json.encode(slotDataForEnc));
+    String encryptedSlotToken = SlotsServices().slotEncryptedCode(
+        slotId: gpAppStateListen.parkingLordData.id,
+        userId: gpAppState.parkingLordData.userId);
+    print(encryptedSlotToken);
     return Container(
       child: Stack(
         children: [

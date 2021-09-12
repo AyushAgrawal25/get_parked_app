@@ -9,6 +9,7 @@ import 'package:getparked/StateManagement/Models/SlotData.dart';
 import 'package:getparked/StateManagement/Models/VehicleData.dart';
 import 'package:getparked/StateManagement/Models/VehicleTypeData.dart';
 import 'package:getparked/Utils/DomainUtils.dart';
+import 'package:getparked/Utils/EncryptionUtils.dart';
 import 'package:getparked/Utils/JSONUtils.dart';
 import 'package:getparked/Utils/SecureStorageUtils.dart';
 import 'package:http/http.dart' as http;
@@ -425,6 +426,58 @@ class SlotsServices {
     } catch (excp) {
       print(excp);
       return SlotVehicleUnchecktatus.failed;
+    }
+  }
+
+  String slotEncryptedCode({int slotId, int userId}) {
+    try {
+      Map<String, dynamic> slotDataForEnc = {
+        "slotId": slotId,
+        "slotUserId": userId
+      };
+      String encryptedSlotToken =
+          EncryptionUtils.aesEncryption(json.encode(slotDataForEnc));
+      return encryptedSlotToken;
+    } catch (excp) {
+      return null;
+    }
+  }
+
+  Future<SlotData> getSlotDetailsFromQRCode(
+      String qrCode, String authToken) async {
+    try {
+      // TEMP
+      String slotQRCode = EncryptionUtils.aesDecryption(
+          "rKKlAuQNubnaB5BE8fRtsyBf7rbxBlLYgjmCwICNOOmllgh3dC0jIWMh8e6+95kc");
+
+      // String slotQRCode = EncryptionUtils.aesDecryption(qrCode);
+      Map slotQRData = json.decode(slotQRCode);
+      if (slotQRData == null) {
+        return null;
+      } else {
+        Uri url = Uri.parse(
+            domainName + SLOTS_ROUTE + "/slotDetails/${slotQRData["slotId"]}");
+        http.Response resp = await http.get(url, headers: {
+          AUTH_TOKEN: authToken,
+          CONTENT_TYPE_KEY: JSON_CONTENT_VALUE
+        });
+
+        if (resp.statusCode == 200) {
+          Map slotMap = json.decode(resp.body)["data"];
+          SlotData slotData = SlotData.fromMap(slotMap);
+          return slotData;
+        } else if (resp.statusCode == 404) {
+          return null;
+        } else if (resp.statusCode == 403) {
+          return null;
+        } else if (resp.statusCode == 500) {
+          return null;
+        }
+        return null;
+      }
+    } catch (excp) {
+      print(excp);
+      return null;
     }
   }
 }

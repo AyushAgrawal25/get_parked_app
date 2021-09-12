@@ -1,3 +1,4 @@
+import 'package:getparked/BussinessLogic/SlotsServices.dart';
 import 'package:getparked/StateManagement/Models/VehicleData.dart';
 import 'package:getparked/StateManagement/Models/VehicleTypeData.dart';
 import 'package:getparked/Utils/DomainUtils.dart';
@@ -55,7 +56,7 @@ class _QRScannerPageState extends State<QRScannerPage> {
   }
 
   initializeSlotData() async {
-    gpSlotData = await SlotsUtils()
+    gpSlotData = await SlotsServices()
         .getSlotDetailsFromQRCode(widget.qrCode, gpAppState.authToken);
     setState(() {
       isLoading = false;
@@ -66,17 +67,8 @@ class _QRScannerPageState extends State<QRScannerPage> {
     if (!isLoading) {
       if (gpSlotData != null) {
         // Calculating Area
-        allottedArea = 0;
         totalArea = gpSlotData.breadth * gpSlotData.length;
-        gpSlotData.bookings.forEach((slotBooking) {
-          gpSlotData.vehicles.forEach((slotVehicle) {
-            if (slotBooking.vehicleId == slotVehicle.id) {
-              double area =
-                  slotVehicle.typeData.breadth * slotVehicle.typeData.length;
-              allottedArea += area;
-            }
-          });
-        });
+        allottedArea = totalArea - gpSlotData.availableSpace;
 
         // Page Body
         pageBody = ParkingLordDetailsWidget(

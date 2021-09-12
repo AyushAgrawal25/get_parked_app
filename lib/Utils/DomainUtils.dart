@@ -6,6 +6,7 @@ const String HOST_NAME = "api.getparked.urownsite.xyz";
 // const String HOST_PORT = "5000";
 const String HOST_PORT = "443";
 String domainName = "https://" + HOST_NAME + ":" + HOST_PORT;
+// String domainName = "http://" + HOST_NAME + ":" + HOST_PORT;
 
 String appName = "Get Parked";
 
