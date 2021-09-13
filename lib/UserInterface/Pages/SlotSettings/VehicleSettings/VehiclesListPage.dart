@@ -88,10 +88,10 @@ class _VehiclesListPageState extends State<VehiclesListPage> {
                       ),
                     ],
                   ),
-                  brightness: Brightness.light,
-                  backgroundColor: Colors.transparent,
+                  backgroundColor: qbWhiteBGColor,
                   elevation: 0.0,
                   iconTheme: IconThemeData(color: qbAppTextColor),
+                  brightness: Brightness.light,
                 ),
                 body: Stack(
                   children: [

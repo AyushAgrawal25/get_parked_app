@@ -6,6 +6,7 @@ import 'package:getparked/StateManagement/Models/TransactionData.dart';
 import 'package:getparked/StateManagement/Models/UserData.dart';
 import 'package:getparked/UserInterface/Icons/g_p_icons_icons.dart';
 import 'package:getparked/UserInterface/Pages/Vault/BeneficiaryDetails/BeneficiaryDetailsPage.dart';
+import 'package:getparked/UserInterface/Pages/Vault/WithdrawRequest/WithdrawRequestPage.dart';
 import 'package:getparked/UserInterface/Pages/Wallet/Wallet.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';
 import 'package:getparked/UserInterface/Widgets/CustomIcon.dart';
@@ -320,9 +321,11 @@ class _VaultState extends State<Vault> {
     // Tmp code
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) {
-        return BeneficiaryDetailsPage(
-          beneficiaryData: gpAppState.beneficiaryData,
-        );
+        // return BeneficiaryDetailsPage(
+        //   beneficiaryData: gpAppState.beneficiaryData,
+        // );
+
+        return WithdrawRequestPage();
       },
     ));
   }

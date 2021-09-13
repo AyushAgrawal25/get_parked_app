@@ -147,10 +147,10 @@ class _BeneficiaryDetailsPageState extends State<BeneficiaryDetailsPage> {
                           ),
                         ],
                       ),
-                      brightness: Brightness.light,
-                      backgroundColor: Colors.transparent,
+                      backgroundColor: qbWhiteBGColor,
                       elevation: 0.0,
                       iconTheme: IconThemeData(color: qbAppTextColor),
+                      brightness: Brightness.light,
                     ),
                     body: Container(
                         padding: EdgeInsets.symmetric(horizontal: 20),

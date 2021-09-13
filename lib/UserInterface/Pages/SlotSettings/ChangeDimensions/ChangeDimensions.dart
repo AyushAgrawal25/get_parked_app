@@ -100,10 +100,10 @@ class _ChangeDimensionsState extends State<ChangeDimensions> {
               maintainBottomViewPadding: true,
               child: Scaffold(
                 appBar: AppBar(
-                    brightness: Brightness.light,
-                    backgroundColor: Colors.transparent,
+                    backgroundColor: qbWhiteBGColor,
                     elevation: 0.0,
                     iconTheme: IconThemeData(color: qbAppTextColor),
+                    brightness: Brightness.light,
                     title: Row(
                       children: [
                         CustomIcon(

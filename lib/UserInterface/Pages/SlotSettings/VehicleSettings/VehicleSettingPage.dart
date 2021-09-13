@@ -116,10 +116,10 @@ class _VehicleSettingPageState extends State<VehicleSettingPage> {
                       ),
                     ],
                   ),
-                  brightness: Brightness.light,
-                  backgroundColor: Colors.transparent,
+                  backgroundColor: qbWhiteBGColor,
                   elevation: 0.0,
                   iconTheme: IconThemeData(color: qbAppTextColor),
+                  brightness: Brightness.light,
                 ),
                 body: Container(
                   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
