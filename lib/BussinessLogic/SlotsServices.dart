@@ -447,10 +447,10 @@ class SlotsServices {
       String qrCode, String authToken) async {
     try {
       // TEMP
-      String slotQRCode = EncryptionUtils.aesDecryption(
-          "rKKlAuQNubnaB5BE8fRtsyBf7rbxBlLYgjmCwICNOOmllgh3dC0jIWMh8e6+95kc");
+      // String slotQRCode = EncryptionUtils.aesDecryption(
+      //     "rKKlAuQNubnaB5BE8fRtsyBf7rbxBlLYgjmCwICNOOmllgh3dC0jIWMh8e6+95kc");
 
-      // String slotQRCode = EncryptionUtils.aesDecryption(qrCode);
+      String slotQRCode = EncryptionUtils.aesDecryption(qrCode);
       Map slotQRData = json.decode(slotQRCode);
       if (slotQRData == null) {
         return null;

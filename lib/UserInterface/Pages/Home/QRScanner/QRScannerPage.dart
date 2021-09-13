@@ -3,7 +3,6 @@ import 'package:getparked/StateManagement/Models/VehicleData.dart';
 import 'package:getparked/StateManagement/Models/VehicleTypeData.dart';
 import 'package:getparked/Utils/DomainUtils.dart';
 import 'package:getparked/Utils/FlushBarUtils.dart';
-import 'package:getparked/BussinessLogic/SlotsUtils.dart';
 import 'package:getparked/StateManagement/Models/AppOverlayStyleData.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/StateManagement/Models/SlotData.dart';
