@@ -12,6 +12,7 @@ import 'package:getparked/Utils/JSONUtils.dart';
 import 'package:provider/provider.dart';
 
 const TRANSACTIONS_ROUTE = "/app/transactions";
+const WITHDRAW_REQUEST_ROUTE = TRANSACTIONS_ROUTE + "/wthdrawRequests";
 
 class TransactionServices {
   Future<TransactionGetStatus> getAllTransactions(
@@ -233,6 +234,34 @@ class TransactionServices {
       return VaultMoneyToWalletTransferStatus.failed;
     }
   }
+
+  Future<WithdrawRequestCreateStatus> requestWithdrawForValt(
+      {@required authToken}) async {
+    try {
+      Uri url = Uri.parse(domainName + WITHDRAW_REQUEST_ROUTE + "/forVault");
+      http.Response resp = await http.post(url, headers: {
+        AUTH_TOKEN: authToken,
+        CONTENT_TYPE_KEY: JSON_CONTENT_VALUE
+      });
+
+      // print(resp.body);
+      if (resp.statusCode == 200) {
+        return WithdrawRequestCreateStatus.successful;
+      } else if (resp.statusCode == 403) {
+        return WithdrawRequestCreateStatus.invalidToken;
+      } else if (resp.statusCode == 422) {
+        return WithdrawRequestCreateStatus.pendingRequestExists;
+      } else if (resp.statusCode == 404) {
+        return WithdrawRequestCreateStatus.beneficiaryDetailsNotPresent;
+      } else if (resp.statusCode == 500) {
+        return WithdrawRequestCreateStatus.internalServerError;
+      }
+      return WithdrawRequestCreateStatus.failed;
+    } catch (excp) {
+      print(excp);
+      return WithdrawRequestCreateStatus.failed;
+    }
+  }
 }
 
 enum TransactionGetStatus {
@@ -268,6 +297,15 @@ enum TransactionRequestRespondStatus {
 
 enum VaultMoneyToWalletTransferStatus {
   successful,
+  failed,
+  invalidToken,
+  internalServerError
+}
+
+enum WithdrawRequestCreateStatus {
+  successful,
+  pendingRequestExists,
+  beneficiaryDetailsNotPresent,
   failed,
   invalidToken,
   internalServerError

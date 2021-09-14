@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
+import 'package:getparked/BussinessLogic/TransactionServices.dart';
 import 'package:getparked/StateManagement/Models/AppState.dart';
 import 'package:getparked/UserInterface/Pages/Vault/BeneficiaryDetails/BeneficiaryDetailsPage.dart';
 import 'package:getparked/UserInterface/Theme/AppTheme.dart';
 import 'package:getparked/UserInterface/Widgets/EdgeLessButton.dart';
+import 'package:getparked/UserInterface/Widgets/ErrorPopUp.dart';
 import 'package:getparked/UserInterface/Widgets/Loaders/LoaderPage.dart';
+import 'package:getparked/UserInterface/Widgets/SuccessAndFailure/SuccessAndFailurePage.dart';
 import 'package:getparked/UserInterface/Widgets/TermDisplayWidget.dart';
 import 'package:getparked/UserInterface/Widgets/TransactionDetailsPage/TransactionDetailsWidgets/TransactionAmountWidget.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:provider/provider.dart';
 
 class WithdrawRequestPage extends StatefulWidget {
@@ -26,9 +30,9 @@ class _WithdrawRequestPageState extends State<WithdrawRequestPage> {
 
   Widget termsAndConditions() {
     List<String> terms = [
-      "This is your current balance in the vault you can add a request when your vault balance is more than ₹ 100.",
+      "This is your current balance in the vault you can request withraw when your vault balance is more than ₹ 100.",
       "Once your request has been accepted the amount will be credited to your account.",
-      "You need to provide Bank Details for successful withdrawal of money.",
+      "You need to provide Bank Account Details for successful withdrawal of money.",
       "You cannot request withdraw until and unless your current request is processed."
     ];
 
@@ -162,30 +166,130 @@ class _WithdrawRequestPageState extends State<WithdrawRequestPage> {
   }
 
   Widget sendRequestButtton() {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 1.5),
-      child: EdgeLessButton(
-        height: 40,
-        width: MediaQuery.of(context).size.width,
-        color: (isBeneficiaryDetailsAdded && isAmountSufficient)
-            ? qbAppPrimaryThemeColor
-            : qbDividerDarkColor,
-        child: Center(
-          child: Text(
-            "Send Request",
-            style: GoogleFonts.nunito(
-                fontSize: 17.5,
-                fontWeight: FontWeight.w500,
-                color: Colors.white),
-            textScaleFactor: 1.0,
-            textAlign: TextAlign.center,
+    return Builder(
+      builder: (context) {
+        return Container(
+          margin: EdgeInsets.symmetric(vertical: 1.5),
+          child: EdgeLessButton(
+            height: 40,
+            width: MediaQuery.of(context).size.width,
+            color: (isBeneficiaryDetailsAdded && isAmountSufficient)
+                ? qbAppPrimaryThemeColor
+                : qbDividerDarkColor,
+            child: Center(
+              child: Text(
+                "Send Request",
+                style: GoogleFonts.nunito(
+                    fontSize: 17.5,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white),
+                textScaleFactor: 1.0,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            onPressed: () {
+              onRequestPressed(context: context);
+            },
           ),
-        ),
-        onPressed: () {
-          if (isBeneficiaryDetailsAdded && isAmountSufficient) {}
-        },
-      ),
+        );
+      },
     );
+  }
+
+  onRequestPressed({BuildContext context}) async {
+    if (isBeneficiaryDetailsAdded && isAmountSufficient) {
+      setState(() {
+        isLoading = true;
+      });
+      // // TEMP
+      // WithdrawRequestCreateStatus requestCreateStatus =
+      //     WithdrawRequestCreateStatus.successful;
+
+      WithdrawRequestCreateStatus requestCreateStatus =
+          await TransactionServices()
+              .requestWithdrawForValt(authToken: appState.authToken);
+
+      switch (requestCreateStatus) {
+        case WithdrawRequestCreateStatus.successful:
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) {
+              return SuccessAndFailurePage(
+                onButtonPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+                status: SuccessAndFailureStatus.success,
+                statusText: "Withdraw Request",
+              );
+            },
+          ));
+          break;
+        case WithdrawRequestCreateStatus.beneficiaryDetailsNotPresent:
+          MotionToast.error(
+            description: "Beneficiary Details.",
+            title: "Missing",
+            titleStyle: GoogleFonts.nunito(
+              fontSize: 13.5 / MediaQuery.of(context).textScaleFactor,
+              fontWeight: FontWeight.w600,
+            ),
+            descriptionStyle: GoogleFonts.nunito(
+              fontSize: 11.5 / MediaQuery.of(context).textScaleFactor,
+              fontWeight: FontWeight.w600,
+            ),
+          ).show(context);
+          break;
+        case WithdrawRequestCreateStatus.pendingRequestExists:
+          ErrorPopUp().show("Pending Request", context,
+              errorMoreDetails: "You have a pending withdraw request.");
+          break;
+        case WithdrawRequestCreateStatus.internalServerError:
+          MotionToast.error(
+            description: "Internal Server Error",
+            title: "Error",
+            titleStyle: GoogleFonts.nunito(
+              fontSize: 13.5 / MediaQuery.of(context).textScaleFactor,
+              fontWeight: FontWeight.w600,
+            ),
+            descriptionStyle: GoogleFonts.nunito(
+              fontSize: 11.5 / MediaQuery.of(context).textScaleFactor,
+              fontWeight: FontWeight.w600,
+            ),
+          ).show(context);
+          break;
+        case WithdrawRequestCreateStatus.invalidToken:
+          MotionToast.error(
+            description: "Invalid Token",
+            title: "Login Again",
+            titleStyle: GoogleFonts.nunito(
+              fontSize: 13.5 / MediaQuery.of(context).textScaleFactor,
+              fontWeight: FontWeight.w600,
+            ),
+            descriptionStyle: GoogleFonts.nunito(
+              fontSize: 11.5 / MediaQuery.of(context).textScaleFactor,
+              fontWeight: FontWeight.w600,
+            ),
+          ).show(context);
+          break;
+        case WithdrawRequestCreateStatus.failed:
+          MotionToast.error(
+            description: "Techinal Error",
+            title: "Failed",
+            titleStyle: GoogleFonts.nunito(
+              fontSize: 13.5 / MediaQuery.of(context).textScaleFactor,
+              fontWeight: FontWeight.w600,
+            ),
+            descriptionStyle: GoogleFonts.nunito(
+              fontSize: 11.5 / MediaQuery.of(context).textScaleFactor,
+              fontWeight: FontWeight.w600,
+            ),
+          ).show(context);
+          break;
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -196,6 +300,13 @@ class _WithdrawRequestPageState extends State<WithdrawRequestPage> {
     } else {
       isBeneficiaryDetailsAdded = false;
     }
+
+    // // TEMP
+    // if (gpAppStateListen.vaultMoney > 00) {
+    //   isAmountSufficient = true;
+    // } else {
+    //   isAmountSufficient = false;
+    // }
 
     if (gpAppStateListen.vaultMoney > 100) {
       isAmountSufficient = true;
