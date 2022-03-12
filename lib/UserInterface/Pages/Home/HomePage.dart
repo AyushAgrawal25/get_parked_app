@@ -552,10 +552,8 @@ class _HomePageState extends State<HomePage> {
                         alignment: Alignment.center,
                         child: VehicleBottomBar(
                           onChanged: (type) {
-                            // Logger().i(type);
-                            Logger().i(vehiclesTypeData);
+                            Logger().i(type);
                             vehiclesTypeData.forEach((vehicleTypeData) {
-                              Logger().i(vehicleTypeData.type);
                               if (vehicleTypeData.type == type) {
                                 setState(() {
                                   gpSelectedVehicleTypeData = vehicleTypeData;

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:logger/logger.dart';
 
 // ignore: must_be_immutable
 class GPMap extends StatefulWidget {
@@ -236,6 +237,10 @@ class _GPMapState extends State<GPMap> {
                   zoom: 18.5,
                   target: LatLng(
                       gpMapSlotMarker.latitude, gpMapSlotMarker.longitude)));
+              // Logger().i({
+              //   "slotId": gpMapSlotMarker.slotId,
+              //   "markerType": gpMapSlotMarker.type
+              // });
               widget.onMarkerTap(gpMapSlotMarker.slotId, gpMapSlotMarker.type);
             },
             position:

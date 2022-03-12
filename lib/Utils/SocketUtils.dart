@@ -11,6 +11,7 @@ class SocketUtils {
       Function(IO.Socket) onSocketConnected,
       Function(IO.Socket) onSocketDisconnected}) {
     try {
+      print("Connecting to Sockets...");
       // String socketURL = 'ws://' + HOST_NAME + ':' + HOST_PORT + '/';
       String socketURL = 'https://' + HOST_NAME + '/';
       print(socketURL);
