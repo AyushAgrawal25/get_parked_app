@@ -228,7 +228,7 @@ class _ImagePickerAndInserterState extends State<ImagePickerAndInserter> {
 
   _cropImage() async {
     if (orgImg != null) {
-      File croppedImg = await ImageCropper.cropImage(
+      File croppedImg = await ImageCropper().cropImage(
           sourcePath: orgImg.path,
           // cropStyle: CropStyle.circle,
           aspectRatio: CropAspectRatio(

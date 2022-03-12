@@ -11,19 +11,19 @@ class FileUtils {
     return directory.path;
   }
 
-  static Future<File> getOrCreateFile(String fileName) async {
+  static Future<IO.File> getOrCreateFile(String fileName) async {
     String filePath = await getFilePath();
     return IO.File('$filePath/$fileName.txt');
   }
 
   static Future saveDataInFile(String fileName, String data) async {
-    File file = await getOrCreateFile(fileName);
+    IO.File file = await getOrCreateFile(fileName);
     file.writeAsString(data);
   }
 
   static Future<String> readDataFromFile(String fileName) async {
     try {
-      File file = await getOrCreateFile(fileName);
+      IO.File file = await getOrCreateFile(fileName);
       String fileContents = await file.readAsString();
       return fileContents;
     } on IO.IOException catch (exception) {
@@ -38,13 +38,13 @@ class FileUtils {
   static Future<bool> updateCacheImage(String url) async {
     bool opStatus = false;
     try {
-      File imgFileForUpdate = await DefaultCacheManager().getSingleFile(url);
+      IO.File imgFileForUpdate = await DefaultCacheManager().getSingleFile(url);
       if (imgFileForUpdate != null) {
         String oldFilePath = imgFileForUpdate.path;
         await imgFileForUpdate.delete();
         FileInfo newImgFileInfo = await DefaultCacheManager().downloadFile(url);
         if (newImgFileInfo != null) {
-          File newImgFile = newImgFileInfo.file;
+          IO.File newImgFile = newImgFileInfo.file;
           await newImgFile.rename(oldFilePath);
           opStatus = true;
         }

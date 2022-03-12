@@ -26,7 +26,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
   initApp() async {
     InitAppStatus initAppStatus =
         await AuthProvider().initApp(context: context);
-    print(initAppStatus);
+    print('Init App Status From Flash Screen $initAppStatus');
 
     AppState appState = Provider.of<AppState>(context, listen: false);
     switch (initAppStatus) {

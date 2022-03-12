@@ -36,6 +36,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:getparked/encryptionConfig.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import './MapSearch/MapSearch.dart';
@@ -551,7 +552,10 @@ class _HomePageState extends State<HomePage> {
                         alignment: Alignment.center,
                         child: VehicleBottomBar(
                           onChanged: (type) {
+                            // Logger().i(type);
+                            Logger().i(vehiclesTypeData);
                             vehiclesTypeData.forEach((vehicleTypeData) {
+                              Logger().i(vehicleTypeData.type);
                               if (vehicleTypeData.type == type) {
                                 setState(() {
                                   gpSelectedVehicleTypeData = vehicleTypeData;
@@ -629,19 +633,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   onMarkerTap(int slotId, GPMapSlotMarkerType gpMapSlotMarkerType) {
-    setState(() {
-      gpSelectedMarkerSlotData = gpAppState.findSlotFromMap(slotId);
-      if (gpSelectedVehicleTypeData != null) {
-        if (gpMapSlotMarkerType == GPMapSlotMarkerType.spaceAvailable) {
-          isParkingInfoOpen = true;
-        } else {
-          isParkingInfoOpen = false;
-        }
+    gpSelectedMarkerSlotData = gpAppState.findSlotFromMap(slotId);
+    Logger().i(gpSelectedVehicleTypeData);
+    if (gpSelectedVehicleTypeData == null) {
+      FlushBarUtils.showTextResponsive(context, "Select Vehicle Type",
+          "Vehicle Must be Selected Before Proccessing");
+    } else {
+      if (gpMapSlotMarkerType == GPMapSlotMarkerType.spaceAvailable) {
+        isParkingInfoOpen = true;
       } else {
-        FlushBarUtils.showTextResponsive(context, "Select Vehicle Type",
-            "Vehicle Must be Selected Before Proccessing");
+        isParkingInfoOpen = false;
       }
-    });
+    }
+    setState(() {});
   }
 
   onMapCreated(CameraPosition gpCamPos) async {

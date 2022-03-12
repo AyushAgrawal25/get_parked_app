@@ -12,6 +12,7 @@ import 'package:getparked/Utils/SecureStorageUtils.dart';
 import 'package:getparked/Utils/ToastUtils.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fbAuth;
+import 'package:logger/logger.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -20,6 +21,11 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool isLoading = false;
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -141,12 +147,15 @@ class _LoginPageState extends State<LoginPage> {
       bool userRegistrationStatus =
           await UserServices().isEmailRegistered(email: user.email);
 
+      print(
+          'LoginPage.dart | userRegistrationStatus : $userRegistrationStatus');
+
       if (userRegistrationStatus) {
         // Call Login function.
         String authToken =
             await UserServices().login(email: user.email, userToken: user.uid);
 
-        print(authToken);
+        Logger().i("Auth Token : $authToken");
         if (authToken != null) {
           await SecureStorageUtils().setAuthToken(authToken);
           navigateToSpashScreen();
@@ -173,6 +182,8 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         isLoading = false;
       });
+    } else {
+      print('LoginPage.dart : googleLogin : User is null.');
     }
   }
 

@@ -14,6 +14,7 @@ import 'package:getparked/Utils/JSONUtils.dart';
 import 'package:getparked/Utils/SecureStorageUtils.dart';
 import 'package:http/http.dart' as http;
 import 'package:getparked/Utils/DomainUtils.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 const String USER_ROUTE = "/app/users";
@@ -97,7 +98,7 @@ class UserServices {
           headers: <String, String>{
             CONTENT_TYPE_KEY: JSON_CONTENT_VALUE,
           });
-      // print(resp.body);
+      // Logger().i(json.decode(resp.body));
       if (resp.statusCode == 200) {
         return json.decode(resp.body)[AUTH_TOKEN];
       }

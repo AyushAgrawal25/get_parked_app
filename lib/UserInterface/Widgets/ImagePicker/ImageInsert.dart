@@ -62,7 +62,7 @@ class _ImageInsertPageState extends State<ImageInsertPage> {
         isLoading = true;
       });
 
-      File croppedImage = await ImageCropper.cropImage(
+      File croppedImage = await ImageCropper().cropImage(
           sourcePath: image.path,
           aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
           maxHeight: 700,
@@ -94,7 +94,7 @@ class _ImageInsertPageState extends State<ImageInsertPage> {
         isLoading = true;
       });
 
-      File croppedImage = await ImageCropper.cropImage(
+      File croppedImage = await ImageCropper().cropImage(
           sourcePath: originalPicture.path,
           aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
           maxHeight: 700,
